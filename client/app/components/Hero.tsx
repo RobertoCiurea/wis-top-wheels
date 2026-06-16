@@ -15,7 +15,7 @@ export const Hero = ()=>{
       Calitate <br/>
       <em>fără compromis</em>
     </h1>
-    <p className="hero-sub">Jante premium, mașini second-hand de import Germania și servicii de închiriere — totul într-un singur loc, cu garanție și transparență totală.</p>
+    <p className="hero-sub">Jante premium, mașini second-hand de import Germania și servicii de vulcanizare — totul într-un singur loc, cu garanție și transparență totală.</p>
     <div className="hero-actions">
       <a href="#stock" className="btn btn-gold btn-lg">Vezi Stocul</a>
       <a href="#contact" className="btn btn-ghost btn-lg">Contactează-ne</a>

@@ -7,6 +7,7 @@ import "@/app/styles/mobile-menu.css"
 
 export  const Navigation = ()=>{
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
 
     const closeMenu = () => {
         setIsMenuOpen(false);
@@ -29,9 +30,18 @@ export  const Navigation = ()=>{
             }
         }
 
+        const handleScroll = () => {
+            if (window.scrollY > 50) {
+              setScrolled(true);
+            } else {
+              setScrolled(false);
+            }
+        }
+
+
         window.addEventListener('resize', handleResize);
         window.addEventListener('keydown', handleKeyDown);
-
+        window.addEventListener('scroll', handleScroll);
         return () => {
             window.removeEventListener('resize', handleResize);
             window.removeEventListener('keydown', handleKeyDown);
@@ -41,7 +51,7 @@ export  const Navigation = ()=>{
     return(
         <>
 {/*NAVIGATION Desktop*/}
-<nav className="nav" id="nav">
+<nav className={`nav ${scrolled ? 'scrolled' : ''}`} id="nav">
   <div className="nav-inner">
     <a href="#" className="nav-logo">
       <Image src={Logo} alt="WIS Top Wheels Logo" preload sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" />
@@ -54,7 +64,6 @@ export  const Navigation = ()=>{
         <div className="nav-dropdown__menu" role="menu">
           <a href="#stock" role="menuitem">Jante & Anvelope</a>
           <a href="#cars" role="menuitem">Mașini de vânzare</a>
-          <a href="#rentals" role="menuitem">Închirieri auto</a>
         </div>
       </div>
       <a href="#contact">Contact</a>
@@ -78,7 +87,6 @@ export  const Navigation = ()=>{
       <nav className="mobile-links">
         <a href="#stock" onClick={toggleMenu}>Jante & Anvelope</a>
         <a href="#cars" onClick={toggleMenu}>Mașini de vânzare</a>
-        <a href="#rentals" onClick={toggleMenu}>Închirieri auto</a>
         <a href="#about" onClick={toggleMenu}>Despre noi</a>
         <a href="#contact" onClick={toggleMenu}>Contact</a>
       </nav>
