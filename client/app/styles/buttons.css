@@ -1,0 +1,110 @@
+/* ── BUTTONS ── */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:13px 26px;
+  border-radius:var(--radius);
+  font-family:var(--font-body);
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:0.04em;
+  transition:var(--transition);
+  white-space:nowrap;
+  cursor:pointer;
+}
+
+.btn-gold{
+  background:var(--gold);
+  color:#000;
+  border:1.5px solid var(--gold);
+}
+.btn-white{
+  background:var(--white);
+  color:#000;
+  border:1.5px solid var(--white);
+}
+.btn-white:hover{
+  background:var(--gray-light);
+  border-color:var(--gray);
+  transform:translateY(-10px);
+
+}
+
+.btn-gold:hover{
+  background:var(--gold-light);
+  border-color:var(--gold-light);
+  transform:translateY(-10px);
+}
+
+.btn-ghost{
+  background:transparent;
+  color:var(--white);
+  border:1.5px solid var(--border);
+}
+
+.btn-ghost:hover{
+  border-color:var(--gold);
+  color:var(--gold);
+}
+
+.btn-sm{
+  padding:11px 22px;
+  font-size:14px;
+}
+
+.btn-lg{
+  padding:16px 32px;
+  font-size:15px;
+}
+
+.nav-cta .btn{
+  min-height:52px;
+  border-radius:999px;
+  letter-spacing:0.08em;
+  padding:0 22px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.nav-cta .btn.btn-ghost{
+  background:rgba(255,255,255,0.08);
+  border-color:rgba(255,255,255,0.18);
+  color:var(--white);
+}
+
+.nav-cta .btn.btn-ghost:hover{
+  background:rgba(255,255,255,0.16);
+}
+
+.nav-cta .btn.btn-gold{
+  box-shadow:0 10px 30px rgba(201,168,76,0.18);
+}
+
+.btn svg,.btn i{
+  width:16px;
+  height:16px;
+  flex-shrink:0;
+  font-size:16px;
+}
+
+.btn-dark{
+  background:#000;
+  color:var(--white);
+  border:1.5px solid #000;
+}
+
+.btn-dark:hover{
+  background:#1a1a1a;
+}
+
+.btn-outline-dark{
+  background:transparent;
+  color:#000;
+  border:1.5px solid rgba(0,0,0,0.4);
+}
+
+.btn-outline-dark:hover{
+  border-color:#000;
+}
