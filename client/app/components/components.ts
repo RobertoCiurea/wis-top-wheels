@@ -5,5 +5,6 @@ import {About} from "@/app/components/About";
 import {Services} from "@/app/components/Services";
 import {Categories} from "@/app/components/Categories";
 import {WheelsStock} from "@/app/components/WheelsStock";
+import {CarsStock} from "@/app/components/CarsStock";
 
-export {Header, Hero, Navigation, About, Services, Categories, WheelsStock};
+export {Header, Hero, Navigation, About, Services, Categories, WheelsStock, CarsStock};
