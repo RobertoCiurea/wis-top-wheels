@@ -1,12 +1,15 @@
 import "@/app/styles/hero.css"
+import Image from "next/image";
 export const Hero = ()=>{
     return(
 <section className="hero" id="hero">
   <div className="hero-bg"></div>
-  <img
+  <Image
     src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=1600&q=80"
     alt="Mașină premium"
     className="hero-img"
+    fill
+    loading="eager"
   />
   <div className="hero-overlay"></div>
   <div className="hero-overlay-bottom"></div>
