@@ -10,5 +10,6 @@ import {WhyUs} from "@/app/components/WhyUs";
 import {Cta} from "@/app/components/Cta";
 import {Contact} from "@/app/components/Contact";
 import { Map } from "./Map";
+import { Footer } from "./Footer";
 
-export {Header, Hero, Navigation, About, Services, Categories, WheelsStock, CarsStock, WhyUs, Cta, Contact, Map};
+export {Header, Hero, Navigation, About, Services, Categories, WheelsStock, CarsStock, WhyUs, Cta, Contact, Map, Footer};
