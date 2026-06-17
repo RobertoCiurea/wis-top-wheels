@@ -1,4 +1,4 @@
-import {Header, Hero, About, Services, Categories, WheelsStock, CarsStock, WhyUs, Cta, Contact, Map, Footer} from "@/app/components/components";
+import {Header, Hero, About, Services, Categories, WheelsStock, CarsStock, WhyUs, Cta, Contact, Map, Footer, WhatsappFloat} from "@/app/components/components";
 export default function Home() {
   return (
     <> 
@@ -14,6 +14,7 @@ export default function Home() {
       <Contact/>
       <Map/>
       <Footer/>
+      <WhatsappFloat/>
     </>
   );
 }
