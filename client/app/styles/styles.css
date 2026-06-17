@@ -205,6 +205,31 @@ button{
   background:var(--gold);
 }
 
+.whatsapp-float{
+  transform: scale(0.9);
+  position:fixed;
+  bottom:28px;
+  right:28px;
+  padding: 2px;
+  z-index:700;
+  width:60px;
+  height:60px;
+  background:#25D366;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
+  box-shadow:0 4px 20px rgba(37,211,102,0.35);
+  transition:var(--transition);
+  color:#fff;
+}
+
+.whatsapp-float:hover{
+  transform:scale(0.908);
+  box-shadow:0 6px 28px rgba(37,211,102,0.5);
+}
+
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
@@ -227,5 +252,11 @@ input:-webkit-autofill:active{
 @media(max-width:768px){
   .section{
     padding:64px 0;
+  }
+  .whatsapp-float{
+    transform: scale(0.8);
+  }
+   .whatsapp-float:hover{
+    transform: scale(0.808);
   }
 }
