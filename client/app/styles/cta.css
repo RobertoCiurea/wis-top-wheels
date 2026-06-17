@@ -1,0 +1,45 @@
+/* ── CTA BAND ── */
+.cta-band{
+  background:var(--gold);
+  padding:56px 0;
+}
+
+.cta-inner{
+  max-width:var(--max);
+  margin:0 auto;
+  padding:0 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:32px;
+  flex-wrap:wrap;
+}
+
+.cta-copy h2{
+  font-family:var(--font-display);
+  font-size:clamp(28px,3vw,48px);
+  font-weight:800;
+  color:#000;
+  text-transform:uppercase;
+  line-height:1;
+  margin-bottom:8px;
+}
+
+.cta-copy p{
+  font-size:16px;
+  color:rgba(0,0,0,0.65);
+  font-weight:500;
+}
+
+.cta-actions{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+}
+
+@media(max-width:768px){
+  .cta-inner{
+  flex-direction:column;
+  align-items:flex-start;
+}
+}
