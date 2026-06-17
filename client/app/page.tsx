@@ -1,4 +1,4 @@
-import {Header, Hero, About, Services, Categories, WheelsStock, CarsStock, WhyUs, Cta} from "@/app/components/components";
+import {Header, Hero, About, Services, Categories, WheelsStock, CarsStock, WhyUs, Cta, Contact} from "@/app/components/components";
 export default function Home() {
   return (
     <> 
@@ -11,6 +11,7 @@ export default function Home() {
       <CarsStock/>
       <WhyUs/>
       <Cta/>
+      <Contact/>
     </>
   );
 }
