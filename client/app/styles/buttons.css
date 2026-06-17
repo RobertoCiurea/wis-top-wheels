@@ -58,6 +58,17 @@
   font-size:15px;
 }
 
+.btn-success{
+  background: rgba(3, 127, 53, 0.621);
+  border-color: rgba(3, 127, 53, 0.621);
+  cursor:initial;
+}
+
+.btn-success:hover{
+  background-color: rgba(3, 127, 53, 0.4);
+  border-color: rgba(3, 127, 53, 0.4);
+}
+
 .nav-cta .btn{
   min-height:52px;
   border-radius:999px;
