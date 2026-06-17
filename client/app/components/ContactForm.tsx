@@ -45,7 +45,6 @@ const onSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
         }, 3000);
     }
     resetState();
-    console.log('Form submitted:', { name, phone, subject, message });
 }
 
 const resetState = ()=>{
@@ -93,7 +92,7 @@ const resetState = ()=>{
                 </div>
                 <div style={{display:'flex', gap:'12px', flexWrap:'wrap'}}>
                 <button ref={buttonRef} type='submit' className="btn btn-gold" style={{flex:'1', justifyContent:'center'}}>Trimite mesajul</button>
-                <a href="https://wa.me/40700000000" className="btn btn-ghost" style={{flex:'1', justifyContent:'center'}}>💬 WhatsApp direct</a>
+                <a href="https://wa.me/40726547517" className="btn btn-ghost" style={{flex:'1', justifyContent:'center'}}>💬 WhatsApp direct</a>
                 </div>
             </form>
     )
