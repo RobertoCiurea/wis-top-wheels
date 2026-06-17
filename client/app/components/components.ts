@@ -8,5 +8,6 @@ import {WheelsStock} from "@/app/components/WheelsStock";
 import {CarsStock} from "@/app/components/CarsStock";
 import {WhyUs} from "@/app/components/WhyUs";
 import {Cta} from "@/app/components/Cta";
+import {Contact} from "@/app/components/Contact";
 
-export {Header, Hero, Navigation, About, Services, Categories, WheelsStock, CarsStock, WhyUs, Cta};
+export {Header, Hero, Navigation, About, Services, Categories, WheelsStock, CarsStock, WhyUs, Cta, Contact};
