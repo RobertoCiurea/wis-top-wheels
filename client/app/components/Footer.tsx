@@ -55,24 +55,24 @@ export const Footer = ()=>{
                 <div className="nav-logo">
                 <Image src={Logo} alt="WIS Top Wheels Logo" />
                 </div>
-                <p>Furnizorul tău de încredere pentru jante, mașini și închirieri auto în Argeș. Calitate verificată, prețuri corecte, oameni de cuvânt.</p>
+                <p>Furnizorul tău de încredere pentru jante, mașini și servicii auto în Argeș. Calitate verificată, prețuri corecte, oameni de cuvânt.</p>
                 <Socials/>
             </div>
             <div>
                 <div className="footer-title">Servicii</div>
                 <div className="footer-links">
-                <a href="#stock">Jante & Anvelope</a>
-                <a href="#cars">Mașini Import Germania</a>
+                <a href="#stoc-jante-anvelope">Jante & Anvelope</a>
+                <a href="#masini-vanzare">Mașini Import Germania</a>
                 <a href="#contact">Vulcanizare & Direcții auto</a>
                 </div>
             </div>
             <div>
                 <div className="footer-title">Companie</div>
                 <div className="footer-links">
-                <a href="#about">Despre noi</a>
-                <a href="#contact">Contact</a>
-                <a href="#">Politică de confidențialitate</a>
-                <a href="#">Termeni și condiții</a>
+                <a href="#despre-noi">Despre noi</a>
+                <a href="#contact-section">Contact</a>
+                <a href="/privacy">Politică de confidențialitate</a>
+                <a href="/terms">Termeni și condiții</a>
                 </div>
             </div>
             <div>
@@ -80,23 +80,25 @@ export const Footer = ()=>{
                 <div className="footer-links" style={{marginBottom:20}}>
                 <a href="tel:+40726547517">📞 +40 726 547 517</a>
                 <a href="https://wa.me/40726547517">💬 WhatsApp</a>
-                <a href="https://www.google.com/maps?cid=17513810032771618169&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAMYASAF&hl=ro&gl=RO&source=embed">📍Suseni, Argeș</a>
+                <a href="https://www.google.com/maps?cid=17513810032771618169&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAMYASAF&hl=ro&gl=RO&source=embed" rel="noopener noreferrer">📍Suseni, Argeș</a>
                 </div>
                 <div className="footer-newsletter">
                 <div className="footer-title">Noutăți stoc</div>
                 <form onSubmit={onSubmit} className="newsletter-form">
                     <input
                      name="newsletter"
-                     type="text"
+                     type="email"
                      className="newsletter-input"
+                     aria-label="Email pentru noutăți stoc"
                      style={{borderColor: `${newsletterError ? 'rgba(234, 9, 9, 0.5)' : 'var(--border)'} `}}
                      placeholder="Email-ul tău"
                      value={newsletter}
                      onChange={(e)=>setNewsletter(e.target.value)}
+                     required
                          />
-                    <button ref={buttonRef} type="submit" className="btn btn-gold btn-sm">Trimite</button>
+                    <button ref={buttonRef} type="submit" className="btn btn-gold btn-sm" aria-label="Trimite email-ul">Trimite</button>
                 </form>
-                {newsletterError && <div className="form-error">{newsletterError}</div>}
+                {newsletterError && <div className="form-error" role="alert">{newsletterError}</div>}
                 </div>
             </div>
             </div>
