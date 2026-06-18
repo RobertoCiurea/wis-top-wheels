@@ -5,19 +5,19 @@ import Mercedes from "@/public/images/mercedes-cla-200.jpg"
 import Audi from "@/public/images/audi-a4-avant.jpg"
 export const CarsStock = ()=>{
     return (
-        <section className="section" id="cars">
+    <div className="section" id="cars" aria-labelledby="cars-heading">
         <div className="container">
             <div style={{display:'flex', alignItems:'flex-end', justifyContent:'space-between', flexWrap:'wrap', gap:'16px', marginBottom:'12px'}}>
             <div className="reveal visible">
                 <div className="eyebrow">Import Germania</div>
-                <h2 className="display d2">Mașini de <span className="accent">vânzare</span></h2>
+                <h2 className="display d2" id="cars-heading">Mașini de <span className="accent">vânzare</span></h2>
             </div>
-            <a href="#contact" className="btn btn-ghost reveal">Contactează-ne →</a>
+            <a href="#contact-section" className="btn btn-ghost reveal">Contactează-ne →</a>
             </div>
             <div className="stock-grid reveal visible">
 
             <div className="stock-card">
-                <Image src={Bmw} alt="BMW Seria 3" className="stock-img" />
+                <Image src={Bmw} alt="BMW Seria 3 320d xDrive, 2020, vopsea și interior în stare perfectă" className="stock-img" />
                 <div className="stock-body">
                 <div className="stock-type">BMW · 2020 · 150.000 km</div>
                 <div className="stock-title">BMW Seria 3 — 320d xDrive</div>
@@ -30,7 +30,7 @@ export const CarsStock = ()=>{
             </div>
 
             <div className="stock-card">
-                <Image src={Mercedes} alt="Mercedes CLA" className="stock-img" />
+                <Image src={Mercedes} alt="Mercedes-Benz CLA 200, 2019, vopsea gri metalizat cu interior gri" className="stock-img" />
                 <div className="stock-body">
                 <div className="stock-type">Mercedes · 2019 · 180.000 km</div>
                 <div className="stock-title">Mercedes-Benz CLA 200</div>
@@ -43,7 +43,7 @@ export const CarsStock = ()=>{
             </div>
 
             <div className="stock-card">
-                <Image src={Audi} alt="Audi A4" className="stock-img" />
+                <Image src={Audi} alt="Audi A4 Avant 2.0 TDI, 2021, vopsea gri cu interior bej" className="stock-img" />
                 <div className="stock-body">
                 <div className="stock-type">Audi · 2021 · 90.000 km</div>
                 <div className="stock-title">Audi A4 Avant — 2.0 TDI</div>
@@ -57,6 +57,6 @@ export const CarsStock = ()=>{
 
             </div>
         </div>
-        </section>
+    </div>
     )
 }
