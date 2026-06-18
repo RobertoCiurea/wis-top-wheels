@@ -87,14 +87,14 @@ export const Footer = ()=>{
                 <form onSubmit={onSubmit} className="newsletter-form">
                     <input
                      name="newsletter"
-                     type="email"
+                     type="text"
                      className="newsletter-input"
                      aria-label="Email pentru noutăți stoc"
                      style={{borderColor: `${newsletterError ? 'rgba(234, 9, 9, 0.5)' : 'var(--border)'} `}}
                      placeholder="Email-ul tău"
                      value={newsletter}
                      onChange={(e)=>setNewsletter(e.target.value)}
-                     required
+                     
                          />
                     <button ref={buttonRef} type="submit" className="btn btn-gold btn-sm" aria-label="Trimite email-ul">Trimite</button>
                 </form>
