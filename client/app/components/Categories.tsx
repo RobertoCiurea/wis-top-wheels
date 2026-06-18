@@ -31,7 +31,7 @@ export const Categories = ()=>{
           <div className="cat-link">Vezi mașinile <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></div>
         </div>
       </a>
-      <a href="#rentals" className="cat-card" aria-label="Servicii de vulcanizare și direcție roți 3D">
+      <a href="#contact" className="cat-card" aria-label="Servicii de vulcanizare și direcție roți 3D">
         <Image src={ServiceImage} alt="Servicii profesionale de vulcanizare și direcție roți 3D" className="cat-bg" />
         <div className="cat-overlay"></div>
         <div className="cat-content">
