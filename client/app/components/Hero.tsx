@@ -2,26 +2,27 @@ import "@/app/styles/hero.css"
 import Image from "next/image";
 export const Hero = ()=>{
     return(
-<section className="hero" id="hero">
+<div className="hero" id="hero" aria-labelledby="hero-heading">
   <div className="hero-bg"></div>
   <Image
     src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=1600&q=80"
-    alt="Mașină premium"
+    alt="Mașină premium - Hero banner"
     className="hero-img"
     fill
-    loading="eager"
+    priority
+    sizes="(max-width: 768px) 100vw, 100vw"
   />
   <div className="hero-overlay"></div>
   <div className="hero-overlay-bottom"></div>
   <div className="container hero-content">
-    <h1 className="display d1">
+    <h1 className="display d1" id="hero-heading">
       Calitate <br/>
       <em>fără compromis</em>
     </h1>
     <p className="hero-sub">Jante premium, mașini second-hand de import Germania și servicii de vulcanizare — totul într-un singur loc, cu garanție și transparență totală.</p>
     <div className="hero-actions">
-      <a href="#stock" className="btn btn-gold btn-lg">Vezi Stocul</a>
-      <a href="#contact" className="btn btn-ghost btn-lg">Contactează-ne</a>
+      <a href="#stoc-jante-anvelope" className="btn btn-gold btn-lg">Vezi Stocul</a>
+      <a href="#contact-section" className="btn btn-ghost btn-lg">Contactează-ne</a>
     </div>
     <div className="hero-stats">
       <div className="stat">
@@ -40,6 +41,6 @@ export const Hero = ()=>{
       </div>
     </div>
   </div>
-</section>
+</div>
     )
 }
