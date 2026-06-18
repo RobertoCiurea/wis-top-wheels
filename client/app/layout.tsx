@@ -104,7 +104,7 @@ export const metadata: Metadata = {
     siteName: "WIS Top Wheels",
     images: [
       {
-        url: `${baseUrl}/public/logo.png`,
+        url: `${baseUrl}/logo.png`,
         width: 1200,
         height: 630,
         alt: "WIS Top Wheels — Jante Premium și Mașini de Vânzare",
@@ -116,7 +116,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "WIS Top Wheels — Jante Premium, Mașini Import Germania",
     description: "Cumpără jante aliaj de calitate, anvelope, și mașini de vânzare importate din Germania cu garanție și transparență totală.",
-    images: [`${baseUrl}/public/logo.png`],
+    images: [`${baseUrl}/logo.png`],
   },
   robots: {
     index: true,
@@ -143,7 +143,6 @@ export const viewport: Viewport = {
   maximumScale: 5,
   userScalable: true,
   themeColor: [
-    { media: "(prefers-color-scheme: accent)", color: "#DBB11B" },
     { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
   ],
 };
@@ -160,7 +159,7 @@ export default function RootLayout({
         "@type": "Organization",
         name: "WIS Top Wheels",
         url: baseUrl,
-        logo: `${baseUrl}/public/logo.png`,
+        logo: `${baseUrl}/logo.png`,
         description: "Cumpără jante aliaj de calitate, anvelope, și mașini de vânzare importate din Germania cu garanție și transparență totală.",
         sameAs: [
           "https://www.instagram.com/wis_wheels_cars/",
@@ -209,7 +208,7 @@ export default function RootLayout({
       {
         "@type": "LocalBusiness",
         name: "WIS Top Wheels",
-        image: `${baseUrl}/public/logo.png`,
+        image: `${baseUrl}/logo.png`,
         url: baseUrl,
         telephone: "+40726547517",
         address: {
