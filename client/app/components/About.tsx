@@ -100,7 +100,7 @@ export const About = ()=>{
 
 
     return(
-        <section className="section" id="about">
+        <div className="section" id="about" aria-labelledby="about-heading">
         <div className="container">
             <div className="about-grid">
             <div className="about-visual reveal reveal-inversed visible  ">
@@ -133,21 +133,21 @@ export const About = ()=>{
                         <div className="vp-progress__filled" style={{ width: `${progressPercent}%` }}></div>
                     </div>
                     <div className="vp-controls__row">
-                    <button className="vp-btn vp-btn--play" onClick={togglePlay} aria-label={playing ? "Pause" : "Play"}>
+                    <button className="vp-btn vp-btn--play" onClick={togglePlay} aria-label={playing ? "Pause video" : "Play video"}>
                         {playing ? (
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M8 7h3v10H8V7zm5 0h3v10h-3V7z" fill="currentColor"/></svg>
                         ) : (
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 7v10l8-5-8-5z" fill="currentColor"/></svg>
                         )}
                     </button>
-                    <div className="vp-time">{formatTime(currentTime)} / {formatTime(duration)}</div>
+                    <div className="vp-time" aria-label={`Current time: ${formatTime(currentTime)} of ${formatTime(duration)}`}>{formatTime(currentTime)} / {formatTime(duration)}</div>
 
                     <div className="vp-volume-wrap" aria-hidden="false">
-                        <input className="vp-volume" type="range" step="0.01" min={0} max={1} value={volume} aria-label="Volume" onChange={updateVolume}/>
+                        <input className="vp-volume" type="range" step="0.01" min={0} max={1} value={volume} aria-label="Volume control" onChange={updateVolume}/>
                     </div>
 
-                    <button className="vp-btn vp-btn--mute" onClick={toggleMute} aria-label={muted ? "Unmute" : "Mute"}>
-                    <Image src={muted ? MuteIcon : VolumeIcon} alt="Mute/Unmute" width="18" height="18"/>
+                    <button className="vp-btn vp-btn--mute" onClick={toggleMute} aria-label={muted ? "Unmute video" : "Mute video"}>
+                    <Image src={muted ? MuteIcon : VolumeIcon} alt="" width="18" height="18"/>
                     </button>
                     </div>
                 </div>
@@ -188,7 +188,7 @@ export const About = ()=>{
             </div>
             </div>
         </div>
-        </section>
+        </div>
 
     )
 }
