@@ -69,8 +69,8 @@ export  const Navigation = ()=>{
       <a href="#contact">Contact</a>
     </div>
     <div className="nav-cta">
-      <a href="tel:+40700000000" className="btn btn-ghost btn-sm">📞 Sună acum</a>
-      <a href="https://wa.me/40700000000" className="btn btn-gold btn-sm">WhatsApp</a>
+      <a href="tel:+40726547517" className="btn btn-ghost btn-sm">📞 Sună acum</a>
+      <a href="https://wa.me/40726547517" className="btn btn-gold btn-sm">WhatsApp</a>
     </div>
     <button className={`nav-toggle ${isMenuOpen ? 'open' : ''}`} onClick={toggleMenu} id="menuToggle" aria-label="Meniu">
       <span></span><span></span><span></span>
@@ -91,8 +91,8 @@ export  const Navigation = ()=>{
         <a href="#contact" onClick={toggleMenu}>Contact</a>
       </nav>
       <div className="mobile-cta mobile-cta--stacked">
-        <a href="tel:+40700000000" className="btn btn-ghost" onClick={toggleMenu}>📞 Sună acum</a>
-        <a href="https://wa.me/40700000000" className="btn btn-gold" onClick={toggleMenu}>WhatsApp</a>
+        <a href="tel:+40726547517" className="btn btn-ghost" onClick={toggleMenu}>📞 Sună acum</a>
+        <a href="https://wa.me/40726547517" className="btn btn-gold" onClick={toggleMenu}>WhatsApp</a>
       </div>
     </div>
   </aside>
