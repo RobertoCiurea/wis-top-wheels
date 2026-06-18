@@ -71,8 +71,8 @@ export const Footer = ()=>{
                 <div className="footer-links">
                 <a href="#despre-noi">Despre noi</a>
                 <a href="#contact-section">Contact</a>
-                <a href="/privacy">Politică de confidențialitate</a>
-                <a href="/terms">Termeni și condiții</a>
+                <a href="#">Politică de confidențialitate</a>
+                <a href="#">Termeni și condiții</a>
                 </div>
             </div>
             <div>
