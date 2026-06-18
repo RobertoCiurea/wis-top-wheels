@@ -137,16 +137,6 @@
   border-color:rgba(234, 9, 9, 0.5);
 }
 
-.btn-success{
-  background: rgba(3, 127, 53, 0.621);
-  border-color: rgba(3, 127, 53, 0.621);
-  cursor:initial;
-}
-
-.btn-success:hover{
-  background-color: rgba(3, 127, 53, 0.4);
-  border-color: rgba(3, 127, 53, 0.4);
-}
 
 select.form-input{
   appearance:none;
