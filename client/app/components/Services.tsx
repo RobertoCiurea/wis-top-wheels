@@ -17,7 +17,7 @@ export const Services = ()=>{
                 <div className="svc-title">Mașini Import Germania</div>
             </div>
             </a>
-            <a href="#rentals" className="service-tab">
+            <a href="#contact" className="service-tab">
             <div className="svc-icon">🔧</div>
             <div>
                 <div className="svc-label">Serviciu</div>
