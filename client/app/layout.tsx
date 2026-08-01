@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import {  Barlow_Condensed } from "next/font/google";
-import {Inter} from "next/font/google";
+import { Barlow_Condensed } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./styles/styles.css";
-import "./styles/buttons.css"
-
+import "./styles/buttons.css";
+import { Header, Footer } from "@/app/components/components";
 
 const barlowCondensed = Barlow_Condensed({
   variable: "--font-barlow-condensed",
@@ -21,8 +21,10 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://wistopwheels.ro";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
-  title: "WIS Top Wheels — Jante Premium, Mașini Second-Hand Import Germania, Vulcanizare",
-  description: "Cumpără jante aliaj de calitate, anvelope, și mașini de vânzare importate din Germania, cu garanție și transparență totală. Servicii de vulcanizare și direcție roți 3D. Răspund rapid pe WhatsApp și telefon.",
+  title:
+    "WIS Top Wheels — Jante Premium, Mașini Second-Hand Import Germania, Vulcanizare",
+  description:
+    "Cumpără jante aliaj de calitate, anvelope, și mașini de vânzare importate din Germania, cu garanție și transparență totală. Servicii de vulcanizare și direcție roți 3D. Răspund rapid pe WhatsApp și telefon.",
   applicationName: "WIS Top Wheels",
   authors: [{ name: "WIS Top Wheels", url: baseUrl }],
   keywords: [
@@ -100,7 +102,8 @@ export const metadata: Metadata = {
     locale: "ro_RO",
     url: baseUrl,
     title: "WIS Top Wheels — Jante Premium, Mașini Import Germania",
-    description: "Cumpără jante aliaj de calitate, anvelope, și mașini de vânzare importate din Germania cu garanție și transparență totală.",
+    description:
+      "Cumpără jante aliaj de calitate, anvelope, și mașini de vânzare importate din Germania cu garanție și transparență totală.",
     siteName: "WIS Top Wheels",
     images: [
       {
@@ -115,7 +118,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "WIS Top Wheels — Jante Premium, Mașini Import Germania",
-    description: "Cumpără jante aliaj de calitate, anvelope, și mașini de vânzare importate din Germania cu garanție și transparență totală.",
+    description:
+      "Cumpără jante aliaj de calitate, anvelope, și mașini de vânzare importate din Germania cu garanție și transparență totală.",
     images: [`${baseUrl}/logo.png`],
   },
   robots: {
@@ -134,7 +138,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: baseUrl,
   },
-
 };
 
 export const viewport: Viewport = {
@@ -142,9 +145,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
-  ],
+  themeColor: [{ media: "(prefers-color-scheme: dark)", color: "#0a0a0a" }],
 };
 
 export default function RootLayout({
@@ -160,7 +161,8 @@ export default function RootLayout({
         name: "WIS Top Wheels",
         url: baseUrl,
         logo: `${baseUrl}/logo.png`,
-        description: "Cumpără jante aliaj de calitate, anvelope, și mașini de vânzare importate din Germania cu garanție și transparență totală.",
+        description:
+          "Cumpără jante aliaj de calitate, anvelope, și mașini de vânzare importate din Germania cu garanție și transparență totală.",
         sameAs: [
           "https://www.instagram.com/wis_wheels_cars/",
           "https://www.tiktok.com/@wis_wheels_cars",
@@ -226,7 +228,8 @@ export default function RootLayout({
         "@type": "WebSite",
         url: baseUrl,
         name: "WIS Top Wheels",
-        description: "Cumpără jante aliaj de calitate, anvelope, și mașini de vânzare importate din Germania cu garanție și transparență totală.",
+        description:
+          "Cumpără jante aliaj de calitate, anvelope, și mașini de vânzare importate din Germania cu garanție și transparență totală.",
       },
     ],
   };
@@ -239,7 +242,11 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <Header />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
