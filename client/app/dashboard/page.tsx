@@ -10,12 +10,8 @@ export default async function DashboardPage() {
       Authorization: `Bearer ${session.accessToken}`,
     },
   });
-  if (!response.ok) return "Error";
-  const data = await response.text();
-  return (
-    <>
-      <h1>Welcome to dashboard!</h1>
-      <h3>{data}</h3>
-    </>
-  );
+  if (response.status === 401)
+    redirect("/api/auth/signin?callbackUrl=/dashboard");
+  else if (response.status == 403) return "Forbidden";
+  return <></>;
 }
