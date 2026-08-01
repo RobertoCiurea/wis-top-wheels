@@ -14,15 +14,16 @@
 .dashboard-content {
   width: 100%;
   padding-left: 2rem;
-  flex: 0 0 85%;
+  flex: 0 0 80%;
 }
 .sidebar {
-  flex: 0 0 15%;
+  flex: 0 0 20%;
   background: var(--card);
   padding: 1.25rem 2rem;
   border-radius: var(--radius);
   font: var(--font-body);
   color: var(--gray-light);
+  box-shadow: 0 4px 20px rgba(111, 110, 110, 0.1);
 }
 
 .navbar-menu {
@@ -33,6 +34,9 @@
   gap: 35px;
 }
 .navbar-menu span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   cursor: pointer;
   padding: 5px;
   position: relative;
@@ -61,8 +65,16 @@
 
 .sidebar span:hover {
   background: var(--card-hover);
+  color: var(--gray);
 }
 
 .sidebar span:hover::after {
   width: 100%;
+}
+.sidebar span svg {
+  transition: var(--transition);
+}
+
+.sidebar span:hover svg {
+  transform: translateY(-5px);
 }
