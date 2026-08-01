@@ -1,35 +1,47 @@
-import {Header, Hero, About, Services, Categories, WheelsStock, CarsStock, WhyUs, Cta, Contact, Map, Footer, WhatsappFloat} from "@/app/components/components";
+import {
+  Header,
+  Hero,
+  About,
+  Services,
+  Categories,
+  WheelsStock,
+  CarsStock,
+  WhyUs,
+  Cta,
+  Contact,
+  Map,
+  Footer,
+  WhatsappFloat,
+} from "@/app/components/components";
 
 export default function Home() {
   return (
     <>
-      <Header/>
       <main>
-        <Hero/>
-        <Services/>
+        <Hero />
+        <Services />
         <section id="despre-noi" className="section">
-          <About/>
+          <About />
         </section>
-        <Categories/>
+        <Categories />
         <section id="stoc-jante-anvelope">
-          <WheelsStock/>
+          <WheelsStock />
         </section>
         <section id="masini-vanzare">
-          <CarsStock/>
+          <CarsStock />
         </section>
         <section id="de-ce-noi">
-          <WhyUs/>
+          <WhyUs />
         </section>
-        <Cta/>
+        <Cta />
         <section id="contact-section">
-          <Contact/>
+          <Contact />
         </section>
         <section id="locatie">
-          <Map/>
+          <Map />
         </section>
       </main>
-      <Footer/>
-      <WhatsappFloat/>
+      <WhatsappFloat />
     </>
   );
 }
