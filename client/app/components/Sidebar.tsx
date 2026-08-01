@@ -1,24 +1,57 @@
 import Link from "next/link";
+import {
+  ChartNoAxesCombined,
+  LoaderPinwheel,
+  Car,
+  Plus,
+  ShieldCheck,
+  LogOut,
+  MessageSquare,
+} from "lucide-react";
 export const Sidebar = () => {
   return (
     <div className="sidebar">
       <nav className="navbar-menu">
         <Link href="/dashboard/statistics">
-          <span>Statistici</span>
+          <span>
+            <ChartNoAxesCombined />
+            Statistici
+          </span>
         </Link>
         <Link href="/dashboard/rims">
-          <span>Anunturi jante</span>
+          <span>
+            <LoaderPinwheel />
+            Anunturi jante
+          </span>
         </Link>
         <Link href="/dashboard/cars">
-          <span>Anunturi auto</span>
+          <span>
+            <Car />
+            Anunturi auto
+          </span>
         </Link>
         <Link href="/dashboard/new-add">
-          <span>Adauga anunt</span>
+          <span>
+            <Plus />
+            Adauga anunt
+          </span>
+        </Link>
+        <Link href="/dashboard/messages">
+          <span>
+            <MessageSquare />
+            Mesaje
+          </span>
         </Link>
         <Link href="/dashboard/admin">
-          <span>Zona administrator</span>
+          <span>
+            <ShieldCheck />
+            Zona administrator
+          </span>
         </Link>
-        <span>Deconectare</span>
+        <span>
+          <LogOut />
+          Deconectare
+        </span>
       </nav>
     </div>
   );
