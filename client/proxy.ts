@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 
 export default auth((req) => {
   const isLoggedIn = !!req.auth;
-  const hasRefreshTokenError = req.auth?.error === "RefreshTokenError";
+  const hasRefreshTokenError =
+    (req.auth as { error?: string } | null)?.error === "RefreshTokenError";
   const isDashboard = req.nextUrl.pathname.startsWith("/dashboard");
 
   //redirect only if the user is on /dashboard route and not logged in or has refresh token error
