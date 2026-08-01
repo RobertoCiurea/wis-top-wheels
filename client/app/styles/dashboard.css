@@ -1,0 +1,68 @@
+.dashboard-container {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 13rem 5rem;
+}
+.dashboard-group {
+  width: 100%;
+  display: flex;
+}
+.dashboard-content {
+  width: 100%;
+  padding-left: 2rem;
+  flex: 0 0 85%;
+}
+.sidebar {
+  flex: 0 0 15%;
+  background: var(--card);
+  padding: 1.25rem 2rem;
+  border-radius: var(--radius);
+  font: var(--font-body);
+  color: var(--gray-light);
+}
+
+.navbar-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  gap: 35px;
+}
+.navbar-menu span {
+  cursor: pointer;
+  padding: 5px;
+  position: relative;
+  transition: var(--transition);
+}
+
+.navbar-menu span::before {
+  content: "";
+  width: 100%;
+  height: 2px;
+  background: var(--border);
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+}
+.navbar-menu span::after {
+  content: "";
+  width: 0;
+  height: 2px;
+  background: var(--gold);
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  transition: width var(--transition);
+}
+
+.sidebar span:hover {
+  background: var(--card-hover);
+}
+
+.sidebar span:hover::after {
+  width: 100%;
+}
