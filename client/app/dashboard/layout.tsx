@@ -7,7 +7,6 @@ export default function DashboardLayout({
 }) {
   return (
     <>
-      <Header />
       <main className="dashboard-container">
         <div className="dashboard-group">
           {/* Left side - sidebar */}
@@ -16,7 +15,6 @@ export default function DashboardLayout({
           <div className="dashboard-content">{children}</div>
         </div>
       </main>
-      <Footer />
     </>
   );
 }
