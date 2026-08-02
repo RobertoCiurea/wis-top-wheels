@@ -13,5 +13,6 @@ export default async function DashboardPage() {
   if (response.status === 401)
     redirect("/api/auth/signin?callbackUrl=/dashboard");
   else if (response.status == 403) return "Forbidden";
-  return <></>;
+  const user = session.user;
+  return <h1>Welcome to the dashboard, {user?.name}!</h1>;
 }
