@@ -10,5 +10,21 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
   interface JWT {
     accessToken?: string;
+    refreshToken?: string;
+    idToken?: string;
+    expiresAt?: number;
+    error?: "RefreshTokenError";
+  }
+}
+
+//extend the default session type to include the accessToken and idToken properties
+declare module "next-auth" {
+  interface Session {
+    accessToken?: string;
+    idToken?: string;
+    error?: "RefreshTokenError";
+    user: {
+      // keep the default user properties (name, email, image)
+    } & DefaultSession["user"];
   }
 }
