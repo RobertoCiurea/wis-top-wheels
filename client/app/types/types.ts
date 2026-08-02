@@ -14,3 +14,11 @@ export type CardProps = {
   title: string;
   text: string;
 };
+
+export type UserCardProps = {
+  id: string;
+  username: string;
+  email: string;
+  roles: string[];
+  accessToken?: string;
+};
