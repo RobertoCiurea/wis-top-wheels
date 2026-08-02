@@ -7,6 +7,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       clientId: process.env.KEYCLOAK_ID!,
       clientSecret: process.env.KEYCLOAK_SECRET!,
       issuer: process.env.KEYCLOAK_ISSUER!,
+      authorization: {
+        params: {
+          prompt: "login",
+        },
+      },
     }),
   ],
   callbacks: {
@@ -16,6 +21,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           ...token,
           accessToken: account.access_token,
           refreshToken: account.refresh_token,
+          idToken: account.id_token,
           expiresAt: account.expires_at
             ? account.expires_at * 1000
             : Date.now() + 300 * 1000, //create a 5 minutes expiration date
@@ -58,6 +64,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken;
+      session.idToken = token.idToken;
+      session.error = token.error;
       return session;
     },
   },
