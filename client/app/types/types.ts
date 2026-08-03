@@ -22,3 +22,9 @@ export type UserCardProps = {
   roles: string[];
   accessToken?: string;
 };
+
+export type ActionState = {
+  status: number;
+  error?: string;
+  message?: string;
+};
