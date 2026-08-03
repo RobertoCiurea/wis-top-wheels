@@ -159,6 +159,14 @@ public class UserManagementResource {
             userResource.roles().realmLevel().add(List.of(role));
 
             return Response.ok().entity("User updated successfully").build();
+        } catch (WebApplicationException e) {
+
+            String keycloakError = e.getResponse().readEntity(String.class);
+            System.err.println("KEYCLOAK REJECTED UPDATE: " + keycloakError);
+
+            return Response.status(e.getResponse().getStatus())
+                    .entity("Keycloak validation error: " + keycloakError)
+                    .build();
         } catch (Exception e) {
             e.printStackTrace(); // Log the actual error to your Quarkus console
             //check if keycloak rejected the username
