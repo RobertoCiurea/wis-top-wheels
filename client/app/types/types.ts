@@ -21,6 +21,7 @@ export type UserCardProps = {
   email: string;
   roles: string[];
   accessToken?: string;
+  currentUserEmail: string;
 };
 
 export type ActionState = {
