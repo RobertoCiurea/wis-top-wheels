@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./styles/styles.css";
 import "./styles/buttons.css";
 import { Header, Footer } from "@/app/components/components";
+import { Toaster } from "sonner";
 
 const barlowCondensed = Barlow_Condensed({
   variable: "--font-barlow-condensed",
@@ -250,6 +251,7 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
+        <Toaster theme="dark" />
       </body>
     </html>
   );
