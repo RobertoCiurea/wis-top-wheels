@@ -63,6 +63,7 @@ export default async function AdminDashboardPage() {
               email={user.email}
               roles={user.roles}
               accessToken={session.accessToken}
+              currentUserEmail={session.user.email}
             />
           ))
         ) : (
