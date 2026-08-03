@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useEffect, useState } from "react";
 import { UserCardProps } from "@/app/types/types";
 import { CircleUserRound, Pencil, Trash, TriangleAlert } from "lucide-react";
 import { Modal } from "@/app/components/Modal";
 import { ActionState } from "@/app/types/types";
 import { useActionState } from "react";
 import { updateUser } from "@/app/actions/updateUserAction";
+import { deleteUser } from "../actions/deleteUserAction";
 import "@/app/styles/contact.css";
+import { toast } from "sonner";
 
 export const UserCard = ({
   id,
@@ -15,21 +17,55 @@ export const UserCard = ({
   email,
   roles,
   accessToken,
+  currentUserEmail,
 }: UserCardProps) => {
-  const initialState: ActionState = {
+  const initialEditState: ActionState = {
+    status: 0,
+    error: "",
+    message: "",
+  };
+  const initialDeleteState: ActionState = {
     status: 0,
     error: "",
     message: "",
   };
 
   //useActionState hook initialization
-  const [state, formAction, isPending] = useActionState(
+  const [editState, editFormAction, editIsPending] = useActionState(
     updateUser,
-    initialState,
+    initialEditState,
+  );
+
+  const [deleteState, deleteFormAction, deleteIsPending] = useActionState(
+    deleteUser,
+    initialDeleteState,
   );
 
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  useEffect(() => {
+    if (editState.status === 200 && isEditOpen) {
+      setIsEditOpen(false);
+      toast.success(
+        editState.message || "Datele utilizatorului au fost salvate cu succes.",
+      );
+    }
+  }, [editState, isEditOpen]);
+
+  useEffect(() => {
+    console.log("Delete state");
+    console.log(deleteState);
+    if (deleteState.status === 200 && isDeleteOpen) {
+      console.log("user sters cu succes");
+
+      setIsDeleteOpen(false);
+      toast.success(
+        deleteState.message || "Utilizatorul a fost șters cu succes!",
+      );
+    }
+  }, [deleteState, isDeleteOpen]);
+
+  const isCurrentUser = currentUserEmail === email;
 
   const closeEditModal = () => {
     setIsEditOpen(false);
@@ -41,15 +77,14 @@ export const UserCard = ({
 
   return (
     <>
-      <div className="user-card">
-        <div className="user-card-header">
+      <div className={`user-card ${isCurrentUser ? "current-user-card" : ""}`}>
+        <div
+          className={`user-card-header ${isCurrentUser ? "current-user-header" : ""}`}
+        >
           <p>{username}</p>
           <CircleUserRound size={36} />
         </div>
         <div className="user-card-content">
-          {/* {successMessage ? (
-            <div className="user-card-status success">{successMessage}</div>
-          ) : null} */}
           <div className="user-card-row">
             <p>Rol</p>
             {roles.length > 0 ? (
@@ -67,10 +102,13 @@ export const UserCard = ({
             <p>{email}</p>
           </div>
         </div>
+
         <div className="user-card-footer">
           <button
-            className="user-card-button edit-button"
+            className={`user-card-button edit-button ${isCurrentUser ? "disabled" : ""}`}
             type="button"
+            disabled={isCurrentUser}
+            title={isCurrentUser ? "Nu poți edita propriul cont." : ""}
             onClick={() => {
               setIsEditOpen(true);
             }}
@@ -79,8 +117,9 @@ export const UserCard = ({
             Editează
           </button>
           <button
-            className="user-card-button delete-button"
+            className={`user-card-button delete-button ${isCurrentUser ? "disabled" : ""} `}
             type="button"
+            disabled={isCurrentUser}
             onClick={() => {
               setIsDeleteOpen(true);
             }}
@@ -108,19 +147,25 @@ export const UserCard = ({
             </button>
             <button
               type="submit"
-              form="edit-user-form"
+              form={`edit-user-form-${id}`}
               className="modal-action-button primary"
-              disabled={isPending}
+              disabled={editIsPending}
             >
-              {isPending ? "Se salvează..." : "Salvează"}
+              {editIsPending ? "Se salvează..." : "Salvează"}
             </button>
           </>
         }
       >
-        <form id="edit-user-form" className="modal-form" action={formAction}>
+        <form
+          id={`edit-user-form-${id}`}
+          className="modal-form"
+          action={editFormAction}
+        >
           <input type="hidden" name="id" value={id} />
           <input type="hidden" name="accessToken" value={accessToken} />
-          {state.error && <div className="modal-error">{state.error}</div>}
+          {editState.error && (
+            <div className="modal-error">{editState.error}</div>
+          )}
           <div className="form-group">
             <label className="form-label" htmlFor={`username-${id}`}>
               Nume utilizator
@@ -131,7 +176,7 @@ export const UserCard = ({
               id={`username-${id}`}
               defaultValue={username}
               required
-              disabled={isPending}
+              disabled={editIsPending}
             />
           </div>
 
@@ -144,7 +189,7 @@ export const UserCard = ({
               className="form-input"
               id={`role-${id}`}
               defaultValue={roles[0]}
-              disabled={isPending}
+              disabled={editIsPending}
             >
               <option value="admin">admin</option>
               <option value="moderator">moderator</option>
@@ -152,7 +197,7 @@ export const UserCard = ({
           </div>
         </form>
       </Modal>
-      {/* 
+
       <Modal
         isOpen={isDeleteOpen}
         onClose={closeDeleteModal}
@@ -165,23 +210,30 @@ export const UserCard = ({
               type="button"
               className="modal-action-button secondary"
               onClick={closeDeleteModal}
-              disabled={isDeleting}
             >
               Anulează
             </button>
+
             <button
-              type="button"
+              form={`delete-user-form-${id}`}
+              type="submit"
               className="modal-action-button danger"
-              onClick={handleDeleteConfirm}
-              disabled={isDeleting}
             >
-              {isDeleting ? "Se șterge..." : "Șterge"}
+              {deleteIsPending ? "Se șterge..." : "Șterge"}
             </button>
           </>
         }
       >
-        <div>
-          {error ? <div className="modal-error">{error}</div> : null}
+        <form
+          id={`delete-user-form-${id}`}
+          className="modal-form"
+          action={deleteFormAction}
+        >
+          {deleteState.error && (
+            <div className="modal-error">{deleteState.error}</div>
+          )}
+          <input type="hidden" name="id" value={id} />
+          <input type="hidden" name="accessToken" value={accessToken} />
           <div className="modal-warning-card">
             <TriangleAlert size={24} />
             <p>
@@ -189,8 +241,8 @@ export const UserCard = ({
               nu poate fi anulată.
             </p>
           </div>
-        </div>
-      </Modal> */}
+        </form>
+      </Modal>
     </>
   );
 };
