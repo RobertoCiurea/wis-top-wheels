@@ -4,27 +4,10 @@ import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { UserCardProps } from "@/app/types/types";
 import { CircleUserRound, Pencil, Trash, TriangleAlert } from "lucide-react";
 import { Modal } from "@/app/components/Modal";
+import { ActionState } from "@/app/types/types";
+import { useActionState } from "react";
+import { updateUser } from "@/app/actions/updateUserAction";
 import "@/app/styles/contact.css";
-
-const getFriendlyErrorMessage = async (
-  response: Response,
-  fallback: string,
-): Promise<string> => {
-  if (response.status === 401 || response.status === 403) {
-    return "Sesiunea a expirat sau nu ai drepturile necesare. Conectează-te din nou pentru a continua.";
-  }
-
-  try {
-    const text = await response.text();
-    if (text) {
-      return text;
-    }
-  } catch {
-    // Ignore parsing issues and fall back to the default message.
-  }
-
-  return fallback;
-};
 
 export const UserCard = ({
   id,
@@ -33,102 +16,44 @@ export const UserCard = ({
   roles,
   accessToken,
 }: UserCardProps) => {
-  const [userState, setUserState] = useState({ username, email, roles });
+  const initialState: ActionState = {
+    status: 0,
+    error: "",
+    message: "",
+  };
+
+  //useActionState hook initialization
+  const [state, formAction, isPending] = useActionState(
+    updateUser,
+    initialState,
+  );
+
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [formValues, setFormValues] = useState({
-    username: userState.username,
-    email: userState.email,
-    role: userState.roles[0] ?? "moderator",
-  });
-  const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [isSaving, setIsSaving] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isRemoved, setIsRemoved] = useState(false);
-
-  useEffect(() => {
-    setUserState({ username, email, roles });
-    setFormValues({ username, email, role: roles[0] ?? "moderator" });
-  }, [username, email, roles]);
-
-  const availableRoles = useMemo(() => ["admin", "moderator"], []);
-
-  const resetForm = () => {
-    setFormValues({
-      username: userState.username,
-      email: userState.email,
-      role: userState.roles[0] ?? "moderator",
-    });
-    setError("");
-    setSuccessMessage("");
-  };
 
   const closeEditModal = () => {
     setIsEditOpen(false);
-    setError("");
-    setSuccessMessage("");
   };
 
   const closeDeleteModal = () => {
     setIsDeleteOpen(false);
-    setError("");
-    setSuccessMessage("");
   };
-
-  const handleEditSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!formValues.username.trim() || !formValues.email.trim()) {
-      setError("Numele și adresa de email sunt obligatorii.");
-      return;
-    }
-
-    setIsSaving(true);
-    setError("");
-    setSuccessMessage("");
-
-    setUserState((current) => ({
-      ...current,
-      username: formValues.username.trim(),
-      email: formValues.email.trim(),
-      roles: [formValues.role],
-    }));
-    setSuccessMessage("Datele utilizatorului au fost salvate cu succes.");
-    closeEditModal();
-  };
-
-  const handleDeleteConfirm = async () => {
-    if (isDeleting) return;
-
-    setIsDeleting(true);
-    setError("");
-    setSuccessMessage("");
-
-    setSuccessMessage("Utilizatorul a fost șters cu succes.");
-    setIsRemoved(true);
-    closeDeleteModal();
-  };
-
-  if (isRemoved) {
-    return null;
-  }
 
   return (
     <>
       <div className="user-card">
         <div className="user-card-header">
-          <p>{userState.username}</p>
+          <p>{username}</p>
           <CircleUserRound size={36} />
         </div>
         <div className="user-card-content">
-          {successMessage ? (
+          {/* {successMessage ? (
             <div className="user-card-status success">{successMessage}</div>
-          ) : null}
+          ) : null} */}
           <div className="user-card-row">
             <p>Rol</p>
-            {userState.roles.length > 0 ? (
-              userState.roles.map((role, index) => (
+            {roles.length > 0 ? (
+              roles.map((role, index) => (
                 <span className="role" key={`${role}-${index}`}>
                   {role}
                 </span>
@@ -139,7 +64,7 @@ export const UserCard = ({
           </div>
           <div className="user-card-row">
             <p>Email</p>
-            <p>{userState.email}</p>
+            <p>{email}</p>
           </div>
         </div>
         <div className="user-card-footer">
@@ -147,7 +72,6 @@ export const UserCard = ({
             className="user-card-button edit-button"
             type="button"
             onClick={() => {
-              resetForm();
               setIsEditOpen(true);
             }}
           >
@@ -158,7 +82,6 @@ export const UserCard = ({
             className="user-card-button delete-button"
             type="button"
             onClick={() => {
-              setError("");
               setIsDeleteOpen(true);
             }}
           >
@@ -187,35 +110,28 @@ export const UserCard = ({
               type="submit"
               form="edit-user-form"
               className="modal-action-button primary"
-              disabled={isSaving}
+              disabled={isPending}
             >
-              {isSaving ? "Se salvează..." : "Salvează"}
+              {isPending ? "Se salvează..." : "Salvează"}
             </button>
           </>
         }
       >
-        <form
-          id="edit-user-form"
-          className="modal-form"
-          onSubmit={handleEditSubmit}
-        >
-          {error ? <div className="modal-error">{error}</div> : null}
+        <form id="edit-user-form" className="modal-form" action={formAction}>
+          <input type="hidden" name="id" value={id} />
+          <input type="hidden" name="accessToken" value={accessToken} />
+          {state.error && <div className="modal-error">{state.error}</div>}
           <div className="form-group">
             <label className="form-label" htmlFor={`username-${id}`}>
               Nume utilizator
             </label>
             <input
+              name="username"
               className={`form-input`}
               id={`username-${id}`}
-              value={formValues.username}
-              onChange={(event) =>
-                setFormValues((current) => ({
-                  ...current,
-                  username: event.target.value,
-                }))
-              }
+              defaultValue={username}
               required
-              disabled={isSaving}
+              disabled={isPending}
             />
           </div>
 
@@ -224,31 +140,23 @@ export const UserCard = ({
               Rol
             </label>
             <select
+              name="role"
               className="form-input"
               id={`role-${id}`}
-              value={formValues.role}
-              onChange={(event) =>
-                setFormValues((current) => ({
-                  ...current,
-                  role: event.target.value,
-                }))
-              }
-              disabled={isSaving}
+              defaultValue={roles[0]}
+              disabled={isPending}
             >
-              {availableRoles.map((role) => (
-                <option value={role} key={role}>
-                  {role}
-                </option>
-              ))}
+              <option value="admin">admin</option>
+              <option value="moderator">moderator</option>
             </select>
           </div>
         </form>
       </Modal>
-
+      {/* 
       <Modal
         isOpen={isDeleteOpen}
         onClose={closeDeleteModal}
-        description={`Șterge utilizatorul ${userState.username} cu rolul de ${userState.roles.join(", ")}.`}
+        description={`Șterge utilizatorul ${username} cu rolul de ${roles.join(", ")}.`}
         title="Confirmă ștergerea"
         maxWidth="480px"
         footer={
@@ -282,7 +190,7 @@ export const UserCard = ({
             </p>
           </div>
         </div>
-      </Modal>
+      </Modal> */}
     </>
   );
 };
