@@ -52,20 +52,16 @@ export const UserCard = ({
         editState.message || "Datele utilizatorului au fost salvate cu succes.",
       );
     }
-  }, [editState, isEditOpen]);
+  }, [editState]);
 
   useEffect(() => {
-    console.log("Delete state");
-    console.log(deleteState);
     if (deleteState.status === 200 && isDeleteOpen) {
-      console.log("user sters cu succes");
-
       setIsDeleteOpen(false);
       toast.success(
         deleteState.message || "Utilizatorul a fost șters cu succes!",
       );
     }
-  }, [deleteState, isDeleteOpen]);
+  }, [deleteState]);
 
   const isCurrentUser = currentUserEmail === email;
 
@@ -87,6 +83,14 @@ export const UserCard = ({
           <CircleUserRound size={36} />
         </div>
         <div className="user-card-content">
+          <div className="user-card-row">
+            <p>Nume</p>
+            <p>{lastName}</p>
+          </div>
+          <div className="user-card-row">
+            <p>Prenume</p>
+            <p>{firstName}</p>
+          </div>
           <div className="user-card-row">
             <p>Rol</p>
             {roles.length > 0 ? (
