@@ -1,4 +1,4 @@
-import { UserCard } from "@/app/components/UserCard";
+import { UserCard, AddUser } from "@/app/components/components";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { UserCardProps } from "@/app/types/types";
@@ -53,6 +53,7 @@ export default async function AdminDashboardPage() {
   return (
     <section className="dashboard-content">
       <h1>Lista Staff</h1>
+      <AddUser accessToken={session.accessToken} />
       <div className="users-grid">
         {data && data.length > 0 ? (
           data.map((user: UserCardProps) => (
@@ -60,6 +61,8 @@ export default async function AdminDashboardPage() {
               key={user.id}
               id={user.id}
               username={user.username}
+              firstName={user.firstName}
+              lastName={user.lastName}
               email={user.email}
               roles={user.roles}
               accessToken={session.accessToken}
