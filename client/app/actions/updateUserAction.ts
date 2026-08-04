@@ -33,7 +33,7 @@ export async function updateUser(
         },
         body: JSON.stringify({
           username: username.trim(),
-          firstName: firstName.trim,
+          firstName: firstName.trim(),
           lastName: lastName.trim(),
           role,
         }),
