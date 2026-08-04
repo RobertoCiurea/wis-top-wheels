@@ -42,6 +42,8 @@ public class UserManagementResource {
             return new UserResponseDto(
                     user.getId(),
                     user.getUsername(),
+                    user.getFirstName(),
+                    user.getLastName(),
                     user.getEmail(),
                     rolesNames);
         }).toList();
@@ -61,6 +63,8 @@ public class UserManagementResource {
             UserResponseDto userResponseDto = new UserResponseDto(
                     user.getId(),
                     user.getUsername(),
+                    user.getFirstName(),
+                    user.getLastName(),
                     user.getEmail(),
                     roleNames
             );
@@ -81,6 +85,8 @@ public class UserManagementResource {
         UserRepresentation user = new UserRepresentation();
         user.setUsername(UserRequest.username());
         user.setEmail(UserRequest.email());
+        user.setFirstName(UserRequest.firstName());
+        user.setLastName(UserRequest.lastName());
         user.setEnabled(true);
         user.setEmailVerified(true);
 
@@ -117,6 +123,8 @@ public class UserManagementResource {
             UserResponseDto userResponseDto = new UserResponseDto(
                     userRepresentation.getId(),
                     userRepresentation.getUsername(),
+                    userRepresentation.getFirstName(),
+                    userRepresentation.getLastName(),
                     userRepresentation.getEmail(),
                    roleNames
             );
@@ -136,8 +144,10 @@ public class UserManagementResource {
             //get the user representation (the actual user data)
             UserRepresentation user = userResource.toRepresentation();
 
-            //update user properties (username)
+            //update user properties (username, firstName, lastName)
             user.setUsername(updatedUser.username());
+            user.setFirstName(updatedUser.firstName());
+            user.setLastName(updatedUser.lastName());
 
             //save the profile
             userResource.update(user);
