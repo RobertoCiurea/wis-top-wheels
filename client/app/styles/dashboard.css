@@ -198,6 +198,28 @@
   font: inherit;
 }
 
+/* Custom scroll bar */
+
+.dashboard-container ::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+.dashboard-container ::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+/* Handle */
+.dashboard-container ::-webkit-scrollbar-thumb {
+  border-radius: var(--radius-lg);
+  background: var(--gold);
+}
+
+/* Handle on hover */
+.dashboard-container ::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-dim);
+}
+
 @media (max-width: 1024px) {
   .dashboard-container {
     padding: 7rem 1.25rem 2rem;
@@ -357,7 +379,7 @@
     max-height: 20rem;
     opacity: 1;
     padding: 0.6rem;
-    overflow: scroll;
+    overflow-y: scroll;
   }
 
   .mobile-nav-item {

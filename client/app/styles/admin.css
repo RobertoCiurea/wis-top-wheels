@@ -345,6 +345,44 @@
   text-decoration: none;
 }
 
+.add-user-button {
+  background: none;
+  border: none;
+  color: var(--gray-light);
+  text-decoration: underline;
+  transition: var(--transition);
+}
+
+.add-user-button:hover {
+  color: var(--gray);
+}
+
+.add-user-form {
+  max-height: 480px;
+  overflow-y: scroll;
+}
+
+.requirement-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--gray);
+}
+.requirement-item.is-valid {
+  color: #22c55e;
+}
+.requirement-item.is-error {
+  color: #ef4444;
+}
+
+.password-requirements {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
 @media (max-width: 640px) {
   .modal-panel {
     padding: 1.2rem;
@@ -356,5 +394,8 @@
 
   .modal-action-button {
     width: 100%;
+  }
+  .add-user-form {
+    max-height: 360px;
   }
 }
