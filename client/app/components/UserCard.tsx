@@ -15,6 +15,8 @@ export const UserCard = ({
   id,
   username,
   email,
+  firstName,
+  lastName,
   roles,
   accessToken,
   currentUserEmail,
@@ -175,6 +177,32 @@ export const UserCard = ({
               className={`form-input`}
               id={`username-${id}`}
               defaultValue={username}
+              required
+              disabled={editIsPending}
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label" htmlFor={`lastName-${id}`}>
+              Nume
+            </label>
+            <input
+              name="lastName"
+              className={`form-input`}
+              id={`lastName-${id}`}
+              defaultValue={lastName}
+              required
+              disabled={editIsPending}
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label" htmlFor={`firstName-${id}`}>
+              Prenume
+            </label>
+            <input
+              name="firstName"
+              className={`form-input`}
+              id={`firstName-${id}`}
+              defaultValue={firstName}
               required
               disabled={editIsPending}
             />

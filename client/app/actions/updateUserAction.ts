@@ -8,11 +8,19 @@ export async function updateUser(
   //extract the form data
   const id = formData.get("id") as string;
   const username = formData.get("username") as string;
+  const firstName = formData.get("firstName") as string;
+  const lastName = formData.get("lastName") as string;
   const role = formData.get("role") as string;
   const accessToken = formData.get("accessToken") as string;
 
   if (!username || !username.trim())
     return { status: 400, error: "Numele de utilizator nu poate fi gol." };
+
+  if (!firstName || !firstName.trim())
+    return { status: 400, error: "Prenumele nu poate fi gol." };
+
+  if (!lastName || !lastName.trim())
+    return { status: 400, error: "Numele nu poate fi gol." };
 
   try {
     const response = await fetch(
@@ -23,7 +31,12 @@ export async function updateUser(
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({ username: username.trim(), role }),
+        body: JSON.stringify({
+          username: username.trim(),
+          firstName: firstName.trim,
+          lastName: lastName.trim(),
+          role,
+        }),
       },
     );
     if (!response.ok) {
