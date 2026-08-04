@@ -2,16 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { X } from "lucide-react";
-
-type ModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  description?: string;
-  children: React.ReactNode;
-  footer?: React.ReactNode;
-  maxWidth?: string;
-};
+import { ModalProps } from "../types/types";
 
 export const Modal = ({
   isOpen,
@@ -49,9 +40,13 @@ export const Modal = ({
       "button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])";
 
     const focusTimer = window.setTimeout(() => {
-      const firstFocusable =
-        dialogRef.current?.querySelector<HTMLElement>(focusableSelector);
-      firstFocusable?.focus();
+      //check if the currently focused element is already inside the modal
+      //if the user is typing in a password field dont steal the focus
+      if (!dialogRef.current?.contains(document.activeElement)) {
+        const firstFocusable =
+          dialogRef.current?.querySelector<HTMLElement>(focusableSelector);
+        firstFocusable?.focus();
+      }
     }, 20);
 
     const handleKeyDown = (event: KeyboardEvent) => {
