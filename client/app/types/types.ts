@@ -19,9 +19,21 @@ export type UserCardProps = {
   id: string;
   username: string;
   email: string;
+  firstName: string;
+  lastName: string;
   roles: string[];
   accessToken?: string;
   currentUserEmail: string;
+};
+
+export type ModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  description?: string;
+  children: React.ReactNode;
+  footer?: React.ReactNode;
+  maxWidth?: string;
 };
 
 export type ActionState = {
