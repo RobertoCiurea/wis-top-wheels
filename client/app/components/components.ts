@@ -13,6 +13,8 @@ import { Map } from "./Map";
 import { Footer } from "./Footer";
 import { WhatsappFloat } from "./WhatsappFloat";
 import { Sidebar } from "./Sidebar";
+import { UserCard } from "./UserCard";
+import { AddUser } from "./AddUser";
 
 export {
   Header,
@@ -30,4 +32,6 @@ export {
   Footer,
   WhatsappFloat,
   Sidebar,
+  UserCard,
+  AddUser,
 };
