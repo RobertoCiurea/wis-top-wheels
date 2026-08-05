@@ -15,6 +15,7 @@ import { WhatsappFloat } from "./WhatsappFloat";
 import { Sidebar } from "./Sidebar";
 import { UserCard } from "./UserCard";
 import { AddUser } from "./AddUser";
+import { AccessDenied } from "./AccessDenied";
 
 export {
   Header,
@@ -34,4 +35,5 @@ export {
   Sidebar,
   UserCard,
   AddUser,
+  AccessDenied,
 };
