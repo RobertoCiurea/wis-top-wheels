@@ -8,6 +8,8 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UserResource;
@@ -24,7 +26,8 @@ import java.util.List;
 public class UserManagementResource {
     @Inject
     Keycloak keycloak; //keycloak client
-    private static final String REALM_NAME = "wis-top-wheels-realm"; //get it later from env
+    @ConfigProperty(name = "quarkus.keycloak.admin-client.realm")
+    String REALM_NAME;
 
     @GET
     public Response getAllUsers() {
