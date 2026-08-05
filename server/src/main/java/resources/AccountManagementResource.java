@@ -60,8 +60,8 @@ public class AccountManagementResource {
                     userRepresentation.getId(),
                     userRepresentation.getUsername(),
                     userRepresentation.getFirstName(),
-                    userRepresentation.getEmail(),
                     userRepresentation.getLastName(),
+                    userRepresentation.getEmail(),
                     roleNames
             );
             return Response.ok(user).build();
