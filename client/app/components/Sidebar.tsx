@@ -14,6 +14,7 @@ import {
   MessageSquare,
   LayoutDashboard,
   ChevronDown,
+  UserRound,
 } from "lucide-react";
 
 const navigationItems = [
@@ -27,6 +28,7 @@ const navigationItems = [
   { href: "/dashboard/new-add", label: "Adauga anunt", icon: Plus },
   { href: "/dashboard/messages", label: "Mesaje", icon: MessageSquare },
   { href: "/dashboard/admin", label: "Zona administrator", icon: ShieldCheck },
+  { href: "/dashboard/account", label: "Contul meu", icon: UserRound },
 ];
 
 export const Sidebar = () => {
@@ -48,7 +50,10 @@ export const Sidebar = () => {
     };
 
     const onPointerDown = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setMobileOpen(false);
       }
     };
@@ -62,12 +67,14 @@ export const Sidebar = () => {
   }, []);
 
   const activeLabel =
-    navigationItems.find(({ href }) => activeItem === href || activeItem.startsWith(`${href}/`))?.label ||
-    "Dashboard";
+    navigationItems.find(
+      ({ href }) => activeItem === href || activeItem.startsWith(`${href}/`),
+    )?.label || "Dashboard";
 
   const ActiveIcon =
-    navigationItems.find(({ href }) => activeItem === href || activeItem.startsWith(`${href}/`))?.icon ||
-    LayoutDashboard;
+    navigationItems.find(
+      ({ href }) => activeItem === href || activeItem.startsWith(`${href}/`),
+    )?.icon || LayoutDashboard;
 
   return (
     <div className="sidebar-shell">
@@ -99,7 +106,10 @@ export const Sidebar = () => {
               </span>
               <span className="mobile-nav-trigger__label">{activeLabel}</span>
             </span>
-            <ChevronDown size={16} className={`mobile-nav-chevron ${mobileOpen ? "open" : ""}`} />
+            <ChevronDown
+              size={16}
+              className={`mobile-nav-chevron ${mobileOpen ? "open" : ""}`}
+            />
           </button>
 
           <div className={`mobile-nav-menu ${mobileOpen ? "open" : ""}`}>
