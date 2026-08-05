@@ -1,4 +1,4 @@
-import { UserCard, AddUser } from "@/app/components/components";
+import { UserCard, AddUser, AccessDenied } from "@/app/components/components";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { UserCardProps } from "@/app/types/types";
@@ -7,10 +7,10 @@ import "@/app/styles/admin.css";
 export default async function AdminDashboardPage() {
   const session = await auth();
   if (!session) {
-    redirect("/api/auth/signin?callbackUrl=/dashboard");
+    redirect("/api/auth/signin?callbackUrl=/dashboard/admin");
   }
 
-  const response = await fetch("http://localhost:8081/api/admin/users", {
+  const response = await fetch(`${process.env.SERVER_URL}/api/admin/users`, {
     headers: {
       Authorization: `Bearer ${session.accessToken}`,
     },
@@ -18,23 +18,7 @@ export default async function AdminDashboardPage() {
   });
 
   if (response.status === 401 || response.status === 403) {
-    return (
-      <section className="dashboard-content">
-        <div className="admin-status-card error">
-          <h1>Acces neautorizat</h1>
-          <p>
-            Sesiunea a expirat sau nu ai permisiuni suficiente pentru a vedea
-            lista utilizatorilor.
-          </p>
-          <a
-            href="/api/auth/signin?callbackUrl=/dashboard"
-            className="modal-action-button primary"
-          >
-            Conectează-te din nou
-          </a>
-        </div>
-      </section>
-    );
+    return <AccessDenied />;
   }
 
   if (!response.ok) {
