@@ -2,10 +2,10 @@
 import { useState, useCallback, useActionState, useEffect } from "react";
 import { Modal } from "@/app/components/Modal";
 import "@/app/styles/contact.css";
-import { Circle, CheckCircle2 } from "lucide-react";
 import { ActionState } from "../types/types";
 import { addUser } from "../actions/addUserAction";
 import { toast } from "sonner";
+import { PasswordInput } from "@/app/components/PasswordInput";
 export const AddUser = ({
   accessToken,
 }: {
@@ -168,90 +168,20 @@ export const AddUser = ({
               <option value="moderator">moderator</option>
             </select>
           </div>
-          <div className="form-group">
-            <label className="form-label" htmlFor="password">
-              Parolă
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              className="form-input"
-              placeholder="********"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label" htmlFor="confirmPassword">
-              Confirmă Parola
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              className="form-input"
-              placeholder="********"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          </div>
-          <div className="password-requirements">
-            <RequirementItem isValid={hasLength} text="Cel puțin 8 caractere" />
-            <RequirementItem
-              isValid={hasUpper}
-              text="Cel puțin o literă mare"
-            />
-            <RequirementItem
-              isValid={hasLower}
-              text="Cel puțin o literă mică"
-            />
-            <RequirementItem isValid={hasNumber} text="Cel puțin o cifră" />
-            <RequirementItem
-              isValid={hasSpecial}
-              text="Cel puțin un caracter special"
-            />
-
-            <div
-              style={{
-                marginTop: "8px",
-                paddingTop: "8px",
-                borderTop: "1px solid #333",
-              }}
-            >
-              <RequirementItem
-                isValid={passwordsMatch}
-                text={
-                  confirmPassword.length > 0 && !passwordsMatch
-                    ? "Parolele nu coincid!"
-                    : "Parolele coincid"
-                }
-                isError={confirmPassword.length > 0 && !passwordsMatch}
-              />
-            </div>
-          </div>
+          <PasswordInput
+            password={password}
+            setPassword={setPassword}
+            confirmPassword={confirmPassword}
+            setConfirmPassword={setConfirmPassword}
+            hasLength={hasLength}
+            hasUpper={hasUpper}
+            hasLower={hasLower}
+            hasNumber={hasNumber}
+            hasSpecial={hasSpecial}
+            passwordsMatch={passwordsMatch}
+          />
         </form>
       </Modal>
     </>
-  );
-};
-
-// requirement item custom helper component
-const RequirementItem = ({
-  isValid,
-  text,
-  isError = false,
-}: {
-  isValid: boolean;
-  text: string;
-  isError?: boolean;
-}) => {
-  return (
-    <div
-      className={`requirement-item ${isValid ? "is-valid" : isError ? "is-error" : ""}`}
-    >
-      {isValid ? <CheckCircle2 size={16} /> : <Circle size={16} />}
-      <span>{text}</span>
-    </div>
   );
 };
