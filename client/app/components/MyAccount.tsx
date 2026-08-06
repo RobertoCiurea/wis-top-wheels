@@ -1,10 +1,13 @@
 "use client";
-import { UserCardProps } from "../types/types";
+import { ActionState, UserCardProps } from "../types/types";
 import "@/app/styles/account.css";
 import "@/app/styles/contact.css";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useActionState, useEffect } from "react";
 import { Modal } from "./Modal";
 import { PasswordInput } from "@/app/components/components";
+import { updateAccount } from "../actions/updateAccountAction";
+import { updatePassword } from "../actions/updatePasswordAction";
+import { toast } from "sonner";
 export const MyAccount = ({
   id,
   username,
@@ -17,6 +20,26 @@ export const MyAccount = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const updateAccountInitialState: ActionState = {
+    status: 0,
+    error: "",
+    message: "",
+  };
+  const updatePasswordInitialState: ActionState = {
+    status: 0,
+    error: "",
+    message: "",
+  };
+
+  const [updateAccountState, updateAccountFormAction, isUpdateAccountPending] =
+    useActionState(updateAccount, updateAccountInitialState);
+
+  const [
+    updatePasswordState,
+    updatePasswordFormAction,
+    isUpdatePasswordPending,
+  ] = useActionState(updatePassword, updatePasswordInitialState);
 
   // password validation checks
   const hasLength = password.length >= 8;
@@ -36,7 +59,21 @@ export const MyAccount = ({
     hasNumber &&
     hasSpecial &&
     passwordsMatch;
-  const isPending = false;
+
+  useEffect(() => {
+    if (updateAccountState.status == 200) {
+      toast.success(updateAccountState.message);
+    }
+  }, [updateAccountState.status, updateAccountState.message]);
+
+  useEffect(() => {
+    if (updatePasswordState.status == 200 && isModalOpen) {
+      toast.success(updatePasswordState.message);
+      closeModal();
+    }
+    setPassword("");
+    setConfirmPassword("");
+  }, [updatePasswordState]);
 
   const openModal = useCallback(() => {
     setIsModalOpen(true);
@@ -50,7 +87,12 @@ export const MyAccount = ({
     <>
       <div className="account-container">
         <div className="account-top">
-          <form className="account-form">
+          <form action={updateAccountFormAction} className="account-form">
+            {updateAccountState.error && (
+              <div className="modal-error" style={{ marginBottom: "1rem" }}>
+                {updateAccountState.error}
+              </div>
+            )}
             <input
               type="hidden"
               name="accessToken"
@@ -152,9 +194,9 @@ export const MyAccount = ({
               <button
                 type="submit"
                 className="modal-action-button primary"
-                disabled={isPending}
+                disabled={isUpdateAccountPending}
               >
-                {isPending ? "Se salvează..." : "Salvează"}
+                {isUpdateAccountPending ? "Se salvează..." : "Salvează"}
               </button>
             </div>
           </form>
@@ -175,19 +217,29 @@ export const MyAccount = ({
             </button>
             <button
               type="submit"
-              form="change-user-form"
+              form="change-password-form"
               className="modal-action-button primary"
-              disabled={!isPasswordValid || isPending}
+              disabled={!isPasswordValid || isUpdatePasswordPending}
               title={
                 !isPasswordValid ? "Parola nu îndeplinește condițiile." : ""
               }
             >
-              {isPending ? "Se salvează..." : "Salvează"}
+              {isUpdatePasswordPending ? "Se salvează..." : "Salvează"}
             </button>
           </>
         }
       >
-        <form id="change-password-form">
+        <form
+          id="change-password-form"
+          action={updatePasswordFormAction}
+          className="change-password-form"
+        >
+          {updatePasswordState.error && (
+            <div className="modal-error" style={{ marginBottom: "1rem" }}>
+              {updatePasswordState.error}
+            </div>
+          )}
+          <input type="hidden" name="accessToken" defaultValue={accessToken} />
           <div className="form-group">
             <label htmlFor="oldPassword" className="form-label">
               Parola veche
