@@ -16,6 +16,7 @@ import { Sidebar } from "./Sidebar";
 import { UserCard } from "./UserCard";
 import { AddUser } from "./AddUser";
 import { AccessDenied } from "./AccessDenied";
+import { PasswordInput } from "./PasswordInput";
 
 export {
   Header,
@@ -36,4 +37,5 @@ export {
   UserCard,
   AddUser,
   AccessDenied,
+  PasswordInput,
 };
