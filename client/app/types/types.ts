@@ -1,4 +1,9 @@
-import React, { ComponentType, ElementType } from "react";
+import React, {
+  ComponentType,
+  Dispatch,
+  ElementType,
+  SetStateAction,
+} from "react";
 export type IconProps = React.SVGProps<SVGSVGElement> & {
   size?: number | string;
   title?: string;
@@ -23,7 +28,7 @@ export type UserCardProps = {
   lastName: string;
   roles: string[];
   accessToken?: string;
-  currentUserEmail: string;
+  currentUserEmail?: string;
 };
 
 export type ModalProps = {
@@ -40,4 +45,18 @@ export type ActionState = {
   status: number;
   error?: string;
   message?: string;
+};
+
+export type PasswordProps = {
+  passwordTitle?: string;
+  password: string;
+  setPassword: Dispatch<SetStateAction<string>>;
+  confirmPassword: string;
+  setConfirmPassword: Dispatch<SetStateAction<string>>;
+  hasLength: boolean;
+  hasUpper: boolean;
+  hasLower: boolean;
+  hasNumber: boolean;
+  hasSpecial: boolean;
+  passwordsMatch: boolean;
 };
