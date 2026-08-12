@@ -3,17 +3,16 @@ package dto;
 import jakarta.validation.constraints.NotNull;
 
 public class WheelAdDto extends BaseAdDto {
-    @NotNull(message = "You must select the wheel type")
+    @NotNull(message = "Trebuie să selectați tipul (Jante, Anvelope sau Roți Complete).")
     public WheelType wheelType;
 
     public String rimMake;
-    public Integer rimDiameter;
-    public String boltPattern;
+    public Double rimDiameter;
     public String rimMaterial;
 
     public String tyreMake;
     public String tyreSeason;
     public Integer tyreWidth;
-    public Integer tyreProfile;
+    public Double tyreProfile;
 
 }
