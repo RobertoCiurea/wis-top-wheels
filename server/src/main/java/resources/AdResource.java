@@ -3,6 +3,8 @@ package resources;
 import client.OlxAdClient;
 import dto.*;
 
+import io.quarkus.cache.CacheInvalidate;
+import io.quarkus.cache.CacheInvalidateAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -35,6 +37,7 @@ public class AdResource {
 
     @POST
     @Path("/wheels")
+    @CacheInvalidateAll(cacheName = "public-ads-list")
     public Response createWheelAd(@Valid WheelAdDto wheelAdDto){
         try {
             String authHeader = "Bearer " + tokenManager.getAccessToken();
@@ -52,50 +55,12 @@ public class AdResource {
 
     }
 
-    @GET
-    @Path("/wheels")
-    public Response getWheelAds(
-            @QueryParam("offset") int offset,
-        @QueryParam("limit") int limit
-    ){
-        try{
-            String authHeader = "Bearer " + tokenManager.getAccessToken();
-           OlxAdListResponseDto response = adClient.getAds(authHeader, "2.0", offset, limit);
-            return Response.ok().entity(response).build();
-        }catch (WebApplicationException e){
-            String error = e.getResponse().readEntity(String.class);
-            return Response.status(e.getResponse().getStatus()).entity(error).build();
-        }catch (Exception e){
-            e.printStackTrace();
-            return Response.serverError().entity("Networking error. Try again!").build();
 
-        }
-
-    }
-
-    @GET
-    @Path("/wheels/{id}")
-    public Response getWheelAd(@PathParam("id") Long advertId){
-        try{
-            if (advertId == null) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("ID is required").build();
-            }
-            String authHeader = "Bearer " + tokenManager.getAccessToken();
-            OlxSingleAdResponseDto response = adClient.getAd(authHeader, "2.0", advertId);
-            return Response.ok().entity(response).build();
-        }catch (WebApplicationException e){
-            String error = e.getResponse().readEntity(String.class);
-            return Response.status(e.getResponse().getStatus()).entity(error).build();
-        }catch (Exception e){
-            e.printStackTrace();
-            return Response.serverError().entity("Networking error. Try again!").build();
-
-        }
-
-    }
 
     @PUT
     @Path("/wheels/{id}")
+    @CacheInvalidateAll(cacheName = "public-ads-list")
+    @CacheInvalidate(cacheName = "public-ad-details")
     public Response updateWheelAd(
             @PathParam("id") Long advertId,
             @Valid WheelAdDto wheelAdDto){
@@ -120,6 +85,8 @@ public class AdResource {
 
     @POST
     @Path("/wheels/{id}/action")
+    @CacheInvalidateAll(cacheName = "public-ads-list")
+    @CacheInvalidate(cacheName = "public-ad-details")
     public Response takeAction(@PathParam("id") Long advertId, AdActionDto actionDto) {
         try {
             String authHeader = "Bearer " + tokenManager.getAccessToken();
@@ -150,6 +117,8 @@ public class AdResource {
 
     @DELETE
     @Path("/wheels/{id}")
+    @CacheInvalidateAll(cacheName = "public-ads-list")
+    @CacheInvalidate(cacheName = "public-ad-details")
     public Response deleteAd(@PathParam("id") Long advertId){
         try{
             if (advertId == null) {
