@@ -17,6 +17,7 @@ import { UserCard } from "./UserCard";
 import { AddUser } from "./AddUser";
 import { AccessDenied } from "./AccessDenied";
 import { PasswordInput } from "./PasswordInput";
+import { WheelAdForm } from "./WheelAdForm";
 
 export {
   Header,
@@ -38,4 +39,5 @@ export {
   AddUser,
   AccessDenied,
   PasswordInput,
+  WheelAdForm,
 };
