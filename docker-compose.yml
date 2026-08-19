@@ -48,7 +48,7 @@ services:
       - app-net
   #MinIo S3
   minio:
-    image: minio/minio:latest
+    image: quay.io/minio/minio:RELEASE.2025-04-22T22-12-26Z
     container_name: minio
     ports:
       - "9000:9000" #s3 api port
@@ -56,6 +56,7 @@ services:
     environment:
       MINIO_ROOT_USER: admin
       MINIO_ROOT_PASSWORD: password
+      MINIO_API_CORS_ALLOW_ORIGIN: "*"
     volumes:
       - minio_data:/data
     command: [ "server", "--console-address", ":9001", "/data" ]
