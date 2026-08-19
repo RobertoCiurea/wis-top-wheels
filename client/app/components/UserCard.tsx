@@ -18,7 +18,6 @@ export const UserCard = ({
   firstName,
   lastName,
   roles,
-  accessToken,
   currentUserEmail,
 }: UserCardProps) => {
   const initialEditState: ActionState = {
@@ -168,7 +167,6 @@ export const UserCard = ({
           action={editFormAction}
         >
           <input type="hidden" name="id" value={id} />
-          <input type="hidden" name="accessToken" value={accessToken} />
           {editState.error && (
             <div className="modal-error">{editState.error}</div>
           )}
@@ -265,7 +263,6 @@ export const UserCard = ({
             <div className="modal-error">{deleteState.error}</div>
           )}
           <input type="hidden" name="id" value={id} />
-          <input type="hidden" name="accessToken" value={accessToken} />
           <div className="modal-warning-card">
             <TriangleAlert size={24} />
             <p>

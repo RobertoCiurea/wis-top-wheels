@@ -6,11 +6,7 @@ import { ActionState } from "../types/types";
 import { addUser } from "../actions/addUserAction";
 import { toast } from "sonner";
 import { PasswordInput } from "@/app/components/PasswordInput";
-export const AddUser = ({
-  accessToken,
-}: {
-  accessToken: string | undefined;
-}) => {
+export const AddUser = () => {
   const initialState: ActionState = {
     status: 0,
     message: "",
@@ -95,7 +91,6 @@ export const AddUser = ({
           id="add-user-form"
           className="contact-form add-user-form"
         >
-          <input type="hidden" name="accessToken" defaultValue={accessToken} />
           {state.error && (
             <div className="modal-error" style={{ marginBottom: "1rem" }}>
               {state.error}

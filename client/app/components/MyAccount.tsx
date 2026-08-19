@@ -239,7 +239,6 @@ export const MyAccount = ({
               {updatePasswordState.error}
             </div>
           )}
-          <input type="hidden" name="accessToken" defaultValue={accessToken} />
           <div className="form-group">
             <label htmlFor="oldPassword" className="form-label">
               Parola veche

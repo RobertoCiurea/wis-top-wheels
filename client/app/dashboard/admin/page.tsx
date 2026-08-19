@@ -37,7 +37,7 @@ export default async function AdminDashboardPage() {
   return (
     <section className="dashboard-content">
       <h1>Lista Staff</h1>
-      <AddUser accessToken={session.accessToken} />
+      <AddUser />
       <div className="users-grid">
         {data && data.length > 0 ? (
           data.map((user: UserCardProps) => (
@@ -49,7 +49,6 @@ export default async function AdminDashboardPage() {
               lastName={user.lastName}
               email={user.email}
               roles={user.roles}
-              accessToken={session.accessToken}
               currentUserEmail={session.user.email}
             />
           ))
