@@ -60,3 +60,10 @@ export type PasswordProps = {
   hasSpecial: boolean;
   passwordsMatch: boolean;
 };
+
+export type WheelAdFormActionState = {
+  success: boolean;
+  message?: string;
+  errors?: Record<string, string>;
+  formError?: string;
+};
