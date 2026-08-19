@@ -1,3 +1,5 @@
+import { WheelAdForm } from "@/app/components/components";
+
 export default function NewAddDashboardPage() {
-  return <div>Adauga anunt nou</div>;
+  return <WheelAdForm />;
 }
