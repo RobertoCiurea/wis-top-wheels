@@ -1,7 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { ActionState } from "../types/types";
-
+import { auth } from "@/auth";
 export async function updateAccount(
   prevState: ActionState,
   formData: FormData,
@@ -10,7 +10,16 @@ export async function updateAccount(
   const firstName = formData.get("firstName") as string;
   const lastName = formData.get("lastName") as string;
   const email = formData.get("email") as string;
-  const accessToken = formData.get("accessToken") as string;
+
+  const session = await auth();
+  if (!session || !session.user) {
+    return {
+      status: 401,
+      error: "Trebuie să fii autentificat pentru a accesa această resursă.",
+    };
+  }
+
+  const accessToken = session.accessToken;
 
   if (!username || !username.trim()) {
     return { status: 400, error: "Numele de utilizator nu poate fi gol." };

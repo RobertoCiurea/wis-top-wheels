@@ -1,15 +1,22 @@
 "use server";
 
-import { headers } from "next/headers";
 import { ActionState } from "../types/types";
 import { revalidatePath } from "next/cache";
-
+import { auth } from "@/auth";
 export async function deleteUser(
   prevState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
   const id = formData.get("id") as string;
-  const accessToken = formData.get("accessToken") as string;
+  const session = await auth();
+  if (!session || !session.user) {
+    return {
+      status: 401,
+      error: "Trebuie să fii autentificat pentru a accesa această resursă.",
+    };
+  }
+
+  const accessToken = session.accessToken;
   try {
     const response = await fetch(
       `http://localhost:8081/api/admin/users/${id}`,

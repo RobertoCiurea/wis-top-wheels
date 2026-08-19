@@ -1,4 +1,5 @@
 "use server";
+import { auth } from "@/auth";
 import { ActionState } from "../types/types";
 import { revalidatePath } from "next/cache";
 export async function addUser(
@@ -12,7 +13,16 @@ export async function addUser(
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const role = formData.get("role") as string;
-  const accessToken = formData.get("accessToken") as string;
+
+  const session = await auth();
+  if (!session || !session.user) {
+    return {
+      status: 401,
+      error: "Trebuie să fii autentificat pentru a accesa această resursă.",
+    };
+  }
+
+  const accessToken = session.accessToken;
 
   if (!firstName || !firstName.trim()) {
     return { status: 400, error: "Prenumele nu poate fi gol." };

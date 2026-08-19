@@ -1,13 +1,22 @@
 "use server";
 import { ActionState } from "../types/types";
 import { revalidatePath } from "next/cache";
+import { auth } from "@/auth";
 export async function updatePassword(
   prevState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
   const oldPassword = formData.get("oldPassword") as string;
   const newPassword = formData.get("password") as string;
-  const accessToken = formData.get("accessToken") as string;
+  const session = await auth();
+  if (!session || !session.user) {
+    return {
+      status: 401,
+      error: "Trebuie să fii autentificat pentru a accesa această resursă.",
+    };
+  }
+
+  const accessToken = session.accessToken;
 
   console.log(oldPassword);
   console.log(newPassword);
