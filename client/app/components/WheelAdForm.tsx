@@ -6,12 +6,14 @@ import {
   useActionState,
   useRef,
   useState,
+  useEffect,
 } from "react";
 import { createWheelAd } from "@/app/actions/createWheelAdAction";
 import "@/app/styles/contact.css";
 import "@/app/styles/wheel-ad-form.css";
 import { WheelAdFormActionState } from "../types/types";
 import { uploadFilesToSTorage } from "@/services/uploadService";
+import { toast } from "sonner";
 
 const AD_TYPES = [
   { value: "RIMS_ONLY", label: "Doar jante" },
@@ -386,6 +388,12 @@ export const WheelAdForm = () => {
     initialState,
   );
 
+  useEffect(() => {
+    if (state.success && state.message) {
+      toast.success(state.message);
+    }
+  }, [state]);
+
   const visibleErrors = state.errors ?? {};
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -431,6 +439,7 @@ export const WheelAdForm = () => {
     Boolean(visibleErrors[fieldName]);
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setIsUploading(true);
     setImageUploadError("");
     const formData = new FormData(e.currentTarget);
