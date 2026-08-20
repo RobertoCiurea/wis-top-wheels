@@ -49,7 +49,9 @@ export async function addUser(
   };
 
   try {
-    const response = await fetch("http://localhost:8081/api/admin/users", {
+    const apiBaseUrl =
+      process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";
+    const response = await fetch(`${apiBaseUrl}/api/admin/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -23,20 +23,19 @@ export async function updatePassword(
   console.log(accessToken);
 
   try {
-    const response = await fetch(
-      `${process.env.SERVER_URL}/api/account/password`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          oldPassword: oldPassword,
-          newPassword: newPassword,
-        }),
+    const apiBaseUrl =
+      process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";
+    const response = await fetch(`${apiBaseUrl}/api/account/password`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
-    );
+      body: JSON.stringify({
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      }),
+    });
     if (!response.ok) {
       console.log(response);
       switch (response.status) {

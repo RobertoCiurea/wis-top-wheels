@@ -18,16 +18,15 @@ export async function deleteUser(
 
   const accessToken = session.accessToken;
   try {
-    const response = await fetch(
-      `http://localhost:8081/api/admin/users/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
+    const apiBaseUrl =
+      process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";
+    const response = await fetch(`${apiBaseUrl}/api/admin/users/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
-    );
+    });
     if (!response.ok) {
       console.log(response);
       switch (response.status) {

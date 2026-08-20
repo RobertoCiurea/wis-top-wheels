@@ -33,22 +33,21 @@ export async function updateUser(
     return { status: 400, error: "Numele nu poate fi gol." };
 
   try {
-    const response = await fetch(
-      `http://localhost:8081/api/admin/users/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          username: username.trim(),
-          firstName: firstName.trim(),
-          lastName: lastName.trim(),
-          role,
-        }),
+    const apiBaseUrl =
+      process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";
+    const response = await fetch(`${apiBaseUrl}/api/admin/users/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
-    );
+      body: JSON.stringify({
+        username: username.trim(),
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        role,
+      }),
+    });
     if (!response.ok) {
       switch (response.status) {
         case 409:
