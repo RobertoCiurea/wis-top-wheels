@@ -24,7 +24,7 @@ public class OlxMapperService {
 
         // full wheel category doesn't accept tire brand, season, width and profile so add it to the description
         String finalDescription = dto.description;
-        if (dto.wheelType == WheelType.FULL_WHEEl) {
+        if (dto.wheelType == WheelType.FULL_WHEEL) {
             StringBuilder tyreInfo = new StringBuilder("\n\n--- Detalii Anvelope ---\n");
             if (dto.tyreMake != null) tyreInfo.append("Producător: ").append(dto.tyreMake.toUpperCase()).append("\n");
             if (dto.tyreSeason != null) tyreInfo.append("Sezon: ").append(dto.tyreSeason.toUpperCase()).append("\n");
@@ -50,14 +50,14 @@ public class OlxMapperService {
                 addAttribute(attributes, "donor_make", dto.rimMake.toLowerCase());
         }
 
-        if(dto.wheelType == WheelType.FULL_WHEEl){
+        if(dto.wheelType == WheelType.FULL_WHEEL){
             if(dto.rimMake!=null)
                 addAttribute(attributes, "make", dto.rimMake.toLowerCase());
         }
 
 
         // add rim attributes if the user selects it
-        if (dto.wheelType == WheelType.RIMS_ONLY || dto.wheelType == WheelType.FULL_WHEEl) {
+        if (dto.wheelType == WheelType.RIMS_ONLY || dto.wheelType == WheelType.FULL_WHEEL) {
 
             if (dto.rimDiameter != null) {
                 // formats 19.5 into "parts-rims-inches-19-5"
@@ -74,7 +74,7 @@ public class OlxMapperService {
         }
 
         // add tyres attributes if the user selects it
-        if (dto.wheelType == WheelType.TYRES_ONLY || dto.wheelType == WheelType.FULL_WHEEl) {
+        if (dto.wheelType == WheelType.TYRES_ONLY || dto.wheelType == WheelType.FULL_WHEEL) {
             if (dto.tyreMake != null) {
                 addAttribute(attributes, "tire_brand", dto.tyreMake.toLowerCase());
             }
