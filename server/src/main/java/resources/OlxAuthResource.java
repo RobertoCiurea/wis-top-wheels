@@ -3,14 +3,12 @@ package resources;
 import client.OlxAuthClient;
 import dto.OlxTokenResponse;
 import entity.OlxTokenEntity;
+import io.quarkus.logging.Log;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -90,6 +88,7 @@ public class OlxAuthResource {
     public Response getOlxConnectionStatus(){
         try{
             OlxTokenEntity tokenRecord = OlxTokenEntity.findById("SINGLETON");
+            Log.info(tokenRecord.refreshToken);
                 boolean isConnected = (tokenRecord!=null
                         && tokenRecord.refreshToken!=null
                         && !tokenRecord.refreshToken.trim().isEmpty());
@@ -98,5 +97,22 @@ public class OlxAuthResource {
             e.printStackTrace();
             return Response.serverError().entity("Error connecting "+ e.getMessage()).build();
         }
+    }
+
+    @Path("/disconnect")
+    @DELETE
+    @Transactional
+    public Response disconnectOlx(){
+        try{
+            OlxTokenEntity tokenRecord = OlxTokenEntity.findById("SINGLETON");
+            if(tokenRecord!=null){
+                tokenRecord.delete();
+            }
+            return Response.noContent().build();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Response.serverError().entity("Error " + e.getMessage()).build();
+        }
+
     }
 }
