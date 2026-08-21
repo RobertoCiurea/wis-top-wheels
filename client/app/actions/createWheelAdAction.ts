@@ -73,7 +73,7 @@ const wheelAdSchema = z.discriminatedUnion("wheelType", [
       .min(1, "Profilul anvelopei este obligatoriu."),
   }),
   baseAdSchema.extend({
-    wheelType: z.literal("FULL_WHEELS"),
+    wheelType: z.literal("FULL_WHEEL"),
     rimMake: z
       .string()
       .min(1, "Marca jantei este obligatorie.")
@@ -144,8 +144,8 @@ export async function createWheelAd(
     });
 
     if (!response.ok) {
-      console.log(response);
       const errorPayload = await response.json().catch(() => ({}));
+      console.log(errorPayload);
       return {
         success: false,
         formError:
