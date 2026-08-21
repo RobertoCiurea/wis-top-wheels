@@ -9,8 +9,9 @@ export default async function AdminDashboardPage() {
   if (!session) {
     redirect("/api/auth/signin?callbackUrl=/dashboard/admin");
   }
-
-  const response = await fetch(`${process.env.SERVER_URL}/api/admin/users`, {
+  const apiBaseUrl =
+    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";
+  const response = await fetch(`${apiBaseUrl}/api/admin/users`, {
     headers: {
       Authorization: `Bearer ${session.accessToken}`,
     },
