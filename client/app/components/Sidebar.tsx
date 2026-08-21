@@ -15,9 +15,11 @@ import {
   LayoutDashboard,
   ChevronDown,
   UserRound,
+  House,
 } from "lucide-react";
 
 const navigationItems = [
+  { href: "/dashboard/", label: "Acasă", icon: House },
   {
     href: "/dashboard/statistics",
     label: "Statistici",
