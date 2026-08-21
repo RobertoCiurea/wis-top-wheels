@@ -18,7 +18,7 @@ import { toast } from "sonner";
 const AD_TYPES = [
   { value: "RIMS_ONLY", label: "Doar jante" },
   { value: "TYRES_ONLY", label: "Doar cauciucuri" },
-  { value: "FULL_WHEELS", label: "Set roți complete" },
+  { value: "FULL_WHEEL", label: "Set roți complete" },
 ] as const;
 
 const STATES = [
@@ -446,6 +446,7 @@ export const WheelAdForm = () => {
     formData.delete("images");
     try {
       const uploadedUrls = await uploadFilesToSTorage(selectedFiles);
+
       formData.set("imageUrls", JSON.stringify(uploadedUrls));
       startTransition(() => {
         formAction(formData);
