@@ -9,7 +9,9 @@ export default async function AccountDashboardPage() {
   if (!session) {
     redirect("/api/auth/signin?callbackUrl=/dashboard/account");
   }
-  const response = await fetch(`${process.env.SERVER_URL}/api/account`, {
+  const apiBaseUrl =
+    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";
+  const response = await fetch(`${apiBaseUrl}/api/account`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
