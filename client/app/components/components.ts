@@ -18,6 +18,8 @@ import { AddUser } from "./AddUser";
 import { AccessDenied } from "./AccessDenied";
 import { PasswordInput } from "./PasswordInput";
 import { WheelAdForm } from "./WheelAdForm";
+import { OlxConnect } from "./OlxConnect";
+import { OlxDisconnect } from "./OlxDisconnect";
 
 export {
   Header,
@@ -40,4 +42,6 @@ export {
   AccessDenied,
   PasswordInput,
   WheelAdForm,
+  OlxConnect,
+  OlxDisconnect,
 };
