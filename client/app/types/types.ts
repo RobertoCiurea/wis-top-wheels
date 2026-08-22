@@ -67,3 +67,52 @@ export type WheelAdFormActionState = {
   errors?: Record<string, string>;
   formError?: string;
 };
+
+export type WheelAdProps = {
+  id: number;
+  status: string;
+  url: string;
+  title: string;
+  description: string;
+
+  contact: {
+    name: string;
+    phone: string;
+  };
+
+  location: {
+    city_id: number;
+    district_id: number | null;
+    latitude: string;
+    longitude: string;
+  };
+
+  images: {
+    id: number | null;
+    url: string;
+  }[];
+
+  price: {
+    value: number;
+    currency: string;
+    negotiable: boolean;
+  };
+
+  attributes: {
+    code: string;
+    value: string;
+  }[];
+
+  created_at: string;
+  activated_at: string;
+  valid_to: string;
+
+  category_id: number;
+
+  advertiser_type: "private" | "business" | string;
+
+  external_id: number | null;
+  external_url: string | null;
+
+  auto_extend_enabled: boolean;
+};
