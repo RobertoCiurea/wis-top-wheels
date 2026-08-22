@@ -3,6 +3,7 @@ import { Barlow_Condensed } from "next/font/google";
 import { Inter } from "next/font/google";
 import "./styles/styles.css";
 import "./styles/buttons.css";
+import "./styles/status.css";
 import { Header, Footer } from "@/app/components/components";
 import { Toaster } from "sonner";
 
