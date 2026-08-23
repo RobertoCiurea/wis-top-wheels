@@ -51,7 +51,7 @@ export const WheelsStock = ({
         {mainPage && (
           <div className="stock-actions">
             <Link
-              href="/anunturi/jante-si-roit?page=1"
+              href="/anunturi/jante-si-roti?page=1"
               className="btn btn-ghost stock-link"
             >
               Vezi tot stocul
