@@ -58,7 +58,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
         };
       } catch (error) {
-        console.error("Error refreshing Keycloak Access Token:", error);
+        //console.error("Error refreshing Keycloak Access Token:", error);
         return { ...token, error: "RefreshTokenError" };
       }
     },
