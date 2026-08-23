@@ -287,6 +287,10 @@
   color: var(--gray);
 }
 
+.wheel-ad-card__date {
+  color: var(--gray);
+}
+
 .wheel-ad-card__negotiable {
   color: var(--gray-light);
 }
