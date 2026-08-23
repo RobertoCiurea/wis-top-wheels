@@ -20,7 +20,7 @@ import { PasswordInput } from "./PasswordInput";
 import { WheelAdForm } from "./WheelAdForm";
 import { OlxConnect } from "./OlxConnect";
 import { OlxDisconnect } from "./OlxDisconnect";
-
+import { WheelAdvert } from "./WheelAdvert";
 export {
   Header,
   Hero,
@@ -44,4 +44,5 @@ export {
   WheelAdForm,
   OlxConnect,
   OlxDisconnect,
+  WheelAdvert,
 };
