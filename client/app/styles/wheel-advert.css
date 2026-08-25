@@ -397,7 +397,6 @@
 .wheel-advert .modal-backdrop .modal-panel {
   width: min(100%, 1100px);
   max-height: calc(100vh - 32px);
-  overflow: auto;
   padding: 22px;
   background: var(--card);
   border: 1px solid var(--border);
