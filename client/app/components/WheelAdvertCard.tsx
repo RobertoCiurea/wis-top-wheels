@@ -62,12 +62,12 @@ function SliderControls() {
   );
 }
 
-export default function WheelAdvertCard({
+export const WheelAdvertCard = ({
   advert,
   href = advert.url,
   priority = false,
   cityName = "Pitești, Argeș",
-}: WheelAdvertCardProps) {
+}: WheelAdvertCardProps) => {
   const wheelType = getWheelType(advert);
   const rimSize = getRimSize(advert);
   const tyreBrand = getAttribute(advert, "tire_brand");
@@ -265,4 +265,4 @@ export default function WheelAdvertCard({
       </div>
     </article>
   );
-}
+};
