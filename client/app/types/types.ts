@@ -34,7 +34,7 @@ export type UserCardProps = {
 export type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  title: string;
+  title?: string;
   description?: string;
   children: React.ReactNode;
   footer?: React.ReactNode;
@@ -115,4 +115,37 @@ export type WheelAdProps = {
   external_url: string | null;
 
   auto_extend_enabled: boolean;
+};
+
+export type CatalogParams = {
+  page: number;
+  limit: number;
+  category?: string; //based on category id: 1647 / 1649
+  maxPrice?: string;
+  state?: string; //new or used
+  diameter?: string;
+  make?: string;
+  material?: string;
+  tyreBrand?: string;
+  season?: string;
+  width?: string;
+  profile?: string;
+  sortBy?: string;
+  order?: string;
+};
+
+export type WheelAdvertFilterValues = {
+  page?: string;
+  category: string;
+  maxPrice: string;
+  state: string;
+  diameter: string;
+  make: string;
+  material: string;
+  tyreBrand: string;
+  season: string;
+  width: string;
+  profile: string;
+  sortBy: string;
+  order: string;
 };
