@@ -21,6 +21,9 @@ import { WheelAdForm } from "./WheelAdForm";
 import { OlxConnect } from "./OlxConnect";
 import { OlxDisconnect } from "./OlxDisconnect";
 import { WheelAdvert } from "./WheelAdvert";
+import { WheelAdvertCard } from "./WheelAdvertCard";
+import { WheelAdvertFilters } from "./WheelAdvertFilters";
+import { Pagination } from "./Pagination";
 export {
   Header,
   Hero,
@@ -45,4 +48,7 @@ export {
   OlxConnect,
   OlxDisconnect,
   WheelAdvert,
+  WheelAdvertCard,
+  WheelAdvertFilters,
+  Pagination,
 };
