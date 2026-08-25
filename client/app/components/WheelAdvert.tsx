@@ -146,7 +146,6 @@ export const WheelAdvert = ({ advert }: { advert: WheelAdProps }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
     null,
   );
-  console.log(advert);
   const specifications = getWheelSpecifications(advert);
   const publishedDate = formatDate(advert.activated_at || advert.created_at);
   const price = formatPrice(advert);
@@ -163,8 +162,6 @@ export const WheelAdvert = ({ advert }: { advert: WheelAdProps }) => {
     Number.isFinite(latitude) && Number.isFinite(longitude)
       ? `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`
       : undefined;
-
-  console.log(specifications);
 
   return (
     <article className="wheel-advert" aria-labelledby="wheel-advert-title">
