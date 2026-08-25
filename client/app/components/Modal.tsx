@@ -111,9 +111,11 @@ export const Modal = ({
       >
         <div className="modal-header">
           <div>
-            <h2 id={titleId} className="modal-title">
-              {title}
-            </h2>
+            {title && (
+              <h2 id={titleId} className="modal-title">
+                {title}
+              </h2>
+            )}
             {description ? (
               <p className="modal-description">{description}</p>
             ) : null}
