@@ -14,9 +14,15 @@ import {
   WhatsappFloat,
 } from "@/app/components/components";
 import { getWheelAdverts } from "@/services/advertService";
+import { CatalogParams } from "./types/types";
 
 export default async function Home() {
-  const response = await getWheelAdverts(1, 6);
+  const queryParams: CatalogParams = {
+    page: 1,
+    limit: 6,
+    order: "desc",
+  };
+  const data = await getWheelAdverts(queryParams);
 
   return (
     <>
@@ -28,7 +34,7 @@ export default async function Home() {
         </section>
         <Categories />
         <section id="stoc-jante-anvelope">
-          <WheelsStock wheelAdverts={response.data} mainPage={true} />
+          <WheelsStock wheelAdverts={data?.items} mainPage={true} />
         </section>
         <section id="masini-vanzare">
           <CarsStock />
