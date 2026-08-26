@@ -1,23 +1,128 @@
-import { WheelAdProps } from "@/app/types/types";
-export async function getWheelAdverts(page: number, limit: number = 10) {
-  const offset = (page - 1) * limit;
+import { CatalogParams, WheelAdProps } from "@/app/types/types";
+export async function getWheelAdverts(params: CatalogParams) {
+  //destructuring params
+  const {
+    page,
+    limit = 12,
+    category,
+    maxPrice,
+    state,
+    diameter,
+    make,
+    material,
+    tyreBrand,
+    season,
+    width,
+    profile,
+    sortBy = "createdAt",
+    order = "desc",
+  } = params;
+
   const apiBaseUrl =
     process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";
 
   try {
-    const response = await fetch(
-      `${apiBaseUrl}/api/ad/wheels?offest=${offset}&limit=${limit}`,
-      {
-        method: "GET",
-        next: {
-          revalidate: 3600,
-          tags: ["wheel-ads"],
-        },
+    const response = await fetch(`${apiBaseUrl}/api/ad/wheels?`, {
+      method: "GET",
+      next: {
+        revalidate: 3600,
+        tags: ["wheel-ads"],
       },
-    );
+    });
     if (!response.ok) throw new Error("Eroare de rețea: Încearcă din nou.");
-    const data = await response.json();
-    return data;
+    const payload = await response.json();
+    let ads: WheelAdProps[] = payload.data || [];
+
+    //GENERAL FILTERS
+    //filter by category
+    if (category)
+      ads = ads.filter(
+        (ad: WheelAdProps) => ad.category_id.toString() === category,
+      );
+
+    //filter by max price
+    if (maxPrice) {
+      const max = parseFloat(maxPrice);
+      if (!isNaN(max))
+        ads = ads.filter((ad: WheelAdProps) => (ad.price.value || 0) <= max);
+    }
+
+    //filter by state (new or used)
+    if (state) {
+      ads = ads.filter(
+        (ad: WheelAdProps) => getAttribute(ad, "state") === state,
+      );
+    }
+    if (diameter) {
+      ads = ads.filter((ad: WheelAdProps) => {
+        const rimInches = getAttribute(ad, "rims_inches");
+        const tyreInches = getAttribute(ad, "tyres_inches");
+        return rimInches === diameter || tyreInches === diameter;
+      });
+    }
+
+    //CUSTOM FILTERS
+    //category_id = 1647 => rims filters
+    if (category === "1647") {
+      if (make) {
+        ads = ads.filter(
+          (ad: WheelAdProps) => getAttribute(ad, "donor_make") === make,
+        );
+      }
+      if (material) {
+        ads = ads.filter(
+          (ad: WheelAdProps) => getAttribute(ad, "wheels_rims") == material,
+        );
+      }
+    }
+    //category_id = 1649 => tyres filters
+    if (category === "1649") {
+      if (tyreBrand) {
+        ads = ads.filter(
+          (ad: WheelAdProps) => getAttribute(ad, "tire_brand") === tyreBrand,
+        );
+      }
+      if (season) {
+        ads = ads.filter(
+          (ad: any) => getAttribute(ad, "tyres_type") === season,
+        );
+      }
+      if (width) {
+        ads = ads.filter(
+          (ad: any) => getAttribute(ad, "tyres_width") === width,
+        );
+      }
+      if (profile) {
+        ads = ads.filter(
+          (ad: any) => getAttribute(ad, "tyres_profile") === profile,
+        );
+      }
+    }
+
+    //ads sorting
+    ads.sort((a: WheelAdProps, b: WheelAdProps): number => {
+      let valA;
+      let valB;
+      if (sortBy === "price") {
+        valA = a.price.value || 0;
+        valB = b.price.value || 0;
+      } else {
+        valA = new Date(a.created_at).getTime();
+        valB = new Date(b.created_at).getTime();
+      }
+      if (valA < valB) return order === "asc" ? -1 : 1;
+      if (valA > valB) return order === "asc" ? 1 : -1;
+      return 0;
+    });
+
+    //ads pagination
+    const offset = (page - 1) * limit;
+    const totalFilteredAds = ads.length;
+    const paginatedAds = ads.slice(offset, offset + limit);
+    return {
+      items: paginatedAds,
+      total: totalFilteredAds,
+    };
   } catch (error) {
     console.log("Error " + error);
     return null;
