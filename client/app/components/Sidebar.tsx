@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import LogoutAction from "@/app/actions/logoutAction";
 import {
-  ChartNoAxesCombined,
   LoaderPinwheel,
   Car,
   Plus,
@@ -20,12 +19,12 @@ import {
 
 const navigationItems = [
   { href: "/dashboard/", label: "Acasă", icon: House },
+
   {
-    href: "/dashboard/statistics",
-    label: "Statistici",
-    icon: ChartNoAxesCombined,
+    href: "/dashboard/rims?page=1",
+    label: "Anunturi jante",
+    icon: LoaderPinwheel,
   },
-  { href: "/dashboard/rims", label: "Anunturi jante", icon: LoaderPinwheel },
   { href: "/dashboard/cars", label: "Anunturi auto", icon: Car },
   { href: "/dashboard/new-add", label: "Adauga anunt", icon: Plus },
   { href: "/dashboard/messages", label: "Mesaje", icon: MessageSquare },
