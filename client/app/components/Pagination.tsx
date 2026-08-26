@@ -24,8 +24,7 @@ export const Pagination = ({
   const pathname = usePathname();
   const { replace } = useRouter();
   const currentPage = searchParams.get("page");
-  console.log("Current page" + currentPage);
-  console.log("Number of pages: " + pagesNumber);
+
   const handlePagination = (page: string) => {
     const params = new URLSearchParams(searchParams);
     params.set("page", page);
