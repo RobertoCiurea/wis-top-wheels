@@ -90,16 +90,15 @@ public class AdResource {
     public Response takeAction(@PathParam("id") Long advertId, AdActionDto actionDto) {
         try {
             String authHeader = "Bearer " + tokenManager.getAccessToken();
-
             // build the dynamic command payload
             Map<String, Object> commandPayload = new HashMap<>();
             commandPayload.put("command", actionDto.action.getCommand());
-
+            commandPayload.put("is_success", actionDto.isSuccess);
             // OLX rule: 'deactivate' commands must include the is_success flag
-            if (actionDto.action == OlxAdAction.DEACTIVATE) {
-                boolean successFlag = (actionDto.isSuccess != null) ? actionDto.isSuccess : true;
-                commandPayload.put("is_success", successFlag);
-            }
+//            if (actionDto.action == OlxAdAction.DEACTIVATE) {
+//                boolean successFlag = (actionDto.isSuccess != null) ? actionDto.isSuccess : true;
+//                commandPayload.put("is_success", successFlag);
+//            }
 
             // Send the command to OLX
             adClient.sendCommand(authHeader, "2.0", advertId, commandPayload);
@@ -107,6 +106,7 @@ public class AdResource {
             return Response.ok().entity("Action executed successfully").build();
 
         } catch (WebApplicationException e) {
+            e.printStackTrace();
             String error = e.getResponse().readEntity(String.class);
             return Response.status(e.getResponse().getStatus()).entity(error).build();
         } catch (Exception e) {
@@ -122,9 +122,15 @@ public class AdResource {
     public Response deleteAd(@PathParam("id") Long advertId){
         try{
             if (advertId == null) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("ID is required").build();
+                return Response.status(Response.Status.NOT_FOUND).entity("ID is missing").build();
             }
             String authHeader = "Bearer " + tokenManager.getAccessToken();
+            OlxSingleAdResponseDto advertResponse= adClient.getAd(authHeader, "2.0", advertId);
+            String advertStatus = advertResponse.data.status;
+            if("active".equals(advertStatus) || "limited".equals(advertStatus)){
+                return Response.status(Response.Status.CONFLICT).entity("Advert status must be deactivated.").build();
+
+            }
             adClient.deleteAd(authHeader, "2.0", advertId);
             return Response.noContent().entity("Ad deleted successfully").build();
         }catch (WebApplicationException e){
