@@ -11,11 +11,13 @@ import { ArrowRight } from "lucide-react";
 export const WheelsStock = ({
   wheelAdverts,
   mainPage = false,
+  dashboardPage = false,
   total,
   limit,
 }: {
   wheelAdverts: WheelAdProps[] | undefined;
   mainPage?: boolean;
+  dashboardPage?: boolean;
   total?: number;
   limit?: number;
 }) => {
@@ -24,9 +26,9 @@ export const WheelsStock = ({
       className="section"
       id="stock"
       style={{
-        background: "var(--surface)",
-        borderTop: "1px solid var(--border)",
-        paddingTop: `${!mainPage && "150px"}`,
+        background: `${dashboardPage ? "" : "var(--surface)"}`,
+        borderTop: `${dashboardPage ? "none" : "1px solid var(--border)"}`,
+        paddingTop: `${mainPage ? "" : dashboardPage ? "" : "150px"}`,
       }}
       aria-labelledby="wheels-heading"
     >
