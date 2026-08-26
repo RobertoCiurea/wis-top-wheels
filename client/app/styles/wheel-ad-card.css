@@ -19,6 +19,20 @@
   border-color: var(--gold-dim);
   transform: translateY(-2px);
 }
+.wheel-ad-card__status {
+  width: 100%;
+  display: flex;
+  font-family: var(--font-body);
+  justify-content: space-between;
+  padding: 0 0.75rem;
+  font-size: 14px;
+  color: var(--gray);
+  text-transform: uppercase;
+}
+
+.wheel-ad-card__status .active {
+  color: var(--gold);
+}
 
 .wheel-ad-card__media {
   position: relative;
@@ -343,6 +357,62 @@
 .wheel-ad-card__cta:hover {
   background: var(--gold-light);
   border-color: var(--gold-light);
+}
+
+.admin-action-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-action-buttons .top {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  align-items: center;
+}
+
+.advert-card-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin-top: 15px;
+  padding: 10px 16px;
+  color: var(--white);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: background var(--transition) color var(--transition);
+}
+
+.advert-card-button.update {
+  background: rgba(0, 130, 237, 0.8);
+}
+.advert-card-button.update:hover {
+  background: rgba(0, 130, 237, 0.7);
+  color: var(--gray-light);
+}
+
+.advert-card-button.action {
+  background: rgba(29, 201, 11, 0.8);
+}
+.advert-card-button.action:hover {
+  background: rgba(29, 201, 11, 0.7);
+  color: var(--gray-light);
+}
+
+.advert-card-button.delete {
+  background: rgba(201, 20, 6, 0.8);
+}
+.advert-card-button.delete:hover {
+  background: rgba(201, 20, 6, 0.7);
+  color: var(--gray-light);
 }
 
 .wheel-ad-card .swiper-pagination {
