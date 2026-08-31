@@ -62,6 +62,7 @@ export async function advertAction(
     revalidatePath("/");
     revalidatePath("/anunturi/jante-si-roti");
     revalidatePath("/dashboard/rims");
+    revalidatePath(`/anunturi/jante-si-roti/${advertId}`);
     return {
       status: 200,
       message: body.message,
