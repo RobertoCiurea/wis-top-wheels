@@ -4,6 +4,7 @@ import Logo from "@/public/logo.png";
 import Image from "next/image";
 import "@/app/styles/nav.css";
 import "@/app/styles/mobile-menu.css";
+import { useSession } from "next-auth/react";
 
 export const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -47,12 +48,13 @@ export const Navigation = () => {
     };
   }, [isMenuOpen]);
 
+  const session = useSession();
   return (
     <>
       {/*NAVIGATION Desktop*/}
       <nav className={`nav ${scrolled ? "scrolled" : ""}`} id="nav">
         <div className="nav-inner">
-          <a href="#" className="nav-logo">
+          <a href="/#" className="nav-logo">
             <Image
               src={Logo}
               alt="WIS Top Wheels Logo"
@@ -81,6 +83,9 @@ export const Navigation = () => {
               </div>
             </div>
             <a href="/#contact">Contact</a>
+            {session.status == "authenticated" && (
+              <a href="/dashboard">Zonă administrator</a>
+            )}
           </div>
           <div className="nav-cta">
             <a href="tel:+40726547517" className="btn btn-ghost btn-sm">
@@ -117,18 +122,21 @@ export const Navigation = () => {
         >
           <div className="mobile-menu__body">
             <nav className="mobile-links">
-              <a href="#stock" onClick={toggleMenu}>
+              <a href="/#stock" onClick={toggleMenu}>
                 Jante & Anvelope
               </a>
-              <a href="#cars" onClick={toggleMenu}>
+              <a href="/#cars" onClick={toggleMenu}>
                 Mașini de vânzare
               </a>
-              <a href="#about" onClick={toggleMenu}>
+              <a href="/#about" onClick={toggleMenu}>
                 Despre noi
               </a>
-              <a href="#contact" onClick={toggleMenu}>
+              <a href="/#contact" onClick={toggleMenu}>
                 Contact
               </a>
+              {session.status == "authenticated" && (
+                <a href="/dashboard">Zonă administrator</a>
+              )}
             </nav>
             <div className="mobile-cta mobile-cta--stacked">
               <a
