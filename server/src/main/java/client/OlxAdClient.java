@@ -15,7 +15,7 @@ import java.util.Map;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/api/partner/adverts")
-@ClientHeaderParam(name = "Version", value = "2.0")
+
 public interface OlxAdClient {
 
     @POST
@@ -41,7 +41,7 @@ public interface OlxAdClient {
     );
 
     @PUT
-    @Path("/{advertId")
+    @Path("/{advertId}")
     OlxSingleAdResponseDto updateAd(
             @HeaderParam("Authorization") String authHeader,
             @HeaderParam("Version") String version,
@@ -50,7 +50,7 @@ public interface OlxAdClient {
     );
 
     @DELETE
-    @Path("/{advertId")
+    @Path("/{advertId}")
     void deleteAd(
             @HeaderParam("Authorization") String authHeader,
             @HeaderParam("Version") String version,
