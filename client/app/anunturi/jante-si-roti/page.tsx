@@ -26,12 +26,16 @@ export default async function WheelAdverts({
     order: filters.order,
   };
   const data = await getWheelAdverts(params);
+  const adverts = data?.items.filter((ad) => {
+    return ad.status !== "removed_by_user";
+  });
+
   return (
     <SessionProvider>
       <Suspense fallback={"Se incarca"}>
         <WheelsStock
-          wheelAdverts={data?.items}
-          total={data?.total}
+          wheelAdverts={adverts}
+          total={adverts?.length}
           limit={params.limit}
         />
       </Suspense>
