@@ -79,6 +79,7 @@ public class AdResource {
             return Response.ok().entity(response).build();
         }catch (WebApplicationException e){
             String error = e.getResponse().readEntity(String.class);
+            Log.error("Error updating advert ID " + advertId +" Error: " + error);
             return Response.status(e.getResponse().getStatus()).entity(error).build();
         }catch (Exception e){
             e.printStackTrace();
