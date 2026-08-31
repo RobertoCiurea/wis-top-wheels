@@ -1,7 +1,7 @@
 import { WheelsStock } from "@/app/components/WheelsStock";
-import { WheelAdvertFilters } from "@/app/components/WheelAdvertFilters";
 import { getWheelAdverts } from "@/services/advertService";
 import { Suspense } from "react";
+import { SessionProvider } from "next-auth/react";
 
 export default async function WheelAdverts({
   searchParams,
@@ -27,12 +27,14 @@ export default async function WheelAdverts({
   };
   const data = await getWheelAdverts(params);
   return (
-    <Suspense fallback={"Se incarca"}>
-      <WheelsStock
-        wheelAdverts={data?.items}
-        total={data?.total}
-        limit={params.limit}
-      />
-    </Suspense>
+    <SessionProvider>
+      <Suspense fallback={"Se incarca"}>
+        <WheelsStock
+          wheelAdverts={data?.items}
+          total={data?.total}
+          limit={params.limit}
+        />
+      </Suspense>
+    </SessionProvider>
   );
 }
