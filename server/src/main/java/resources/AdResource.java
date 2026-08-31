@@ -1,10 +1,15 @@
 package resources;
 
 import client.OlxAdClient;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dto.*;
 
 import io.quarkus.cache.CacheInvalidate;
 import io.quarkus.cache.CacheInvalidateAll;
+import io.quarkus.logging.Log;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -89,6 +94,12 @@ public class AdResource {
     @CacheInvalidate(cacheName = "public-ad-details")
     public Response takeAction(@PathParam("id") Long advertId, AdActionDto actionDto) {
         try {
+            if(advertId == null || actionDto == null || actionDto.action == null){
+                Map<String, Object> errorPayload = new HashMap<>();
+                errorPayload.put("status", 400);
+                errorPayload.put("error", "ID-ul anunțului și acțiunea sunt obligatorii.");
+                return Response.status(Response.Status.BAD_REQUEST).entity(errorPayload).build();
+            }
             String authHeader = "Bearer " + tokenManager.getAccessToken();
             // build the dynamic command payload
             Map<String, Object> commandPayload = new HashMap<>();
@@ -102,16 +113,62 @@ public class AdResource {
 
             // Send the command to OLX
             adClient.sendCommand(authHeader, "2.0", advertId, commandPayload);
-
-            return Response.ok().entity("Action executed successfully").build();
+            Map<String, Object> successResponse = new HashMap<>();
+            successResponse.put("status", 200);
+            successResponse.put("message", "Acțiunea a fost aplicată cu succes.");
+            return Response.ok().entity(successResponse).build();
 
         } catch (WebApplicationException e) {
+
             e.printStackTrace();
+            int statusCode = e.getResponse().getStatus();
             String error = e.getResponse().readEntity(String.class);
-            return Response.status(e.getResponse().getStatus()).entity(error).build();
+            Log.error("Olx Error for advert ID: " + advertId  + "Error message: " + error);
+             Map<String, Object> frontendError = new HashMap<>();
+             frontendError.put("status", statusCode);
+             try {
+                 ObjectMapper jsonMapper = new ObjectMapper();
+                 JsonNode rootNode = jsonMapper.readTree(error);
+                 JsonNode errorNode = rootNode.path("error");
+                 String detailMessage="";
+
+                 JsonNode validationNode = errorNode.path("validation");
+                 if(validationNode.isArray() && validationNode.size() >0){
+                     StringBuilder validationMessages = new StringBuilder();
+                     for(JsonNode node : validationNode){
+                         String detail = node.path("detail").asText();
+                         if(detail != null && !detail.isEmpty()){
+                             if(validationMessages.length() > 0){ //there are more message
+                                 validationMessages.append(" | ");
+
+                             }
+                             validationMessages.append(detail);
+                         }
+                     }
+                     detailMessage = validationMessages.toString();
+                 }
+
+                 //if there is no validation section fallback to default olx error response
+                 if(detailMessage.isEmpty()){
+                     detailMessage = errorNode.path("detail").asText();
+                 }
+
+                 //if this shit doesn't work either then fallback to default message
+                 if(detailMessage == null || detailMessage.isEmpty()){
+                     detailMessage ="OLX a respins acțiunea. Verifică datele și starea curentă a anunțului.";
+                 }
+                 frontendError.put("error", detailMessage);
+             }catch (Exception parseException) {
+                 frontendError.put("error", "Eroare de comunicare la nivelul rețelei OLX.");
+             }
+            return Response.status(statusCode).entity(frontendError).build();
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.serverError().entity("Failed to execute command").build();
+            Map<String, Object> serverError = new HashMap<>();
+            serverError.put("status", 500);
+            serverError.put("error", "Eroare internă a serverului la executarea acțiunii.");
+
+            return Response.serverError().entity(serverError).build();
         }
     }
 
