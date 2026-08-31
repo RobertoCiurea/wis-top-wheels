@@ -347,7 +347,10 @@ export const WheelAdvertCard = ({
             <div className="admin-action-buttons">
               <div className="top">
                 <button type="button" className="advert-card-button update">
-                  Update
+                  <Link href={`/anunturi/edit/wheels/${advert.id}`}>
+                    {" "}
+                    Editează
+                  </Link>
                 </button>
                 <button
                   type="button"
