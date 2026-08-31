@@ -9,7 +9,7 @@ export default async function WheelAdvertPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const response = await getWheelAdvertById(Number(id));
+  const response = await getWheelAdvertById(id);
 
   if (!response) notFound();
 
@@ -26,7 +26,7 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const response = await getWheelAdvertById(Number(id));
+  const response = await getWheelAdvertById(id);
   const title = response?.title?.trim() || "Anunț jante și roți";
 
   return {

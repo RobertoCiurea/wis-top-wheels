@@ -129,7 +129,7 @@ export async function getWheelAdverts(params: CatalogParams) {
   }
 }
 
-export async function getWheelAdvertById(id: number) {
+export async function getWheelAdvertById(id: string) {
   const apiBaseUrl =
     process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";
   try {
