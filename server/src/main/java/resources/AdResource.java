@@ -193,6 +193,7 @@ public class AdResource {
             return Response.noContent().entity("Ad deleted successfully").build();
         }catch (WebApplicationException e){
             String error = e.getResponse().readEntity(String.class);
+            Log.error("Olx Error for advert ID: " + advertId  + "Error message: " + error);
             return Response.status(e.getResponse().getStatus()).entity(error).build();
         }catch (Exception e){
             e.printStackTrace();
