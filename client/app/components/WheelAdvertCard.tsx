@@ -347,10 +347,15 @@ export const WheelAdvertCard = ({
             <div className="admin-action-buttons">
               <div className="top">
                 <button type="button" className="advert-card-button update">
-                  <Link href={`/anunturi/edit/wheels/${advert.id}`}>
+                  <a
+                    href={`https://www.olx.ro/d/adding/edit/${advert.id}/?bs=olx_pro_listing`}
+                    title="Editează anunțul"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     {" "}
                     Editează
-                  </Link>
+                  </a>
                 </button>
                 <button
                   type="button"
