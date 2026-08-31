@@ -35,9 +35,9 @@ export async function advertAction(
         body: JSON.stringify(payload),
       },
     );
+    const body = await response.json();
+    console.log(body);
     if (!response.ok) {
-      const body = await response.json();
-      console.log(body);
       switch (response.status) {
         case 401:
         case 403:
@@ -54,8 +54,8 @@ export async function advertAction(
 
         default:
           return {
-            status: response.status,
-            error: body.error.detail,
+            status: body.status,
+            error: body.error,
           };
       }
     }
@@ -64,7 +64,7 @@ export async function advertAction(
     revalidatePath("/dashboard/rims");
     return {
       status: 200,
-      message: "Anunțul a fost modificat cu succes.",
+      message: body.message,
     };
   } catch (error) {
     console.log(error);
