@@ -62,7 +62,32 @@ export const WheelsStock = ({
             ))}
           </div>
         ) : (
-          <h1>Stoc epuizat</h1>
+          <div
+            className="stock-empty reveal visible"
+            role="status"
+            aria-live="polite"
+          >
+            <div className="stock-empty__icon" aria-hidden="true">
+              <span>•</span>
+            </div>
+            <div className="eyebrow stock-empty__eyebrow">Stoc temporar</div>
+            <h3 className="stock-empty__title">
+              Momentan nu avem jante, roți sau anvelope disponibile
+            </h3>
+            <p className="stock-empty__text">
+              Verificăm constant noul stoc și ne poți contacta pentru a afla
+              despre următoarele sosiri sau pentru a găsi un model potrivit
+              nevoilor tale.
+            </p>
+            <div className="stock-empty__actions">
+              <a href="#contact-section" className="btn btn-gold">
+                Solicită un model
+              </a>
+              <a href="https://wa.me/40726547517" className="btn btn-ghost">
+                Scrie pe WhatsApp
+              </a>
+            </div>
+          </div>
         )}
         {mainPage && (
           <div className="stock-actions">
