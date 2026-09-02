@@ -1,10 +1,11 @@
 package dto;
 
-public record ContactRequest(
+public record ContactRequestDto(
         String name,
         String phoneNumber,
         String email,
         String subject,
-        String message
+        String message,
+        String recaptchaToken
 ) {
 }
