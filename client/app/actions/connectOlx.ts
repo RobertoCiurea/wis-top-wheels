@@ -14,7 +14,7 @@ export async function connectToOlx(
     };
   }
   const accessToken = session.accessToken;
-  console.log(accessToken);
+
   const apiBaseUrl =
     process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";
 
