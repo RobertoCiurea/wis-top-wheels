@@ -24,6 +24,8 @@ import { WheelAdvert } from "./WheelAdvert";
 import { WheelAdvertCard } from "./WheelAdvertCard";
 import { WheelAdvertFilters } from "./WheelAdvertFilters";
 import { Pagination } from "./Pagination";
+import { ContactCard } from "./ContactCard";
+import { ContactMessagesGrid } from "./ContactMessages";
 export {
   Header,
   Hero,
@@ -51,4 +53,6 @@ export {
   WheelAdvertCard,
   WheelAdvertFilters,
   Pagination,
+  ContactCard,
+  ContactMessagesGrid,
 };
