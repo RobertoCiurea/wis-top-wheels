@@ -1,4 +1,10 @@
 package dto;
 
-public record RecaptchaResponseDto() {
+public class RecaptchaResponseDto {
+    public TokenProperties tokenProperties;
+
+    public static class TokenProperties {
+        public boolean valid;
+        public String invalidReason;
+    }
 }
