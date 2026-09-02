@@ -149,3 +149,29 @@ export type WheelAdvertFilterValues = {
   sortBy: string;
   order: string;
 };
+
+export type ContactActionState = {
+  success: boolean;
+  message?: string;
+  errors?: Record<string, string>;
+  formError?: string;
+};
+
+export type ContactMessage = {
+  id: number;
+  name: string;
+  phoneNumber: string;
+  email: string;
+  subject: string;
+  message: string;
+};
+
+export const SUBJECT_LABELS: Record<string, string> = {
+  cars: "Mașini de vânzare",
+  wheels: "Jante & Anvelope",
+  "wheels-service": "Programare vulcanizare",
+  any: "Altceva",
+};
+
+export const getSubjectLabel = (subject: string): string =>
+  SUBJECT_LABELS[subject] ?? "Altceva";
