@@ -155,10 +155,11 @@ export async function createWheelAd(
     }
 
     revalidatePath("/dashboard/new-add");
+    revalidatePath("dashboard/rims");
     //revalidate path also for the main page where the most recent ads will be posted
-    //and also on the catalog page (/anunturi/jante)
+    //and also on the catalog page (/anunturi/jante-si-roti)
     revalidatePath("/");
-    revalidatePath("/anunturi/jante");
+    revalidatePath("/anunturi/jante-si-roti");
     return {
       success: true,
       message: "Anunțul a fost publicat cu succes.",
