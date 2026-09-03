@@ -1,6 +1,13 @@
-import { Header, Footer, Sidebar } from "@/app/components/components";
+import { Sidebar } from "@/app/components/components";
 import "@/app/styles/dashboard.css";
 import { SessionProvider } from "next-auth/react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Panou administrare | WIS Top Wheels",
+  robots: { index: false, follow: false },
+};
+
 export default function DashboardLayout({
   children,
 }: {
