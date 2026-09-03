@@ -51,49 +51,68 @@ export const ContactForm = () => {
       </h3>
       <div className="form-row">
         <div className="form-group">
-          <label className="form-label">Nume</label>
+          <label className="form-label" htmlFor="contact-name">
+            Nume
+          </label>
           {state.errors?.name && (
             <div className="form-error">{state.errors?.name}</div>
           )}
           <input
             type="text"
+            id="contact-name"
             name="name"
+            autoComplete="name"
+            required
             className={`form-input ${state.errors?.name ? "form-input-error" : ""}`}
             placeholder="Ion Popescu"
           />
         </div>
         <div className="form-group">
-          <label className="form-label">Telefon</label>
+          <label className="form-label" htmlFor="contact-phone">
+            Telefon
+          </label>
           {state.errors?.phone && (
             <div className="form-error">{state.errors?.phone}</div>
           )}
           <input
             type="tel"
+            id="contact-phone"
             name="phone-number"
+            autoComplete="tel"
+            required
             className={`form-input ${state.errors?.phone ? "form-input-error" : ""}`}
             placeholder="+40 7XX XXX XXX"
           />
         </div>
       </div>
       <div className="form-group">
-        <label className="form-label">Email</label>
+        <label className="form-label" htmlFor="contact-email">
+          Email
+        </label>
         {state.errors?.email && (
           <div className="form-error">{state.errors?.email}</div>
         )}
         <input
           type="email"
+          id="contact-email"
           name="email"
+          autoComplete="email"
+          required
           className={`form-input ${state.errors?.email ? "form-input-error" : ""}`}
           placeholder="ion.popescu@example.com"
         />
       </div>
       <div className="form-group">
-        <label className="form-label">Subiect</label>
+        <label className="form-label" htmlFor="contact-subject">
+          Subiect
+        </label>
         {state.errors?.subject && (
           <div className="form-error">{state.errors?.subject}</div>
         )}
         <select
           name="subject"
+          id="contact-subject"
+          required
           className={`form-input ${state.errors?.subject ? "form-input-error" : ""}`}
         >
           <option value="">Alege un subiect...</option>
@@ -104,12 +123,16 @@ export const ContactForm = () => {
         </select>
       </div>
       <div className="form-group">
-        <label className="form-label">Mesaj</label>
+        <label className="form-label" htmlFor="contact-message">
+          Mesaj
+        </label>
         {state.errors?.message && (
           <div className="form-error">{state.errors?.message}</div>
         )}
         <textarea
           name="message"
+          id="contact-message"
+          required
           className={`form-input ${state.errors?.message ? "form-input-error" : ""}`}
           rows={4}
           placeholder="Descrie ce cauți, ce dimensiune de jante ai, când vrei să te programezi..."
