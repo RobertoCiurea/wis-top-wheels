@@ -6,6 +6,7 @@ import "./styles/buttons.css";
 import "./styles/status.css";
 import { Header, Footer } from "@/app/components/components";
 import { Toaster } from "sonner";
+import { safeJsonLd, siteName, siteUrl } from "@/lib/seo";
 
 const barlowCondensed = Barlow_Condensed({
   variable: "--font-barlow-condensed",
@@ -19,14 +20,13 @@ const inter = Inter({
   weight: ["300", "400", "500", "600", "700"],
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://wistopwheels.ro";
+const baseUrl = siteUrl;
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
-  title:
-    "WIS Top Wheels — Jante Premium, Mașini Second-Hand Import Germania, Vulcanizare",
+  title: "WIS Top Wheels | Jante, roți și anvelope auto",
   description:
-    "Cumpără jante aliaj de calitate, anvelope, și mașini de vânzare importate din Germania, cu garanție și transparență totală. Servicii de vulcanizare și direcție roți 3D. Răspund rapid pe WhatsApp și telefon.",
+    "Găsește jante, roți complete și anvelope auto, noi sau second hand, plus servicii de vulcanizare la WIS Top Wheels.",
   applicationName: "WIS Top Wheels",
   authors: [{ name: "WIS Top Wheels", url: baseUrl }],
   keywords: [
@@ -106,7 +106,7 @@ export const metadata: Metadata = {
     title: "WIS Top Wheels — Jante Premium, Mașini Import Germania",
     description:
       "Cumpără jante aliaj de calitate, anvelope, și mașini de vânzare importate din Germania cu garanție și transparență totală.",
-    siteName: "WIS Top Wheels",
+    siteName,
     images: [
       {
         url: `${baseUrl}/logo.png`,
@@ -245,7 +245,7 @@ export default function RootLayout({
       <head>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
         />
       </head>
       <body>
