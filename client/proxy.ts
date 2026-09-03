@@ -9,7 +9,7 @@ export default auth((req) => {
 
   //redirect only if the user is on /dashboard route and not logged in or has refresh token error
   if (isDashboard && (!isLoggedIn || hasRefreshTokenError)) {
-    const newUrl = new URL("/api/auth/signin", req.nextUrl.origin);
+    const newUrl = new URL("/login", req.nextUrl.origin);
 
     // Callback url after keycloak login
     newUrl.searchParams.set("callbackUrl", req.nextUrl.pathname);
