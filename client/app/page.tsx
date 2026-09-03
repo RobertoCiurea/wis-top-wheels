@@ -13,7 +13,7 @@ import {
 } from "@/app/components/components";
 import { getWheelAdverts } from "@/services/advertService";
 import { CatalogParams } from "./types/types";
-import { SessionProvider } from "next-auth/react";
+
 export default async function Home() {
   const queryParams: CatalogParams = {
     page: 1,
@@ -26,7 +26,7 @@ export default async function Home() {
   });
 
   return (
-    <SessionProvider>
+    <>
       <main>
         <Hero />
         <Services />
@@ -52,6 +52,6 @@ export default async function Home() {
         </section>
       </main>
       <WhatsappFloat />
-    </SessionProvider>
+    </>
   );
 }

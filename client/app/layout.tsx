@@ -6,7 +6,6 @@ import "./styles/buttons.css";
 import "./styles/status.css";
 import { Header, Footer } from "@/app/components/components";
 import { Toaster } from "sonner";
-import { SessionProvider } from "next-auth/react";
 
 const barlowCondensed = Barlow_Condensed({
   variable: "--font-barlow-condensed",
@@ -250,12 +249,12 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <SessionProvider>
+        <>
           <Header />
           {children}
           <Footer />
           <Toaster theme="dark" />
-        </SessionProvider>
+        </>
       </body>
     </html>
   );
