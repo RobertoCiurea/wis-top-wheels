@@ -79,7 +79,7 @@ export const ContactCard = ({ contact }: ContactCardProps) => {
         <p>{contact.message}</p>
       </div>
       <div className="contact-message-card__actions">
-        <form action={formAction} method="POST">
+        <form action={formAction}>
           <input type="hidden" name="contact-id" value={contact.id} />
           <button
             type="submit"
