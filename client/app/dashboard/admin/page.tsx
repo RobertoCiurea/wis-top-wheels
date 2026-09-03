@@ -7,7 +7,7 @@ import "@/app/styles/admin.css";
 export default async function AdminDashboardPage() {
   const session = await auth();
   if (!session) {
-    redirect("/api/auth/signin?callbackUrl=/dashboard/admin");
+    redirect("/login?callbackUrl=/dashboard/admin");
   }
   const apiBaseUrl =
     process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";

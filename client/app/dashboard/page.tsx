@@ -1,5 +1,3 @@
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
 import { OlxConnect, OlxDisconnect } from "@/app/components/components";
 import { checkOlxConnectionStatus } from "@/services/olxService";
 import { CheckCircle2, ExternalLink } from "lucide-react";
@@ -7,11 +5,6 @@ import Link from "next/link";
 import "@/app/styles/olx-connect.css";
 
 export default async function DashboardPage() {
-  const session = await auth();
-  if (!session || !session.user) {
-    redirect("/api/auth/signin?callbackUrl=/dashboard");
-  }
-
   const isConnected = await checkOlxConnectionStatus();
   if (isConnected) {
     return (

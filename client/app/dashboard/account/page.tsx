@@ -7,7 +7,7 @@ import { UserCardProps } from "@/app/types/types";
 export default async function AccountDashboardPage() {
   const session = await auth();
   if (!session) {
-    redirect("/api/auth/signin?callbackUrl=/dashboard/account");
+    redirect("/login?callbackUrl=/dashboard/account");
   }
   const apiBaseUrl =
     process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";

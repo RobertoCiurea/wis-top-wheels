@@ -6,7 +6,7 @@ import "@/app/styles/contact.css";
 export default async function MessagesDashboardPage() {
   const session = await auth();
   if (!session || !session.user) {
-    redirect("/api/auth/signin?callbackUrl=/dashboard");
+    redirect("/login?callbackUrl=/dashboard/messages");
   }
   const accessToken = session.accessToken as string;
   const messages = await getContactMessages(accessToken);
