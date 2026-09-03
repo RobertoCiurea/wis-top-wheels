@@ -71,7 +71,7 @@ function SliderControls() {
 
 export const WheelAdvertCard = ({
   advert,
-  href = advert.url,
+  href = `/anunturi/jante-si-roti/${advert.id}`,
   priority = false,
   cityName = "Pitești, Argeș",
 }: WheelAdvertCardProps) => {
@@ -214,12 +214,7 @@ export const WheelAdvertCard = ({
         </div>
 
         <div className="wheel-ad-card__content">
-          <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="wheel-ad-card__main-link"
-          >
+          <Link href={href} className="wheel-ad-card__main-link">
             <div className="wheel-ad-card__eyebrow">
               {formatCategoryId(advert.category_id)}
             </div>
@@ -335,7 +330,7 @@ export const WheelAdvertCard = ({
                 {advert.price.currency}
               </span>
             </div>
-          </a>
+          </Link>
 
           <Link
             href={`/anunturi/jante-si-roti/${advert.id}`}
