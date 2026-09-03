@@ -4,7 +4,6 @@ import Logo from "@/public/logo.png";
 import Image from "next/image";
 import "@/app/styles/nav.css";
 import "@/app/styles/mobile-menu.css";
-import { useSession } from "next-auth/react";
 
 export const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -48,7 +47,6 @@ export const Navigation = () => {
     };
   }, [isMenuOpen]);
 
-  const session = useSession();
   return (
     <>
       {/*NAVIGATION Desktop*/}
@@ -83,9 +81,8 @@ export const Navigation = () => {
               </div>
             </div>
             <a href="/#contact">Contact</a>
-            {session.status == "authenticated" && (
-              <a href="/dashboard">Zonă administrator</a>
-            )}
+
+            <a href="/dashboard">Zonă administrator</a>
           </div>
           <div className="nav-cta">
             <a href="tel:+40726547517" className="btn btn-ghost btn-sm">
@@ -134,9 +131,8 @@ export const Navigation = () => {
               <a href="/#contact" onClick={toggleMenu}>
                 Contact
               </a>
-              {session.status == "authenticated" && (
-                <a href="/dashboard">Zonă administrator</a>
-              )}
+
+              <a href="/dashboard">Zonă administrator</a>
             </nav>
             <div className="mobile-cta mobile-cta--stacked">
               <a
