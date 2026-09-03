@@ -99,9 +99,6 @@ export default async function WheelAdverts({
   return (
     <SessionProvider>
       <Suspense fallback={"Se incarca"}>
-        <h1 className="display d2">
-          Jante și roți auto: anunțuri de jante și anvelope
-        </h1>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
