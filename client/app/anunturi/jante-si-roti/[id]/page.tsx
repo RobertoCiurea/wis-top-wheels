@@ -2,7 +2,7 @@ import { getWheelAdvertById } from "@/services/advertService";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { WheelAdvert } from "@/app/components/WheelAdvert";
-
+import { SessionProvider } from "next-auth/react";
 export default async function WheelAdvertPage({
   params,
 }: {
@@ -14,9 +14,11 @@ export default async function WheelAdvertPage({
   if (!response) notFound();
 
   return (
-    <main className="section">
-      <WheelAdvert advert={response.data} />
-    </main>
+    <SessionProvider>
+      <main className="section">
+        <WheelAdvert advert={response.data} />
+      </main>
+    </SessionProvider>
   );
 }
 
