@@ -20,7 +20,6 @@ export async function getWheelAdverts(params: CatalogParams) {
 
   const apiBaseUrl =
     process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";
-
   try {
     const response = await fetch(`${apiBaseUrl}/api/ad/wheels?`, {
       method: "GET",
@@ -66,7 +65,8 @@ export async function getWheelAdverts(params: CatalogParams) {
     if (category === "1647") {
       if (make) {
         ads = ads.filter(
-          (ad: WheelAdProps) => getAttribute(ad, "donor_make") === make,
+          (ad: WheelAdProps) =>
+            getAttribute(ad, "donor_make") === formatBrand(make),
         );
       }
       if (material) {
@@ -75,11 +75,13 @@ export async function getWheelAdverts(params: CatalogParams) {
         );
       }
     }
+
     //category_id = 1649 => tyres filters
     if (category === "1649") {
       if (tyreBrand) {
         ads = ads.filter(
-          (ad: WheelAdProps) => getAttribute(ad, "tire_brand") === tyreBrand,
+          (ad: WheelAdProps) =>
+            getAttribute(ad, "tire_brand") === formatBrand(tyreBrand),
         );
       }
       if (season) {
@@ -137,7 +139,7 @@ export async function getWheelAdvertById(id: string) {
       method: "GET",
       next: {
         revalidate: 3600,
-        tags: ["wheel-ad"],
+        tags: [`wheel-ad:${id}`],
       },
     });
     if (!response.ok) throw new Error("Eroare de rețea: Încearcă din nou.");
@@ -213,6 +215,14 @@ export function formatSeason(value: string): string {
     default:
       return value;
   }
+}
+
+export function formatBrand(value: string): string {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "");
 }
 
 export function formatTyreInches(value: string): string | undefined {
