@@ -51,9 +51,11 @@ export const WheelsStock = ({
                 Jante & <span className="accent">Anvelope</span>
               </h2>
 
-              <h3 className="display d4" style={{ padding: ".5rem 0" }}>
-                <span className="accent">{total}</span> anunțuri
-              </h3>
+              {!mainPage && (
+                <h3 className="display d4" style={{ padding: ".5rem 0" }}>
+                  <span className="accent">{total}</span> anunțuri
+                </h3>
+              )}
               {!mainPage && <WheelAdvertFilters />}
             </div>
           </div>
