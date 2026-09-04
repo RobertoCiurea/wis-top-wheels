@@ -443,7 +443,7 @@
 
 @media (max-width: 768px) {
   .wheel-ad-card__slider-button {
-    opacity: 1;
+    display: none;
   }
 
   .wheel-ad-card__content {
