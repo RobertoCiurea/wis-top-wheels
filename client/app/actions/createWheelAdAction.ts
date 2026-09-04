@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
 import { WheelAdFormActionState } from "../types/types";
 import { auth } from "@/auth";
@@ -154,8 +154,9 @@ export async function createWheelAd(
       };
     }
 
+    revalidateTag("wheel-ads", "max");
     revalidatePath("/dashboard/new-add");
-    revalidatePath("dashboard/rims");
+    revalidatePath("/dashboard/rims");
     //revalidate path also for the main page where the most recent ads will be posted
     //and also on the catalog page (/anunturi/jante-si-roti)
     revalidatePath("/");
