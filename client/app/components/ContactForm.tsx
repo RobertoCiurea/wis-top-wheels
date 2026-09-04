@@ -1,11 +1,12 @@
 "use client";
-import { useState, useActionState, useEffect } from "react";
+import { useState, useActionState, useEffect, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { ContactActionState } from "@/app/types/types";
 import { contactAction } from "@/app/actions/contactAction";
 import { toast } from "sonner";
 export const ContactForm = () => {
   const siteKey = process.env.NEXT_PUBLIC_GOOGLE_CAPTCHA_SITE_KEY as string;
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const [token, setToken] = useState<string | null>(null);
   const initialState: ContactActionState = {
     success: false,
@@ -35,6 +36,7 @@ export const ContactForm = () => {
         );
       }
     }
+    recaptchaRef.current?.reset();
   }, [state]);
 
   return (
@@ -62,7 +64,6 @@ export const ContactForm = () => {
             id="contact-name"
             name="name"
             autoComplete="name"
-            required
             className={`form-input ${state.errors?.name ? "form-input-error" : ""}`}
             placeholder="Ion Popescu"
           />
@@ -79,7 +80,6 @@ export const ContactForm = () => {
             id="contact-phone"
             name="phone-number"
             autoComplete="tel"
-            required
             className={`form-input ${state.errors?.phone ? "form-input-error" : ""}`}
             placeholder="+40 7XX XXX XXX"
           />
@@ -97,7 +97,6 @@ export const ContactForm = () => {
           id="contact-email"
           name="email"
           autoComplete="email"
-          required
           className={`form-input ${state.errors?.email ? "form-input-error" : ""}`}
           placeholder="ion.popescu@example.com"
         />
@@ -112,7 +111,6 @@ export const ContactForm = () => {
         <select
           name="subject"
           id="contact-subject"
-          required
           className={`form-input ${state.errors?.subject ? "form-input-error" : ""}`}
         >
           <option value="">Alege un subiect...</option>
@@ -132,13 +130,12 @@ export const ContactForm = () => {
         <textarea
           name="message"
           id="contact-message"
-          required
           className={`form-input ${state.errors?.message ? "form-input-error" : ""}`}
           rows={4}
           placeholder="Descrie ce cauți, ce dimensiune de jante ai, când vrei să te programezi..."
         ></textarea>
       </div>
-      <ReCAPTCHA sitekey={siteKey!} onChange={onChange} />
+      <ReCAPTCHA sitekey={siteKey!} onChange={onChange} ref={recaptchaRef} />
       <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
         <button
           type="submit"
