@@ -1,35 +1,57 @@
-import {Header, Hero, About, Services, Categories, WheelsStock, CarsStock, WhyUs, Cta, Contact, Map, Footer, WhatsappFloat} from "@/app/components/components";
+import {
+  Hero,
+  About,
+  Services,
+  Categories,
+  WheelsStock,
+  CarsStock,
+  WhyUs,
+  Cta,
+  Contact,
+  Map,
+  WhatsappFloat,
+} from "@/app/components/components";
+import { getWheelAdverts } from "@/services/advertService";
+import { CatalogParams } from "./types/types";
 
-export default function Home() {
+export default async function Home() {
+  const queryParams: CatalogParams = {
+    page: 1,
+    limit: 6,
+    order: "desc",
+  };
+  const data = await getWheelAdverts(queryParams);
+  const adverts = data?.items.filter((ad) => {
+    return ad.status !== "removed_by_user";
+  });
+
   return (
     <>
-      <Header/>
       <main>
-        <Hero/>
-        <Services/>
+        <Hero />
+        <Services />
         <section id="despre-noi" className="section">
-          <About/>
+          <About />
         </section>
-        <Categories/>
+        <Categories />
         <section id="stoc-jante-anvelope">
-          <WheelsStock/>
+          <WheelsStock wheelAdverts={adverts} mainPage={true} />
         </section>
         <section id="masini-vanzare">
-          <CarsStock/>
+          <CarsStock />
         </section>
         <section id="de-ce-noi">
-          <WhyUs/>
+          <WhyUs />
         </section>
-        <Cta/>
+        <Cta />
         <section id="contact-section">
-          <Contact/>
+          <Contact />
         </section>
         <section id="locatie">
-          <Map/>
+          <Map />
         </section>
       </main>
-      <Footer/>
-      <WhatsappFloat/>
+      <WhatsappFloat />
     </>
   );
 }
