@@ -28,7 +28,7 @@ export const WheelsStock = ({
       style={{
         background: `${dashboardPage ? "" : "var(--surface)"}`,
         borderTop: `${dashboardPage ? "none" : "1px solid var(--border)"}`,
-        paddingTop: `${mainPage ? "" : dashboardPage ? "" : "150px"}`,
+        paddingTop: `${mainPage ? "" : dashboardPage ? "" : "72px"}`,
       }}
       aria-labelledby="wheels-heading"
     >
