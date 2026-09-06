@@ -4,10 +4,15 @@ import Logo from "@/public/logo.png";
 import Image from "next/image";
 import "@/app/styles/nav.css";
 import "@/app/styles/mobile-menu.css";
+import { MenuSearchBar } from "./MenuSearchBar";
+import { usePathname } from "next/navigation";
 
 export const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+
+  const disableMenuSearchBar = pathname.startsWith("/anunturi");
 
   const closeMenu = () => {
     setIsMenuOpen(false);
@@ -25,25 +30,25 @@ export const Navigation = () => {
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && isMenuOpen) {
-        closeMenu();
+      if (event.key === "Escape") {
+        if (isMenuOpen) {
+          closeMenu();
+        }
       }
     };
 
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 50);
     };
 
     window.addEventListener("resize", handleResize);
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("scroll", handleScroll);
+
     return () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [isMenuOpen]);
 
@@ -63,23 +68,7 @@ export const Navigation = () => {
           <div className="nav-links">
             <a href="/#about">Despre noi</a>
             <a href="/#services">Servicii</a>
-            <div className="nav-dropdown">
-              <button
-                className="nav-dropdown__trigger"
-                aria-expanded="false"
-                aria-haspopup="menu"
-              >
-                Stoc ▾
-              </button>
-              <div className="nav-dropdown__menu" role="menu">
-                <a href="/#stock" role="menuitem">
-                  Jante & Anvelope
-                </a>
-                <a href="/#cars" role="menuitem">
-                  Mașini de vânzare
-                </a>
-              </div>
-            </div>
+
             <a href="/#contact">Contact</a>
 
             <a href="/dashboard">Zonă administrator</a>
@@ -103,6 +92,7 @@ export const Navigation = () => {
             <span></span>
           </button>
         </div>
+        {!disableMenuSearchBar && <MenuSearchBar />}
       </nav>
 
       {/*  MOBILE MENU */}
