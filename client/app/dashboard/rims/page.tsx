@@ -1,6 +1,5 @@
 import { WheelsStock } from "@/app/components/WheelsStock";
 import { getWheelAdverts } from "@/services/advertService";
-import { SessionProvider } from "next-auth/react";
 export default async function RimsDashboardPage({
   searchParams,
 }: {
@@ -25,13 +24,11 @@ export default async function RimsDashboardPage({
   };
   const data = await getWheelAdverts(params);
   return (
-    <SessionProvider>
-      <WheelsStock
-        wheelAdverts={data?.items}
-        total={data?.total}
-        limit={9}
-        dashboardPage={true}
-      />
-    </SessionProvider>
+    <WheelsStock
+      wheelAdverts={data?.items}
+      total={data?.total}
+      limit={9}
+      dashboardPage={true}
+    />
   );
 }
