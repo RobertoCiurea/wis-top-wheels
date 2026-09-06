@@ -26,6 +26,9 @@ import { WheelAdvertFilters } from "./WheelAdvertFilters";
 import { Pagination } from "./Pagination";
 import { ContactCard } from "./ContactCard";
 import { ContactMessagesGrid } from "./ContactMessages";
+import { MenuSearchBar } from "./MenuSearchBar";
+import { FiltersGrid } from "./FiltersGrid";
+import { AuthProvider } from "./AuthProvider";
 export {
   Header,
   Hero,
@@ -55,4 +58,7 @@ export {
   Pagination,
   ContactCard,
   ContactMessagesGrid,
+  MenuSearchBar,
+  FiltersGrid,
+  AuthProvider,
 };
