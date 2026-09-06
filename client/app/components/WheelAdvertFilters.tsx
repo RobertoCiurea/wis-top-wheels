@@ -2,7 +2,7 @@
 
 import { SubmitEvent, Suspense, useCallback, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ArrowDownUp, SlidersHorizontal } from "lucide-react";
+import { ArrowDownUp, SlidersHorizontal, Search, X } from "lucide-react";
 import "@/app/styles/filters.css";
 import { WheelAdvertFilterValues } from "../types/types";
 import { Modal } from "./Modal";
@@ -19,6 +19,7 @@ const FILTER_KEYS: (keyof WheelAdvertFilterValues)[] = [
   "season",
   "width",
   "profile",
+  "query",
   "sortBy",
   "order",
 ];
@@ -34,6 +35,7 @@ const emptyFilters: WheelAdvertFilterValues = {
   season: "",
   width: "",
   profile: "",
+  query: "",
   sortBy: "",
   order: "",
 };
@@ -132,7 +134,19 @@ function WheelAdvertFiltersInner() {
         {option.label}
       </option>
     ));
+  const resetQuery = () => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      query: "",
+    }));
+  };
 
+  const onChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      query: event.target.value,
+    }));
+  };
   return (
     <div className="filters-container">
       <div className="filters-toolbar" aria-label="Opțiuni listă anunțuri">
@@ -146,16 +160,47 @@ function WheelAdvertFiltersInner() {
             <SlidersHorizontal size={18} aria-hidden="true" />
             <span>Filtre</span>
           </button>
+          <button
+            type="button"
+            className={`filters-toolbar-button ${isSortingOpen ? "active" : ""}`}
+            onClick={openSortingModal}
+            aria-label="Deschide sortarea"
+          >
+            <ArrowDownUp size={18} aria-hidden="true" />
+            <span>Sortare</span>
+          </button>
         </div>
-        <button
-          type="button"
-          className={`filters-toolbar-button ${isSortingOpen ? "active" : ""}`}
-          onClick={openSortingModal}
-          aria-label="Deschide sortarea"
-        >
-          <ArrowDownUp size={18} aria-hidden="true" />
-          <span>Sortare</span>
-        </button>
+        <form onSubmit={handleSubmit} className="query-form" role="search">
+          <div className="query-input-content">
+            <input
+              type="search"
+              name="query"
+              className="query-input"
+              placeholder="Caută anunțuri..."
+              value={filters.query}
+              onChange={onChangeQuery}
+              autoComplete="off"
+              aria-label="Caută în anunțuri"
+            />
+            <button
+              type="button"
+              className="reset-query-button"
+              onClick={resetQuery}
+              disabled={!filters.query}
+              aria-label="Șterge căutarea"
+              title="Șterge căutarea"
+            >
+              <X size={16} aria-hidden="true" />
+            </button>
+          </div>
+          <button
+            type="submit"
+            className="filters-toolbar-button query-submit-button"
+          >
+            <Search size={18} aria-hidden="true" />
+            <span>Caută</span>
+          </button>
+        </form>
       </div>
 
       <Modal
