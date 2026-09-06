@@ -24,13 +24,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           idToken: account.id_token,
           expiresAt: account.expires_at
             ? account.expires_at * 1000
-            : Date.now() + 300 * 1000, //create a 5 minutes expiration date
+            : Date.now() + 300 * 1000,
         };
       }
-      //if the token has not expired return it
-      if (Date.now() < (token.expiresAt as number)) return token;
 
-      //if the token expired generate a new one
+      if (token.expiresAt && Date.now() < token.expiresAt) {
+        return token;
+      }
+
+      if (!token.refreshToken) {
+        return { ...token, error: "RefreshTokenError" };
+      }
+
       try {
         const response = await fetch(
           `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`,
@@ -46,19 +51,35 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           },
         );
 
-        const refreshedTokens = await response.json();
+        const responseText = await response.text();
+        let refreshedTokens: {
+          access_token?: string;
+          expires_in?: number;
+          refresh_token?: string;
+        };
 
-        if (!response.ok) throw refreshedTokens;
+        try {
+          refreshedTokens = JSON.parse(responseText);
+        } catch {
+          throw new Error("Keycloak returned a non-JSON refresh response");
+        }
+
+        if (
+          !response.ok ||
+          !refreshedTokens.access_token ||
+          !refreshedTokens.expires_in
+        ) {
+          throw new Error("Keycloak rejected the refresh token");
+        }
 
         return {
           ...token,
+          error: undefined,
           accessToken: refreshedTokens.access_token,
           expiresAt: Date.now() + refreshedTokens.expires_in * 1000,
-          // use the to old refresh token if Keycloak didn't issue a new one
           refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
         };
-      } catch (error) {
-        //console.error("Error refreshing Keycloak Access Token:", error);
+      } catch {
         return { ...token, error: "RefreshTokenError" };
       }
     },
