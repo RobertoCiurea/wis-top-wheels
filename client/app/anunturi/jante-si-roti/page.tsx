@@ -1,7 +1,6 @@
 import { WheelsStock } from "@/app/components/WheelsStock";
 import { getWheelAdverts } from "@/services/advertService";
 import { Suspense } from "react";
-import { SessionProvider } from "next-auth/react";
 import type { Metadata } from "next";
 import {
   canonicalMarketplaceUrl,
@@ -89,6 +88,7 @@ export default async function WheelAdverts({
     season: filters.season,
     width: filters.width,
     profile: filters.profile,
+    query: filters.query ? filters.query : "",
     sortBy: filters.sortBy,
     order: filters.order,
   };
@@ -97,30 +97,28 @@ export default async function WheelAdverts({
   const listingUrl = `${siteUrl}/anunturi/jante-si-roti`;
 
   return (
-    <SessionProvider>
-      <Suspense fallback={"Se incarca"}>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: safeJsonLd({
-              "@context": "https://schema.org",
-              "@type": "ItemList",
-              name: "Anunțuri jante și roți auto",
-              itemListElement: adverts.map((advert, index) => ({
-                "@type": "ListItem",
-                position: index + 1,
-                url: `${listingUrl}/${advert.id}`,
-                name: advert.title,
-              })),
-            }),
-          }}
-        />
-        <WheelsStock
-          wheelAdverts={adverts}
-          total={data?.total}
-          limit={params.limit}
-        />
-      </Suspense>
-    </SessionProvider>
+    <Suspense fallback={"Se incarca"}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: safeJsonLd({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: "Anunțuri jante și roți auto",
+            itemListElement: adverts.map((advert, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              url: `${listingUrl}/${advert.id}`,
+              name: advert.title,
+            })),
+          }),
+        }}
+      />
+      <WheelsStock
+        wheelAdverts={adverts}
+        total={data?.total}
+        limit={params.limit}
+      />
+    </Suspense>
   );
 }

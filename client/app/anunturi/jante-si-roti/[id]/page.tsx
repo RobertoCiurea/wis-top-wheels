@@ -2,7 +2,6 @@ import { getWheelAdvertById } from "@/services/advertService";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { WheelAdvert } from "@/app/components/WheelAdvert";
-import { SessionProvider } from "next-auth/react";
 import {
   getAdvertDescription,
   getPublicImage,
@@ -22,67 +21,64 @@ export default async function WheelAdvertPage({
   if (!response?.data) notFound();
 
   return (
-    <SessionProvider>
-      <main className="section">
+    <main className="section">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: safeJsonLd({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Acasă",
+                item: siteUrl,
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Anunțuri jante și roți",
+                item: `${siteUrl}/anunturi/jante-si-roti`,
+              },
+              {
+                "@type": "ListItem",
+                position: 3,
+                name: response.data.title,
+                item: `${siteUrl}/anunturi/jante-si-roti/${response.data.id}`,
+              },
+            ],
+          }),
+        }}
+      />
+      {isPublicAdvert(response.data) && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: safeJsonLd({
               "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                {
-                  "@type": "ListItem",
-                  position: 1,
-                  name: "Acasă",
-                  item: siteUrl,
-                },
-                {
-                  "@type": "ListItem",
-                  position: 2,
-                  name: "Anunțuri jante și roți",
-                  item: `${siteUrl}/anunturi/jante-si-roti`,
-                },
-                {
-                  "@type": "ListItem",
-                  position: 3,
-                  name: response.data.title,
-                  item: `${siteUrl}/anunturi/jante-si-roti/${response.data.id}`,
-                },
-              ],
+              "@type": "Product",
+              name: response.data.title,
+              description: getAdvertDescription(response.data),
+              ...(getPublicImage(response.data)
+                ? { image: [getPublicImage(response.data)] }
+                : {}),
+              offers:
+                response.data.price?.value >= 0 && response.data.price.currency
+                  ? {
+                      "@type": "Offer",
+                      url: `${siteUrl}/anunturi/jante-si-roti/${response.data.id}`,
+                      price: response.data.price.value,
+                      priceCurrency: response.data.price.currency,
+                      availability: "https://schema.org/InStock",
+                    }
+                  : undefined,
             }),
           }}
         />
-        {isPublicAdvert(response.data) && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: safeJsonLd({
-                "@context": "https://schema.org",
-                "@type": "Product",
-                name: response.data.title,
-                description: getAdvertDescription(response.data),
-                ...(getPublicImage(response.data)
-                  ? { image: [getPublicImage(response.data)] }
-                  : {}),
-                offers:
-                  response.data.price?.value >= 0 &&
-                  response.data.price.currency
-                    ? {
-                        "@type": "Offer",
-                        url: `${siteUrl}/anunturi/jante-si-roti/${response.data.id}`,
-                        price: response.data.price.value,
-                        priceCurrency: response.data.price.currency,
-                        availability: "https://schema.org/InStock",
-                      }
-                    : undefined,
-              }),
-            }}
-          />
-        )}
-        <WheelAdvert advert={response.data} />
-      </main>
-    </SessionProvider>
+      )}
+      <WheelAdvert advert={response.data} />
+    </main>
   );
 }
 
