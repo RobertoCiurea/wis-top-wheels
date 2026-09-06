@@ -1,4 +1,547 @@
 import { CatalogParams, WheelAdProps } from "@/app/types/types";
+import Fuse, { Expression } from "fuse.js";
+
+//query search configuration
+type SearchSeason = "winter" | "summer" | "allseason";
+type SearchState = "new" | "used";
+type SearchCategory = "rims" | "tyres";
+
+type ParsedDimension = {
+  width?: string;
+  profile?: string;
+  diameter?: string;
+};
+
+type ParsedSearchQuery = {
+  textTerms: string[];
+  season?: SearchSeason;
+  state?: SearchState;
+  category?: SearchCategory;
+  dimension?: ParsedDimension;
+};
+
+//extend wheel advert type with search text property (human readbale properties that help in query)
+
+type SearchableWheelAd = WheelAdProps & {
+  searchText: string;
+};
+
+//search synonyms
+const SEARCH_SYNONYMS: Record<string, string[]> = {
+  // TYRES
+  cauciuc: ["anvelopa", "anvelope"],
+  cauciucuri: ["anvelopa", "anvelope"],
+  cauciucurile: ["anvelopa", "anvelope"],
+  pneu: ["anvelopa", "anvelope"],
+  pneuri: ["anvelopa", "anvelope"],
+  anvelopa: ["anvelopa", "anvelope", "cauciuc", "cauciucuri"],
+  anvelope: ["anvelopa", "anvelope", "cauciuc", "cauciucuri"],
+
+  // RIMS
+  janta: ["janta", "jante", "roti"],
+  jante: ["janta", "jante", "roti"],
+  jenti: ["janta", "jante", "roti"],
+
+  // WHEELS
+  roata: ["roata", "roti"],
+  roti: ["roata", "roti"],
+
+  // SEASONS
+  iarna: ["iarna", "winter"],
+  winter: ["iarna", "winter"],
+
+  vara: ["vara", "summer"],
+  summer: ["vara", "summer"],
+
+  allseason: ["allseason", "all season", "all-season"],
+  "all-season": ["allseason", "all season", "all-season"],
+  "all season": ["allseason", "all season", "all-season"],
+
+  // STATE
+  nou: ["nou", "new"],
+  noi: ["nou", "new"],
+  noua: ["nou", "new"],
+  new: ["nou", "new"],
+
+  second: ["second hand", "used"],
+  hand: ["second hand", "used"],
+  "second hand": ["second hand", "used"],
+  folosit: ["second hand", "used"],
+  folosite: ["second hand", "used"],
+  used: ["second hand", "used"],
+};
+
+//stop words (words that slow and break the search)
+const STOP_WORDS = new Set([
+  "pe",
+  "de",
+  "la",
+  "in",
+  "din",
+  "cu",
+  "si",
+  "pentru",
+  "un",
+  "o",
+  "ale",
+  "ai",
+  "a",
+  "care",
+  "este",
+  "sunt",
+  "mai",
+  "foarte",
+]);
+
+//search normalization function (diacritics fix)
+export function normalizeSearchText(value: string): string {
+  return value
+    ? value
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/\s+/g, " ")
+        .trim()
+    : "";
+}
+
+//attribute search helpers functions
+function getSearchableAttributeValue(ad: WheelAdProps, code: string): string {
+  const value = getAttribute(ad, code);
+
+  if (!value) {
+    return "";
+  }
+
+  switch (code) {
+    case "tyres_type": {
+      switch (value) {
+        case "parts-tyres-type-winter":
+          return "iarna winter";
+
+        case "parts-tyres-type-summer":
+          return "vara summer";
+
+        case "parts-tyres-type-allseason":
+          return "all season allseason all-season";
+
+        default:
+          return normalizeSearchText(value);
+      }
+    }
+
+    case "state": {
+      switch (value) {
+        case "new":
+          return "nou noi new";
+
+        case "used":
+          return "second hand folosit folosite used";
+
+        default:
+          return normalizeSearchText(value);
+      }
+    }
+
+    case "wheels_rims": {
+      switch (value) {
+        case "parts-wheels-rims-type-steel":
+          return "otel steel";
+
+        case "parts-wheels-rims-type-alloy":
+          return "aliaj alloy";
+
+        default:
+          return normalizeSearchText(value);
+      }
+    }
+
+    case "donor_make":
+    case "tire_brand":
+      return [
+        normalizeSearchText(value),
+        normalizeSearchText(formatBrand(value)),
+      ].join(" ");
+
+    case "rims_inches":
+    case "tyres_inches":
+      return [normalizeSearchText(value), getRimSize(ad) ?? ""]
+        .filter(Boolean)
+        .join(" ");
+
+    case "tyres_width":
+      return [normalizeSearchText(value), formatTyreWidth(value) ?? ""]
+        .filter(Boolean)
+        .join(" ");
+
+    case "tyres_profile":
+      return [normalizeSearchText(value), formatTyresProfile(value) ?? ""]
+        .filter(Boolean)
+        .join(" ");
+
+    default:
+      return normalizeSearchText(value);
+  }
+}
+
+//creates searchable text that contains the title, description and the
+//human readbale versions of advert attributes
+function buildSearchText(ad: WheelAdProps): string {
+  const parts: string[] = [ad.title, ad.description];
+
+  // General attributes
+  const state = getState(ad);
+  if (state) {
+    parts.push(state);
+  }
+
+  const wheelType = getWheelType(ad);
+  if (wheelType) {
+    parts.push(wheelType);
+  }
+
+  // Rim size
+  const rimSize = getRimSize(ad);
+  if (rimSize) {
+    parts.push(`r${rimSize}`);
+    parts.push(rimSize);
+  }
+
+  // Tyre season
+  const tyreType = getAttribute(ad, "tyres_type");
+  if (tyreType) {
+    parts.push(formatSeason(tyreType));
+  }
+
+  // Tyre dimensions
+  const width = getAttribute(ad, "tyres_width");
+  if (width) {
+    const formattedWidth = formatTyreWidth(width);
+
+    if (formattedWidth) {
+      parts.push(formattedWidth);
+    }
+  }
+
+  const profile = getAttribute(ad, "tyres_profile");
+  if (profile) {
+    const formattedProfile = formatTyresProfile(profile);
+
+    if (formattedProfile) {
+      parts.push(formattedProfile);
+    }
+  }
+
+  // Brands / makes
+  const tyreBrand = getAttribute(ad, "tire_brand");
+  if (tyreBrand) {
+    parts.push(tyreBrand);
+  }
+
+  const donorMake = getAttribute(ad, "donor_make");
+  if (donorMake) {
+    parts.push(donorMake);
+  }
+
+  // Include all raw attributes as fallback.
+  for (const attribute of ad.attributes) {
+    const value = getSearchableAttributeValue(ad, attribute.code);
+
+    if (!value) {
+      continue;
+    }
+
+    parts.push(`${attribute.code} ${value}`);
+  }
+
+  return parts.filter(Boolean).map(normalizeSearchText).join(" ");
+}
+
+//query parsing
+function detectSeason(term: string): SearchSeason | undefined {
+  switch (normalizeSearchText(term)) {
+    case "iarna":
+    case "winter":
+      return "winter";
+
+    case "vara":
+    case "summer":
+      return "summer";
+
+    case "allseason":
+    case "all season":
+    case "all-season":
+      return "allseason";
+
+    default:
+      return undefined;
+  }
+}
+
+function detectState(term: string): SearchState | undefined {
+  switch (normalizeSearchText(term)) {
+    case "nou":
+    case "noi":
+    case "noua":
+    case "new":
+      return "new";
+
+    case "second":
+    case "second hand":
+    case "folosit":
+    case "folosite":
+    case "used":
+      return "used";
+
+    default:
+      return undefined;
+  }
+}
+
+function detectCategory(term: string): SearchCategory | undefined {
+  switch (normalizeSearchText(term)) {
+    case "anvelopa":
+    case "anvelope":
+    case "cauciuc":
+    case "cauciucuri":
+    case "cauciucurile":
+    case "pneu":
+    case "pneuri":
+      return "tyres";
+
+    case "janta":
+    case "jante":
+      return "rims";
+
+    default:
+      return undefined;
+  }
+}
+
+function detectDimension(query: string): ParsedDimension | undefined {
+  const normalized = normalizeSearchText(query).replace(/\s+/g, " ");
+
+  //  supports: 205/55 R16 205/55r16 205/55/16 205 / 55 / 16 205 55 R16 205 55 16
+
+  const fullMatch = normalized.match(
+    /\b(\d{3})\s*[\/\s]\s*(\d{2})\s*(?:[\/\s]*r?\s*)(\d{2}(?:\.\d)?)\b/i,
+  );
+
+  if (fullMatch) {
+    return {
+      width: fullMatch[1],
+      profile: fullMatch[2],
+      diameter: fullMatch[3],
+    };
+  }
+
+  //supports: 205/55 205 / 55
+
+  const widthProfileMatch = normalized.match(/\b(\d{3})\s*[\/\s]\s*(\d{2})\b/);
+
+  if (widthProfileMatch) {
+    return {
+      width: widthProfileMatch[1],
+      profile: widthProfileMatch[2],
+    };
+  }
+
+  //  supports: R16 r16
+
+  const diameterMatch = normalized.match(/\br\s*(\d{2}(?:\.\d)?)\b/i);
+
+  if (diameterMatch) {
+    return {
+      diameter: diameterMatch[1],
+    };
+  }
+
+  return undefined;
+}
+
+function parseSearchQuery(query: string): ParsedSearchQuery {
+  const normalizedQuery = normalizeSearchText(query);
+
+  const dimension = detectDimension(normalizedQuery);
+
+  //remove queries that are already interpreted
+  const cleanedQuery = normalizedQuery
+    //remove full dimensions (example): 205/55 R16 205/55r16 205/55/16 205 / 55 / 16 205 55 R16
+
+    .replace(
+      /\b\d{3}\s*[\/\s]\s*\d{2}\s*(?:[\/\s]*r?\s*)\d{2}(?:\.\d)?\b/gi,
+      " ",
+    )
+
+    //remove partial width/profile: 205/55 205 / 55205 55
+
+    .replace(/\b\d{3}\s*[\/\s]\s*\d{2}\b/gi, " ")
+
+    //remove standalone diameter: R16
+
+    .replace(/\br\s*\d{2}(?:\.\d)?\b/gi, " ");
+
+  const rawTerms = cleanedQuery
+    .split(/\s+/)
+    .map(normalizeSearchText)
+    .filter((word) => word.length > 0 && !STOP_WORDS.has(word));
+
+  let season: SearchSeason | undefined;
+  let state: SearchState | undefined;
+  let category: SearchCategory | undefined;
+
+  const textTerms: string[] = [];
+
+  for (const term of rawTerms) {
+    const detectedSeason = detectSeason(term);
+
+    if (detectedSeason) {
+      season = detectedSeason;
+      continue;
+    }
+
+    const detectedState = detectState(term);
+
+    if (detectedState) {
+      state = detectedState;
+      continue;
+    }
+
+    const detectedCategory = detectCategory(term);
+
+    if (detectedCategory) {
+      category = detectedCategory;
+      textTerms.push(term);
+      continue;
+    }
+
+    textTerms.push(term);
+  }
+
+  return {
+    textTerms,
+    season,
+    state,
+    category,
+    dimension,
+  };
+}
+
+//semantic filters
+function matchesSeason(ad: WheelAdProps, season: SearchSeason): boolean {
+  const value = getAttribute(ad, "tyres_type");
+
+  switch (season) {
+    case "winter":
+      return value === "parts-tyres-type-winter";
+
+    case "summer":
+      return value === "parts-tyres-type-summer";
+
+    case "allseason":
+      return value === "parts-tyres-type-allseason";
+
+    default:
+      return true;
+  }
+}
+
+function matchesState(ad: WheelAdProps, state: SearchState): boolean {
+  const value = getAttribute(ad, "state");
+
+  switch (state) {
+    case "new":
+      return value === "new";
+
+    case "used":
+      return value === "used";
+
+    default:
+      return true;
+  }
+}
+
+function matchesWidth(ad: WheelAdProps, width: string): boolean {
+  const value = getAttribute(ad, "tyres_width");
+
+  if (!value) {
+    return false;
+  }
+
+  const formatted = formatTyreWidth(value);
+
+  return value === width || formatted === width;
+}
+
+function matchesProfile(ad: WheelAdProps, profile: string): boolean {
+  const value = getAttribute(ad, "tyres_profile");
+
+  if (!value) {
+    return false;
+  }
+
+  const formatted = formatTyresProfile(value);
+
+  return value === profile || formatted === profile;
+}
+
+function matchesDiameter(ad: WheelAdProps, diameter: string): boolean {
+  const rimInches = getAttribute(ad, "rims_inches");
+  const tyreInches = getAttribute(ad, "tyres_inches");
+
+  const formattedRim = rimInches ? getRimSize(ad) : undefined;
+
+  const formattedTyre = tyreInches
+    ? getRimSizeFromTyreAttribute(tyreInches)
+    : undefined;
+
+  return (
+    rimInches === diameter ||
+    tyreInches === diameter ||
+    formattedRim === diameter ||
+    formattedTyre === diameter
+  );
+}
+
+function getRimSizeFromTyreAttribute(value: string): string | undefined {
+  const match = value.match(/parts-tyres-inches-(\d+(?:-\d+)?)$/);
+
+  if (!match) {
+    return undefined;
+  }
+
+  return match[1].replace("-", ".");
+}
+
+function matchesDimension(
+  ad: WheelAdProps,
+  dimension: ParsedDimension,
+): boolean {
+  if (dimension.width && !matchesWidth(ad, dimension.width)) {
+    return false;
+  }
+
+  if (dimension.profile && !matchesProfile(ad, dimension.profile)) {
+    return false;
+  }
+
+  if (dimension.diameter && !matchesDiameter(ad, dimension.diameter)) {
+    return false;
+  }
+
+  return true;
+}
+
+//category helpers
+
+function hasTyreCategory(categoryId: number): boolean {
+  return categoryId === 1649;
+}
+
+function hasRimCategory(categoryId: number): boolean {
+  return categoryId === 1647;
+}
+
 export async function getWheelAdverts(params: CatalogParams) {
   //destructuring params
   const {
@@ -14,10 +557,12 @@ export async function getWheelAdverts(params: CatalogParams) {
     season,
     width,
     profile,
+    query,
     sortBy = "createdAt",
     order = "desc",
   } = params;
 
+  console.log(params);
   const apiBaseUrl =
     process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";
   try {
@@ -98,6 +643,124 @@ export async function getWheelAdverts(params: CatalogParams) {
         ads = ads.filter(
           (ad: any) => getAttribute(ad, "tyres_profile") === profile,
         );
+      }
+    }
+
+    if (query && query.trim() !== "") {
+      const parsedQuery = parseSearchQuery(query);
+
+      //check for category
+
+      if (!category && parsedQuery.category) {
+        if (parsedQuery.category === "tyres") {
+          ads = ads.filter((ad) => hasTyreCategory(ad.category_id));
+        }
+
+        if (parsedQuery.category === "rims") {
+          ads = ads.filter((ad) => hasRimCategory(ad.category_id));
+        }
+      }
+
+      //check for tyres season
+
+      if (parsedQuery.season && !season) {
+        ads = ads.filter((ad) => {
+          if (!hasTyreCategory(ad.category_id)) {
+            return false;
+          }
+
+          return matchesSeason(ad, parsedQuery.season!);
+        });
+      }
+
+      //check for state
+
+      if (parsedQuery.state && !state) {
+        ads = ads.filter((ad) => matchesState(ad, parsedQuery.state!));
+      }
+
+      //check for dimensions (both tyres and rims category - but only for diameter)
+
+      if (parsedQuery.dimension) {
+        ads = ads.filter((ad) => {
+          const dimension = parsedQuery.dimension!;
+
+          if (dimension.width || dimension.profile) {
+            if (!hasTyreCategory(ad.category_id)) {
+              return false;
+            }
+
+            return matchesDimension(ad, dimension);
+          }
+
+          return matchesDimension(ad, dimension);
+        });
+      }
+
+      //fuzzy text search
+
+      if (parsedQuery.textTerms.length > 0) {
+        const searchableAds: SearchableWheelAd[] = ads.map((ad) => ({
+          ...ad,
+          searchText: buildSearchText(ad),
+        }));
+
+        const fuseOptions = {
+          isCaseSensitive: false,
+
+          threshold: 0.3,
+
+          ignoreLocation: true,
+          ignoreFieldNorm: true,
+
+          useExtendedSearch: true,
+
+          keys: [
+            {
+              name: "title",
+              weight: 0.7,
+            },
+            {
+              name: "searchText",
+              weight: 0.3,
+            },
+          ],
+
+          getFn: (ad: SearchableWheelAd, path: string | string[]) => {
+            const propertyPath = Array.isArray(path) ? path[0] : path;
+
+            const value = (ad as Record<string, unknown>)[propertyPath];
+
+            return typeof value === "string" ? normalizeSearchText(value) : "";
+          },
+        };
+
+        const fuse = new Fuse(searchableAds, fuseOptions);
+
+        const logicalQuery = {
+          $and: parsedQuery.textTerms.map((term) => {
+            const variants = Array.from(
+              new Set([term, ...(SEARCH_SYNONYMS[term] ?? [])]),
+            );
+
+            return {
+              $or: variants.map((variant) => ({
+                $or: [
+                  {
+                    title: variant,
+                  },
+                  {
+                    searchText: variant,
+                  },
+                ],
+              })),
+            };
+          }),
+        } as Expression;
+
+        const results = fuse.search(logicalQuery);
+
+        ads = results.map((result) => result.item);
       }
     }
 
