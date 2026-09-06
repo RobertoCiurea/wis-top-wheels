@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import "./styles/styles.css";
 import "./styles/buttons.css";
 import "./styles/status.css";
-import { Header, Footer } from "@/app/components/components";
+import { Header, Footer, AuthProvider } from "@/app/components/components";
 import { Toaster } from "sonner";
 import { safeJsonLd, siteName, siteUrl } from "@/lib/seo";
 
@@ -249,12 +249,12 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <>
+        <AuthProvider>
           <Header />
           {children}
           <Footer />
           <Toaster theme="dark" />
-        </>
+        </AuthProvider>
       </body>
     </html>
   );
