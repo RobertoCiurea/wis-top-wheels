@@ -100,7 +100,7 @@ export async function createWheelAd(
   formData: FormData,
 ): Promise<WheelAdFormActionState> {
   const session = await auth();
-  if (!session || !session.user) {
+  if (!session || !session.user || session.error === "RefreshTokenError") {
     return {
       success: false,
       errors: { Unauthorized: "You are not authorized to post an ad" },

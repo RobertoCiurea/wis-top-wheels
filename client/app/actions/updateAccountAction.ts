@@ -12,7 +12,7 @@ export async function updateAccount(
   const email = formData.get("email") as string;
 
   const session = await auth();
-  if (!session || !session.user) {
+  if (!session || !session.user || session.error === "RefreshTokenError") {
     return {
       status: 401,
       error: "Trebuie să fii autentificat pentru a accesa această resursă.",

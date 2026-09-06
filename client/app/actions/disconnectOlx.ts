@@ -7,7 +7,7 @@ export async function disconnectFromOlx(
   prevState: ActionState,
 ): Promise<ActionState> {
   const session = await auth();
-  if (!session || !session.user) {
+  if (!session || !session.user || session.error === "RefreshTokenError") {
     return {
       status: 401,
       error: "Trebuie să fii autentificat pentru a accesa această resursă.",

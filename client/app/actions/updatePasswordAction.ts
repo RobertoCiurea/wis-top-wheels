@@ -9,7 +9,7 @@ export async function updatePassword(
   const oldPassword = formData.get("oldPassword") as string;
   const newPassword = formData.get("password") as string;
   const session = await auth();
-  if (!session || !session.user) {
+  if (!session || !session.user || session.error === "RefreshTokenError") {
     return {
       status: 401,
       error: "Trebuie să fii autentificat pentru a accesa această resursă.",
