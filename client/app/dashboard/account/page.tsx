@@ -6,7 +6,7 @@ import { MyAccount } from "@/app/components/MyAccount";
 import { UserCardProps } from "@/app/types/types";
 export default async function AccountDashboardPage() {
   const session = await auth();
-  if (!session) {
+  if (!session || session.error === "RefreshTokenError") {
     redirect("/login?callbackUrl=/dashboard/account");
   }
   const apiBaseUrl =
