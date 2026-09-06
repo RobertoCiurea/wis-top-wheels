@@ -7,9 +7,12 @@ import { WheelAdvertFilterValues } from "../types/types";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 const PRODUCT_MENU_ITEMS = [
-  { href: "/#stock", label: "Jante & Anvelope" },
+  { href: "/anunturi/jante-si-roti?category=1649&page=1", label: "Anvelope" },
+  {
+    href: "/anunturi/jante-si-roti?category=1647&page=1",
+    label: "Jante și roți",
+  },
   { href: "/#cars", label: "Mașini de vânzare" },
-  { href: "/#services", label: "Servicii" },
 ];
 
 const emptyFilters: WheelAdvertFilterValues = {
@@ -132,7 +135,7 @@ export const MenuSearchBar = () => {
           >
             <span className="menu-search-bar__item-content">
               <Menu size={16} />
-              <span>Produse</span>
+              <span>Stoc</span>
             </span>
             <ChevronDown
               size={16}
