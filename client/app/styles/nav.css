@@ -1,12 +1,14 @@
 /* ── NAV ── */
 .nav {
-  position: fixed;
+  position: relative;
   top: 0;
   left: 0;
   right: 0;
   z-index: 900;
-  padding: 0 24px;
+  padding: 0;
   transition: var(--transition);
+  background: rgba(10, 10, 11, 0.96);
+  backdrop-filter: blur(12px);
 }
 
 .nav-inner {
@@ -17,12 +19,6 @@
   justify-content: space-between;
   min-height: 84px;
   padding: 10px 0;
-}
-
-.nav.scrolled {
-  background: rgba(10, 10, 11, 0.96);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
 }
 
 .nav-logo {
@@ -69,7 +65,8 @@
 
 .nav-links a:hover,
 .nav-dropdown__trigger:hover,
-.nav-dropdown__trigger:focus {
+.nav-dropdown__trigger:focus,
+.nav-dropdown__trigger[aria-expanded="true"] {
   color: var(--gold);
 }
 
@@ -84,7 +81,15 @@
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+}
+
+.nav-dropdown__chevron {
+  transition: transform 0.22s ease;
+}
+
+.nav-dropdown__chevron.open {
+  transform: rotate(180deg);
 }
 
 .nav-dropdown__menu {
@@ -107,8 +112,7 @@
   z-index: 10;
 }
 
-.nav-dropdown:hover .nav-dropdown__menu,
-.nav-dropdown:focus-within .nav-dropdown__menu {
+.nav-dropdown__menu.open {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
