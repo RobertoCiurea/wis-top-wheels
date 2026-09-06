@@ -9,6 +9,8 @@
 
 .filters-toolbar {
   display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
   margin: 0 0 20px;
 }
@@ -40,6 +42,116 @@
 
 .filters-toolbar-button svg {
   flex-shrink: 0;
+}
+.filters-buttons {
+  display: flex;
+  gap: 10px;
+  flex: 1 1 0;
+}
+
+.query-form {
+  display: flex;
+  flex: 1 1 320px;
+  align-items: center;
+  gap: 10px;
+  min-width: min(100%, 320px);
+}
+
+.query-input-content {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.query-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 42px 0 14px;
+  color: var(--white);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  outline: none;
+  transition: var(--transition);
+}
+
+.query-input::placeholder {
+  color: var(--gray);
+}
+
+.query-input:hover,
+.query-input:focus {
+  border-color: var(--gold-dim);
+  background: var(--card-hover);
+}
+
+.query-input:focus {
+  box-shadow: 0 0 0 3px rgba(219, 177, 27, 0.14);
+}
+
+input[type="search"]::-ms-clear {
+  display: none;
+  width: 0;
+  height: 0;
+}
+input[type="search"]::-ms-reveal {
+  display: none;
+  width: 0;
+  height: 0;
+}
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  display: none;
+}
+
+.query-input:-webkit-autofill,
+.query-input:-webkit-autofill:hover,
+.query-input:-webkit-autofill:focus,
+.query-input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--white);
+  caret-color: var(--white);
+  -webkit-box-shadow: 0 0 0 1000px var(--card) inset;
+  box-shadow: 0 0 0 1000px var(--card) inset;
+  transition: background-color 9999s ease-out 0s;
+}
+
+.reset-query-button {
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  color: var(--gray);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: calc(var(--radius) - 2px);
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: var(--transition);
+}
+
+.reset-query-button:hover,
+.reset-query-button:focus-visible {
+  color: var(--gold);
+  background: var(--card-hover);
+  border-color: var(--gold-dim);
+  outline: none;
+}
+
+.reset-query-button:disabled {
+  color: var(--gray);
+  cursor: default;
+  opacity: 0.45;
+}
+
+.query-submit-button {
+  flex: 0 0 auto;
 }
 
 .filters-form {
@@ -244,5 +356,13 @@
 
   .filters-toolbar-button {
     flex: 1;
+  }
+
+  .query-form {
+    flex-basis: 100%;
+  }
+
+  .query-submit-button {
+    flex: 0 0 auto;
   }
 }
