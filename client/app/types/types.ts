@@ -130,6 +130,7 @@ export type CatalogParams = {
   season?: string;
   width?: string;
   profile?: string;
+  query?: string;
   sortBy?: string;
   order?: string;
 };
@@ -146,6 +147,7 @@ export type WheelAdvertFilterValues = {
   season: string;
   width: string;
   profile: string;
+  query?: string;
   sortBy: string;
   order: string;
 };
