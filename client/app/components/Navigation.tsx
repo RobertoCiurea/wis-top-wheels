@@ -6,11 +6,15 @@ import "@/app/styles/nav.css";
 import "@/app/styles/mobile-menu.css";
 import { MenuSearchBar } from "./MenuSearchBar";
 import { usePathname } from "next/navigation";
-
+import { EllipsisVertical, LayoutDashboard, User, LogOut } from "lucide-react";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+import LogoutAction from "../actions/logoutAction";
 export const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const session = useSession();
 
   const disableMenuSearchBar = pathname.startsWith("/anunturi");
 
@@ -66,12 +70,10 @@ export const Navigation = () => {
             />
           </a>
           <div className="nav-links">
-            <a href="/#about">Despre noi</a>
-            <a href="/#services">Servicii</a>
+            <Link href="/#about">Despre noi</Link>
+            <Link href="/#services">Servicii</Link>
 
-            <a href="/#contact">Contact</a>
-
-            <a href="/dashboard">Zonă administrator</a>
+            <Link href="/#contact">Contact</Link>
           </div>
           <div className="nav-cta">
             <a href="tel:+40726547517" className="btn btn-ghost btn-sm">
@@ -80,6 +82,44 @@ export const Navigation = () => {
             <a href="https://wa.me/40726547517" className="btn btn-gold btn-sm">
               WhatsApp
             </a>
+            <div className="nav-dropdown">
+              <button
+                className="nav-dropdown__trigger"
+                aria-expanded="false"
+                aria-haspopup="menu"
+              >
+                <EllipsisVertical size={24} aria-hidden="true" />
+              </button>
+              <div className="nav-dropdown__menu" role="menu">
+                <Link role="menuitem" href="/dashboard">
+                  <div className="nav-drop__menu-item">
+                    <LayoutDashboard />
+                    <span>Dashboard</span>
+                  </div>
+                </Link>
+                <Link role="menuitem" href="/dashboard/account">
+                  <div className="nav-drop__menu-item">
+                    <User />
+                    <span>Cont </span>
+                  </div>
+                </Link>
+                {session.status === "authenticated" && (
+                  <div className="nav-drop__logout">
+                    <span className="top-bar"></span>
+                    <form action={LogoutAction}>
+                      <button
+                        type="submit"
+                        className="nav-drop__menu-item"
+                        role="menuitem"
+                      >
+                        <LogOut />
+                        <span>Delogare</span>
+                      </button>
+                    </form>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
           <button
             className={`nav-toggle ${isMenuOpen ? "open" : ""}`}
@@ -109,18 +149,18 @@ export const Navigation = () => {
         >
           <div className="mobile-menu__body">
             <nav className="mobile-links">
-              <a href="/#stock" onClick={toggleMenu}>
+              <Link href="/#stock" onClick={toggleMenu}>
                 Jante & Anvelope
-              </a>
-              <a href="/#cars" onClick={toggleMenu}>
+              </Link>
+              <Link href="/#cars" onClick={toggleMenu}>
                 Mașini de vânzare
-              </a>
-              <a href="/#about" onClick={toggleMenu}>
+              </Link>
+              <Link href="/#about" onClick={toggleMenu}>
                 Despre noi
-              </a>
-              <a href="/#contact" onClick={toggleMenu}>
+              </Link>
+              <Link href="/#contact" onClick={toggleMenu}>
                 Contact
-              </a>
+              </Link>
 
               <a href="/dashboard">Zonă administrator</a>
             </nav>
