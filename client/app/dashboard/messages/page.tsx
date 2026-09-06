@@ -5,7 +5,7 @@ import { ContactMessagesGrid } from "@/app/components/ContactMessages";
 import "@/app/styles/contact.css";
 export default async function MessagesDashboardPage() {
   const session = await auth();
-  if (!session || !session.user) {
+  if (!session || !session.user || session.error === "RefreshTokenError") {
     redirect("/login?callbackUrl=/dashboard/messages");
   }
   const accessToken = session.accessToken as string;

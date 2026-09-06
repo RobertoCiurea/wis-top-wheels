@@ -6,7 +6,7 @@ import "@/app/styles/admin.css";
 
 export default async function AdminDashboardPage() {
   const session = await auth();
-  if (!session) {
+  if (!session || session.error === "RefreshTokenError") {
     redirect("/login?callbackUrl=/dashboard/admin");
   }
   const apiBaseUrl =
