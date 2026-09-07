@@ -562,7 +562,6 @@ export async function getWheelAdverts(params: CatalogParams) {
     order = "desc",
   } = params;
 
-  console.log(params);
   const apiBaseUrl =
     process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";
   try {
