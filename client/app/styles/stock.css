@@ -5,6 +5,140 @@
   margin-top: 24px;
 }
 
+.stock-loading {
+  min-height: 520px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+.stock-loading__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.stock-loading__eyebrow,
+.stock-loading__title,
+.stock-loading__filter,
+.stock-loading__media,
+.stock-loading__line {
+  background: linear-gradient(
+    90deg,
+    var(--card) 0%,
+    var(--card-hover) 48%,
+    var(--card) 100%
+  );
+  background-size: 220% 100%;
+  animation: stock-loading-shimmer 1.8s ease-in-out infinite;
+}
+
+.stock-loading__eyebrow {
+  width: 116px;
+  height: 10px;
+  margin-bottom: 14px;
+}
+
+.stock-loading__title {
+  width: min(300px, 55vw);
+  height: 42px;
+}
+
+.stock-loading__filter {
+  width: 116px;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.stock-loading__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.stock-loading__card {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+}
+
+.stock-loading__media {
+  aspect-ratio: 4 / 3;
+  background-color: var(--void);
+}
+
+.stock-loading__body {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+
+.stock-loading__line {
+  width: 82%;
+  height: 12px;
+  border-radius: var(--radius);
+}
+
+.stock-loading__line--short {
+  width: 36%;
+  height: 9px;
+}
+
+.stock-loading__line--price {
+  width: 48%;
+  margin-top: 8px;
+}
+
+.stock-loading__label {
+  margin-top: 24px;
+  color: var(--gray);
+  font-size: 13px;
+  text-align: center;
+}
+
+@keyframes stock-loading-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .stock-loading {
+    padding: 64px 0;
+  }
+
+  .stock-loading__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .stock-loading__grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .stock-loading__card:not(:first-child) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stock-loading__eyebrow,
+  .stock-loading__title,
+  .stock-loading__filter,
+  .stock-loading__media,
+  .stock-loading__line {
+    animation: none;
+  }
+}
+
 .stock-card {
   background: var(--card);
   border: 1px solid var(--border);
