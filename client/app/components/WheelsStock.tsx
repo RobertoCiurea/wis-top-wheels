@@ -59,8 +59,8 @@ export const WheelsStock = ({
         </div>
         {wheelAdverts && wheelAdverts.length > 0 ? (
           <div className="stock-grid reveal visible">
-            {wheelAdverts.map((advert, index) => (
-              <WheelAdvertCard advert={advert} key={index} />
+            {wheelAdverts.map((advert) => (
+              <WheelAdvertCard advert={advert} key={advert.id} />
             ))}
           </div>
         ) : (
