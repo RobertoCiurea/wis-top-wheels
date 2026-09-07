@@ -552,70 +552,70 @@ export const WheelAdForm = () => {
           </div>
         </div>
 
-        <div className="form-section">
-          <div className="section-heading">
-            <h2>Jante</h2>
-          </div>
-          <div className="form-grid">
-            <div className="form-group">
-              <label htmlFor="rimMake" className="form-label">
-                Marcă
-              </label>
-              <select
-                id="rimMake"
-                name="rimMake"
-                className={`form-input ${isFieldInvalid("rimMake") ? "form-input-error" : ""}`}
-                defaultValue=""
-                aria-invalid={isFieldInvalid("rimMake")}
-                aria-describedby={
-                  isFieldInvalid("rimMake") ? "rimMake-error" : undefined
-                }
-              >
-                <option value="">Selectează o marcă</option>
-                {rimBrandOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-              {isFieldInvalid("rimMake") && (
-                <div id="rimMake-error" className="form-error">
-                  {visibleErrors.rimMake}
-                </div>
-              )}
+        {selectedWheelType !== "TYRES_ONLY" && (
+          <div className="form-section">
+            <div className="section-heading">
+              <h2>Jante</h2>
             </div>
+            <div className="form-grid">
+              <div className="form-group">
+                <label htmlFor="rimMake" className="form-label">
+                  Marcă
+                </label>
+                <select
+                  id="rimMake"
+                  name="rimMake"
+                  className={`form-input ${isFieldInvalid("rimMake") ? "form-input-error" : ""}`}
+                  defaultValue=""
+                  aria-invalid={isFieldInvalid("rimMake")}
+                  aria-describedby={
+                    isFieldInvalid("rimMake") ? "rimMake-error" : undefined
+                  }
+                >
+                  <option value="">Selectează o marcă</option>
+                  {rimBrandOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                {isFieldInvalid("rimMake") && (
+                  <div id="rimMake-error" className="form-error">
+                    {visibleErrors.rimMake}
+                  </div>
+                )}
+              </div>
 
-            <div className="form-group">
-              <label htmlFor="rimDiameter" className="form-label">
-                Diametru
-              </label>
-              <select
-                id="rimDiameter"
-                name="rimDiameter"
-                className={`form-input ${isFieldInvalid("rimDiameter") ? "form-input-error" : ""}`}
-                defaultValue=""
-                aria-invalid={isFieldInvalid("rimDiameter")}
-                aria-describedby={
-                  isFieldInvalid("rimDiameter")
-                    ? "rimDiameter-error"
-                    : undefined
-                }
-              >
-                <option value="">Selectează diametrul</option>
-                {RIM_DIAMETERS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-              {isFieldInvalid("rimDiameter") && (
-                <div id="rimDiameter-error" className="form-error">
-                  {visibleErrors.rimDiameter}
-                </div>
-              )}
-            </div>
+              <div className="form-group">
+                <label htmlFor="rimDiameter" className="form-label">
+                  Diametru
+                </label>
+                <select
+                  id="rimDiameter"
+                  name="rimDiameter"
+                  className={`form-input ${isFieldInvalid("rimDiameter") ? "form-input-error" : ""}`}
+                  defaultValue=""
+                  aria-invalid={isFieldInvalid("rimDiameter")}
+                  aria-describedby={
+                    isFieldInvalid("rimDiameter")
+                      ? "rimDiameter-error"
+                      : undefined
+                  }
+                >
+                  <option value="">Selectează diametrul</option>
+                  {RIM_DIAMETERS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                {isFieldInvalid("rimDiameter") && (
+                  <div id="rimDiameter-error" className="form-error">
+                    {visibleErrors.rimDiameter}
+                  </div>
+                )}
+              </div>
 
-            {selectedWheelType !== "TYRES_ONLY" && (
               <div className="form-group">
                 <label htmlFor="rimMaterial" className="form-label">
                   Material
@@ -645,9 +645,9 @@ export const WheelAdForm = () => {
                   </div>
                 )}
               </div>
-            )}
+            </div>
           </div>
-        </div>
+        )}
 
         {selectedWheelType !== "RIMS_ONLY" && (
           <div className="form-section">
@@ -655,6 +655,37 @@ export const WheelAdForm = () => {
               <h2>Anvelope</h2>
             </div>
             <div className="form-grid">
+              {selectedWheelType === "TYRES_ONLY" && (
+                <div className="form-group">
+                  <label htmlFor="rimDiameter" className="form-label">
+                    Diametru
+                  </label>
+                  <select
+                    id="rimDiameter"
+                    name="rimDiameter"
+                    className={`form-input ${isFieldInvalid("rimDiameter") ? "form-input-error" : ""}`}
+                    defaultValue=""
+                    aria-invalid={isFieldInvalid("rimDiameter")}
+                    aria-describedby={
+                      isFieldInvalid("rimDiameter")
+                        ? "rimDiameter-error"
+                        : undefined
+                    }
+                  >
+                    <option value="">Selectează diametrul</option>
+                    {RIM_DIAMETERS.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  {isFieldInvalid("rimDiameter") && (
+                    <div id="rimDiameter-error" className="form-error">
+                      {visibleErrors.rimDiameter}
+                    </div>
+                  )}
+                </div>
+              )}
               <div className="form-group">
                 <label htmlFor="tyreMake" className="form-label">
                   Marca anvelope
