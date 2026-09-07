@@ -1,6 +1,6 @@
 "use server";
 import { ActionState } from "../types/types";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { auth } from "@/auth";
 export async function advertAction(
   prevState: ActionState,
@@ -59,12 +59,8 @@ export async function advertAction(
           };
       }
     }
-    revalidateTag("wheel-ads", "max");
-    revalidateTag(`wheel-ad:${advertId}`, "max");
-    revalidatePath("/");
-    revalidatePath("/anunturi/jante-si-roti");
-    revalidatePath("/dashboard/rims");
-    revalidatePath(`/anunturi/jante-si-roti/${advertId}`);
+    updateTag("wheel-ads");
+    updateTag(`wheel-ad:${advertId}`);
     return {
       status: 200,
       message: body.message,
