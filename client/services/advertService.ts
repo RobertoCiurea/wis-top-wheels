@@ -568,7 +568,7 @@ export async function getWheelAdverts(params: CatalogParams) {
     const response = await fetch(`${apiBaseUrl}/api/ad/wheels?`, {
       method: "GET",
       next: {
-        revalidate: 3600,
+        revalidate: 300,
         tags: ["wheel-ads"],
       },
     });
@@ -800,7 +800,7 @@ export async function getWheelAdvertById(id: string) {
     const response = await fetch(`${apiBaseUrl}/api/ad/wheels/${id}`, {
       method: "GET",
       next: {
-        revalidate: 3600,
+        revalidate: 300,
         tags: [`wheel-ad:${id}`],
       },
     });
