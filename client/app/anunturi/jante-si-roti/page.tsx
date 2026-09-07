@@ -1,4 +1,4 @@
-import { WheelsStock } from "@/app/components/WheelsStock";
+import { WheelsStock, WheelAdvertsLoading } from "@/app/components/components";
 import { getWheelAdverts } from "@/services/advertService";
 import { Suspense } from "react";
 import type { Metadata } from "next";
@@ -95,9 +95,15 @@ export default async function WheelAdverts({
   const data = await getWheelAdverts(params);
   const adverts = data?.items ?? [];
   const listingUrl = `${siteUrl}/anunturi/jante-si-roti`;
-
+  console.log(
+    "PAGE DATA:",
+    data?.items.map((ad) => ({
+      id: ad.id,
+      status: ad.status,
+    })),
+  );
   return (
-    <Suspense fallback={"Se incarca"}>
+    <Suspense fallback={<WheelAdvertsLoading />}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
