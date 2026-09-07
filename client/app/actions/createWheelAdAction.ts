@@ -54,10 +54,6 @@ const wheelAdSchema = z.discriminatedUnion("wheelType", [
   }),
   baseAdSchema.extend({
     wheelType: z.literal("TYRES_ONLY"),
-    rimMake: z
-      .string()
-      .min(1, "Marca compatibilă este obligatorie.")
-      .transform(slugify),
     rimDiameter: z.coerce.number().min(1, "Diametrul este obligatoriu."),
     tyreMake: z
       .string()
