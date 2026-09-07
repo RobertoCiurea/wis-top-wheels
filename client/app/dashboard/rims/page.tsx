@@ -1,5 +1,6 @@
-import { WheelsStock } from "@/app/components/WheelsStock";
+import { WheelsStock, WheelAdvertsLoading } from "@/app/components/components";
 import { getWheelAdverts } from "@/services/advertService";
+import { Suspense } from "react";
 export default async function RimsDashboardPage({
   searchParams,
 }: {
@@ -19,16 +20,19 @@ export default async function RimsDashboardPage({
     season: filters.season,
     width: filters.width,
     profile: filters.profile,
+    query: filters.query,
     sortBy: filters.sortBy,
     order: filters.order,
   };
   const data = await getWheelAdverts(params);
   return (
-    <WheelsStock
-      wheelAdverts={data?.items}
-      total={data?.total}
-      limit={9}
-      dashboardPage={true}
-    />
+    <Suspense fallback={<WheelAdvertsLoading />}>
+      <WheelsStock
+        wheelAdverts={data?.items}
+        total={data?.total}
+        limit={9}
+        dashboardPage={true}
+      />
+    </Suspense>
   );
 }
