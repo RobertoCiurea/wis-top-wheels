@@ -117,7 +117,7 @@
     var(--transition),
     opacity 0.25s ease,
     transform 0.25s ease;
-  z-index: 10;
+  z-index: 100;
 }
 
 .nav-dropdown__menu.open {
