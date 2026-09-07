@@ -95,13 +95,7 @@ export default async function WheelAdverts({
   const data = await getWheelAdverts(params);
   const adverts = data?.items ?? [];
   const listingUrl = `${siteUrl}/anunturi/jante-si-roti`;
-  console.log(
-    "PAGE DATA:",
-    data?.items.map((ad) => ({
-      id: ad.id,
-      status: ad.status,
-    })),
-  );
+
   return (
     <Suspense fallback={<WheelAdvertsLoading />}>
       <script
