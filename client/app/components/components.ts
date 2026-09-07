@@ -29,6 +29,7 @@ import { ContactMessagesGrid } from "./ContactMessages";
 import { MenuSearchBar } from "./MenuSearchBar";
 import { FiltersGrid } from "./FiltersGrid";
 import { AuthProvider } from "./AuthProvider";
+import { WheelAdvertsLoading } from "./WheelAdvertsLoading";
 export {
   Header,
   Hero,
@@ -61,4 +62,5 @@ export {
   MenuSearchBar,
   FiltersGrid,
   AuthProvider,
+  WheelAdvertsLoading,
 };
