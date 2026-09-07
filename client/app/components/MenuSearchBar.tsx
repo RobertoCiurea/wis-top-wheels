@@ -61,6 +61,7 @@ export const MenuSearchBar = () => {
   const menuRef = useRef<HTMLDivElement>(null);
   const paramsRef = useRef(new URLSearchParams());
   const router = useRouter();
+  const isDropdownOpen = isProductsOpen || isFiltersOpen;
   const toggleProduct = (open: boolean) => {
     setIsFiltersOpen(false);
     setIsProductsOpen(!open);
@@ -112,7 +113,7 @@ export const MenuSearchBar = () => {
     toast.success("Filtrele au fost resetate cu succes.");
   };
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit: SubmitEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     if (query && query.trim() !== "") {
       paramsRef.current.set("query", query);
@@ -122,9 +123,14 @@ export const MenuSearchBar = () => {
     );
   };
   return (
-    <div className="menu-search-bar" ref={menuRef}>
+    <div
+      className={`menu-search-bar ${isDropdownOpen ? "menu-search-bar--dropdown-open" : ""}`}
+      ref={menuRef}
+    >
       <ul className="menu-search-bar__list">
-        <li className="menu-search-bar__item menu-search-bar__item--menu">
+        <li
+          className={`menu-search-bar__item menu-search-bar__item--menu ${isProductsOpen ? "menu-search-bar__item--open" : ""}`}
+        >
           <button
             type="button"
             className="menu-search-bar__trigger"
@@ -162,7 +168,9 @@ export const MenuSearchBar = () => {
           </div>
         </li>
 
-        <li className="menu-search-bar__item menu-search-bar__item--filters">
+        <li
+          className={`menu-search-bar__item menu-search-bar__item--filters ${isFiltersOpen ? "menu-search-bar__item--open" : ""}`}
+        >
           <button
             type="button"
             className="menu-search-bar__trigger"

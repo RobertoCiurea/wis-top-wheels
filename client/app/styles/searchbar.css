@@ -1,5 +1,6 @@
 .menu-search-bar {
-  z-index: -1;
+  position: relative;
+  z-index: 40;
   width: 100%;
   display: flex;
   align-items: center;
@@ -15,6 +16,10 @@
     opacity 0.25s ease,
     transform 0.25s ease;
   transform: translateY(-4px);
+}
+
+.menu-search-bar--dropdown-open {
+  z-index: 950;
 }
 
 .menu-search-bar__list {
@@ -46,6 +51,10 @@
 .menu-search-bar__item:focus-within {
   background: rgba(255, 255, 255, 0.22);
   transform: translateY(-1px);
+}
+
+.menu-search-bar__item--open {
+  z-index: 100;
 }
 
 .menu-search-bar__item--menu,
@@ -112,6 +121,7 @@
   box-shadow: 0 18px 38px rgba(0, 0, 0, 0.35);
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
   transform: translateY(8px);
   transition:
     opacity 0.22s ease,
@@ -131,6 +141,7 @@
   box-shadow: 0 18px 38px rgba(0, 0, 0, 0.35);
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
   transform: translateY(8px);
   transition:
     opacity 0.22s ease,
@@ -140,8 +151,10 @@
 }
 
 .menu-search-bar__dropdown.open {
+  background: #0f0f12;
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
   transform: translateY(0);
   transition:
     opacity 0.22s ease,
@@ -149,8 +162,10 @@
     visibility 0s linear 0s;
 }
 .menu-search-bar__dropdown-filters.open {
+  background: #0f0f12;
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
   transform: translateY(0);
   transition:
     opacity 0.22s ease,
@@ -298,6 +313,7 @@
 
 @media (max-width: 768px) {
   .menu-search-bar {
+    z-index: 40;
     width: calc(100% - 20px);
     margin: 0 auto 12px;
     min-height: auto;
@@ -320,9 +336,19 @@
     right: 0;
     width: 100%;
     min-width: unset;
-    background: rgba(15, 15, 18, 1);
+    background: #0f0f12;
   }
   .menu-search-bar__dropdown-filters {
-    background: rgba(15, 15, 18, 1);
+    background: #0f0f12;
+  }
+
+  .menu-search-bar__dropdown.open,
+  .menu-search-bar__dropdown-filters.open {
+    z-index: 50;
+  }
+
+  .menu-search-bar__trigger:disabled {
+    cursor: default;
+    opacity: 1;
   }
 }
