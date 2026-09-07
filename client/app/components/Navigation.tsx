@@ -162,7 +162,24 @@ export const Navigation = () => {
                 Contact
               </Link>
 
-              <a href="/dashboard">Zonă administrator</a>
+              <Link href="/dashboard">Zonă administrator</Link>
+
+              {session.status === "authenticated" && (
+                <div className="nav-drop__logout">
+                  <span className="top-bar"></span>
+
+                  <form action={LogoutAction}>
+                    <button
+                      type="submit"
+                      className="nav-drop__menu-item"
+                      role="menuitem"
+                    >
+                      <LogOut />
+                      <span>Delogare</span>
+                    </button>
+                  </form>
+                </div>
+              )}
             </nav>
             <div className="mobile-cta mobile-cta--stacked">
               <a
