@@ -21,9 +21,6 @@ export default async function Home() {
     order: "desc",
   };
   const data = await getWheelAdverts(queryParams);
-  const adverts = data?.items.filter((ad) => {
-    return ad.status !== "removed_by_user";
-  });
 
   return (
     <>
@@ -35,7 +32,7 @@ export default async function Home() {
         </section>
         <Categories />
         <section id="stoc-jante-anvelope">
-          <WheelsStock wheelAdverts={adverts} mainPage={true} />
+          <WheelsStock wheelAdverts={data?.items} mainPage={true} />
         </section>
         <section id="masini-vanzare">
           <CarsStock />
