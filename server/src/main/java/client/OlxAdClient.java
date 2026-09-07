@@ -27,9 +27,7 @@ public interface OlxAdClient {
     @GET
     OlxAdListResponseDto getAds(
             @HeaderParam("Authorization") String authHeader,
-            @HeaderParam("Version") String version,
-            @QueryParam("offset") int offset,
-            @QueryParam("limit") int limit
+            @HeaderParam("Version") String version
     );
 
     @GET

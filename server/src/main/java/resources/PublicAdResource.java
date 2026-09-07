@@ -32,12 +32,11 @@ public class PublicAdResource {
     @Path("/wheels")
     @CacheResult(cacheName = "public-ads-list")
     public Response getWheelAds(
-            @QueryParam("offset") int offset,
-            @QueryParam("limit") int limit
+
     ){
         try{
             String authHeader = "Bearer " + tokenManager.getAccessToken();
-            OlxAdListResponseDto response = adClient.getAds(authHeader, "2.0", offset, limit);
+            OlxAdListResponseDto response = adClient.getAds(authHeader, "2.0");
             return Response.ok().entity(response).build();
         }catch (WebApplicationException e){
             String error = e.getResponse().readEntity(String.class);
