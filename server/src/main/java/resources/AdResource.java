@@ -9,6 +9,7 @@ import dto.*;
 
 import io.quarkus.cache.CacheInvalidate;
 import io.quarkus.cache.CacheInvalidateAll;
+import io.quarkus.cache.CacheKey;
 import io.quarkus.logging.Log;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -21,7 +22,6 @@ import service.OlxMapperService;
 import service.OlxTokenManager;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Path("/api/ad")
@@ -53,7 +53,7 @@ public class AdResource {
             String error = e.getResponse().readEntity(String.class);
             return Response.status(e.getResponse().getStatus()).entity(error).build();
         }catch (Exception e){
-            e.printStackTrace();
+            Log.error("Unexpected error creating wheel ad: " + e.getMessage(), e);
             return Response.serverError().entity("Networking error. Try again!").build();
 
         }
@@ -61,39 +61,39 @@ public class AdResource {
     }
 
 
-
-    @PUT
-    @Path("/wheels/{id}")
-    @CacheInvalidateAll(cacheName = "public-ads-list")
-    @CacheInvalidate(cacheName = "public-ad-details")
-    public Response updateWheelAd(
-            @PathParam("id") Long advertId,
-            @Valid WheelAdDto wheelAdDto){
-        try {
-            if (advertId == null) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("ID is required").build();
-            }
-            String authHeader = "Bearer " + tokenManager.getAccessToken();
-            Map<String, Object> wheelAdPayload = mapper.toOlxWheelPayload(wheelAdDto);
-            OlxSingleAdResponseDto response = adClient.updateAd(authHeader, "2.0", advertId, wheelAdPayload);
-            return Response.ok().entity(response).build();
-        }catch (WebApplicationException e){
-            String error = e.getResponse().readEntity(String.class);
-            Log.error("Error updating advert ID " + advertId +" Error: " + error);
-            return Response.status(e.getResponse().getStatus()).entity(error).build();
-        }catch (Exception e){
-            e.printStackTrace();
-            return Response.serverError().entity("Networking error. Try again!").build();
-
-        }
-
-    }
+//
+//    @PUT
+//    @Path("/wheels/{id}")
+//    @CacheInvalidateAll(cacheName = "public-ads-list")
+//    @CacheInvalidate(cacheName = "public-ad-details")
+//    public Response updateWheelAd(
+//            @PathParam("id") Long advertId,
+//            @Valid WheelAdDto wheelAdDto){
+//        try {
+//            if (advertId == null) {
+//                return Response.status(Response.Status.BAD_REQUEST).entity("ID is required").build();
+//            }
+//            String authHeader = "Bearer " + tokenManager.getAccessToken();
+//            Map<String, Object> wheelAdPayload = mapper.toOlxWheelPayload(wheelAdDto);
+//            OlxSingleAdResponseDto response = adClient.updateAd(authHeader, "2.0", advertId, wheelAdPayload);
+//            return Response.ok().entity(response).build();
+//        }catch (WebApplicationException e){
+//            String error = e.getResponse().readEntity(String.class);
+//            Log.error("Error updating advert ID " + advertId +" Error: " + error);
+//            return Response.status(e.getResponse().getStatus()).entity(error).build();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return Response.serverError().entity("Networking error. Try again!").build();
+//
+//        }
+//
+//    }
 
     @POST
     @Path("/wheels/{id}/action")
     @CacheInvalidateAll(cacheName = "public-ads-list")
     @CacheInvalidate(cacheName = "public-ad-details")
-    public Response takeAction(@PathParam("id") Long advertId, AdActionDto actionDto) {
+    public Response takeAction(@PathParam("id") @CacheKey Long advertId, AdActionDto actionDto) {
         try {
             if(advertId == null || actionDto == null || actionDto.action == null){
                 Map<String, Object> errorPayload = new HashMap<>();
@@ -121,7 +121,7 @@ public class AdResource {
 
         } catch (WebApplicationException e) {
 
-            e.printStackTrace();
+          Log.error("WebApplicationException for advert ID: " + advertId + " Error message: " + e.getMessage(), e);
             int statusCode = e.getResponse().getStatus();
             String error = e.getResponse().readEntity(String.class);
             Log.error("Olx Error for advert ID: " + advertId  + "Error message: " + error);
@@ -164,7 +164,7 @@ public class AdResource {
              }
             return Response.status(statusCode).entity(frontendError).build();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error("Unexpected error for advert ID: " + advertId + " Error message: " + e.getMessage(), e);
             Map<String, Object> serverError = new HashMap<>();
             serverError.put("status", 500);
             serverError.put("error", "Eroare internă a serverului la executarea acțiunii.");
@@ -196,7 +196,7 @@ public class AdResource {
             Log.error("Olx Error for advert ID: " + advertId  + "Error message: " + error);
             return Response.status(e.getResponse().getStatus()).entity(error).build();
         }catch (Exception e){
-            e.printStackTrace();
+            Log.error("Unexpected error for advert ID: " + advertId + " Error message: " + e.getMessage(), e);
             return Response.serverError().entity("Networking error. Try again!").build();
 
         }
