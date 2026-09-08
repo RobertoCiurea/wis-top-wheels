@@ -39,9 +39,7 @@ public class OlxAuthResource {
     @GET
     @Path("/setup")
     @PermitAll
-    //change it later in production
-    //@RolesAllowed({"admin", "moderator"})
-
+    //@RolesAllowed({"admin", "moderator}) //change in production (ngrok issue)
     @Transactional
     public Response setupOlx(@QueryParam("code") String code){
         String redirectUri = redirectUriBase + "/api/olx/auth/setup";
@@ -73,7 +71,7 @@ public class OlxAuthResource {
                 return Response.seeOther(frontendRedirect).build();
             }
         }catch (Exception e){
-            e.printStackTrace();
+            Log.error("Error setting up OLX: " + e.getMessage(), e);
             URI frontendError = URI.create(nextUriBase + "/dashboard?olx=error");
             return Response.seeOther(frontendError).build();
         }
@@ -83,18 +81,17 @@ public class OlxAuthResource {
 
     @Path("/status")
     @GET
-    @PermitAll //change later to RolesAllowed
+    @RolesAllowed({"admin", "moderator"})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOlxConnectionStatus(){
         try{
             OlxTokenEntity tokenRecord = OlxTokenEntity.findById("SINGLETON");
-            Log.info(tokenRecord.refreshToken);
                 boolean isConnected = (tokenRecord!=null
                         && tokenRecord.refreshToken!=null
                         && !tokenRecord.refreshToken.trim().isEmpty());
                 return Response.ok(Map.of("isConnected", isConnected)).build();
             }catch (Exception e){
-            e.printStackTrace();
+            Log.error("Error checking OLX connection status: " + e.getMessage(), e);
             return Response.serverError().entity("Error connecting "+ e.getMessage()).build();
         }
     }
@@ -110,7 +107,7 @@ public class OlxAuthResource {
             }
             return Response.noContent().build();
         }catch (Exception e){
-            e.printStackTrace();
+            Log.error("Error disconnecting OLX: " + e.getMessage(), e);
             return Response.serverError().entity("Error " + e.getMessage()).build();
         }
 
