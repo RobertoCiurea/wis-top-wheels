@@ -3,7 +3,9 @@ package resources;
 import client.OlxAdClient;
 import dto.OlxAdListResponseDto;
 import dto.OlxSingleAdResponseDto;
+import io.quarkus.cache.CacheKey;
 import io.quarkus.cache.CacheResult;
+import io.quarkus.logging.Log;
 import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -42,7 +44,7 @@ public class PublicAdResource {
             String error = e.getResponse().readEntity(String.class);
             return Response.status(e.getResponse().getStatus()).entity(error).build();
         }catch (Exception e){
-            e.printStackTrace();
+            Log.error("Unexpected error fetching wheel ads: " + e.getMessage(), e);
             return Response.serverError().entity("Networking error. Try again!").build();
 
         }
@@ -52,7 +54,7 @@ public class PublicAdResource {
     @GET
     @Path("/wheels/{id}")
     @CacheResult(cacheName = "public-ad-details")
-    public Response getWheelAd(@PathParam("id") Long advertId){
+    public Response getWheelAd(@PathParam("id") @CacheKey Long advertId){
         try{
             if (advertId == null) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("ID is required").build();
@@ -64,7 +66,7 @@ public class PublicAdResource {
             String error = e.getResponse().readEntity(String.class);
             return Response.status(e.getResponse().getStatus()).entity(error).build();
         }catch (Exception e){
-            e.printStackTrace();
+            Log.error("Unexpected error fetching wheel ad: " + e.getMessage(), e);
             return Response.serverError().entity("Networking error. Try again!").build();
 
         }
