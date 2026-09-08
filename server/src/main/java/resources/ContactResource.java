@@ -24,7 +24,7 @@ public class ContactResource {
     }
 
     @GET
-    @Path("/id")
+    @Path("/{id}")
     public Response getContactById(@PathParam("id")Long id){
         ContactEntity contact = ContactEntity.findById(id);
         if(contact == null){
