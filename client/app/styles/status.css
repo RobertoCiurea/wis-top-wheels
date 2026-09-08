@@ -1,0 +1,116 @@
+.status-page {
+  min-height: clamp(520px, calc(100vh - 220px), 760px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 96px 24px;
+  background:
+    linear-gradient(135deg, rgba(219, 177, 27, 0.04), transparent 42%),
+    var(--void);
+  text-align: center;
+}
+
+.status-page__content {
+  width: min(100%, 620px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.status-page__icon {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 28px;
+  color: var(--gold);
+  stroke-width: 1.25;
+}
+
+.status-page .eyebrow {
+  margin-bottom: 14px;
+}
+
+.status-page .eyebrow::before {
+  display: none;
+}
+
+.status-page__code {
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: clamp(96px, 18vw, 180px);
+  font-weight: 700;
+  line-height: 0.8;
+  letter-spacing: 0.02em;
+  margin-bottom: 30px;
+}
+
+.status-page h1 {
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.status-page__message {
+  margin-bottom: 32px;
+}
+
+.status-page__loader {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 28px;
+  border: 3px solid var(--border);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: status-spin 0.9s linear infinite;
+}
+
+.status-page__loading-label {
+  color: var(--gray-light);
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+@keyframes status-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .status-page {
+    min-height: clamp(480px, calc(100vh - 180px), 680px);
+    padding: 64px 24px;
+  }
+
+  .status-page__icon {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 24px;
+  }
+
+  .status-page__code {
+    margin-bottom: 24px;
+  }
+
+  .status-page h1 {
+    font-size: clamp(30px, 9vw, 42px);
+  }
+
+  .status-page__message {
+    font-size: 16px;
+    margin-bottom: 28px;
+  }
+
+  .status-page .btn {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-page__loader {
+    animation-duration: 2s;
+  }
+}

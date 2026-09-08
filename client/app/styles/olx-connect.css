@@ -1,0 +1,213 @@
+.olx-connect {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+.olx-connect__content {
+  min-width: 0;
+}
+
+.olx-connect__content .eyebrow {
+  margin-bottom: 1rem;
+}
+
+.olx-connect__description {
+  max-width: 42rem;
+  margin-top: 1rem;
+  color: var(--gray-light);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.olx-connect__heading-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.olx-connect__heading-row .display {
+  min-width: 0;
+}
+
+.olx-connect__connected-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: 0 0 auto;
+  border: 1px solid rgba(219, 177, 27, 0.45);
+  border-radius: 50%;
+  color: var(--gold);
+  background: rgba(219, 177, 27, 0.12);
+}
+
+.olx-connect__actions {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.olx-connect__actions .btn {
+  justify-content: center;
+}
+
+.olx-connect__disconnect-form {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.25rem;
+}
+
+.olx-connect__disconnect-button {
+  color: var(--gray);
+  border-color: rgba(234, 9, 9, 0.35);
+}
+
+.olx-connect__disconnect-button:hover,
+.olx-connect__disconnect-button:focus-visible {
+  color: #f08a8a;
+  border-color: rgba(234, 9, 9, 0.7);
+}
+
+.olx-connect__disconnect-button:focus-visible {
+  outline: 2px solid rgba(234, 9, 9, 0.7);
+  outline-offset: 3px;
+}
+
+.olx-connect__form {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.olx-connect__button {
+  min-width: 15.5rem;
+  justify-content: center;
+  outline: none;
+}
+
+.olx-connect__button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.olx-connect__button:focus-visible {
+  box-shadow:
+    0 0 0 3px var(--card),
+    0 0 0 5px var(--gold);
+}
+
+.olx-connect__button:disabled {
+  opacity: 0.72;
+  cursor: wait;
+  transform: none;
+}
+
+.olx-connect__button-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+}
+
+.olx-connect__spinner {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  animation: olx-connect-spin 0.9s linear infinite;
+}
+
+.olx-connect__status {
+  max-width: 15.5rem;
+  color: var(--gray);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+@keyframes olx-connect-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .olx-connect {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .olx-connect__form {
+    align-items: stretch;
+  }
+
+  .olx-connect__button,
+  .olx-connect__status {
+    width: 100%;
+    max-width: none;
+  }
+
+  .olx-connect__actions {
+    justify-content: stretch;
+  }
+
+  .olx-connect__actions .btn {
+    flex: 1 1 12rem;
+  }
+
+  .olx-connect__disconnect-form {
+    justify-content: stretch;
+  }
+
+  .olx-connect__disconnect-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .olx-connect {
+    padding: 1.25rem;
+  }
+
+  .olx-connect__button {
+    min-width: 0;
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .olx-connect__heading-row {
+    align-items: flex-start;
+  }
+
+  .olx-connect__connected-icon {
+    width: 2.35rem;
+    height: 2.35rem;
+  }
+
+  .olx-connect__actions {
+    flex-direction: column;
+  }
+
+  .olx-connect__actions .btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .olx-connect__spinner {
+    animation-duration: 1.8s;
+  }
+}
