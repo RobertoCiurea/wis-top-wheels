@@ -6,6 +6,7 @@ import dto.OlxTokenResponse;
 import entity.OlxTokenEntity;
 import exception.RefreshTokenException;
 import exception.TokenNotFoundException;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -30,6 +31,10 @@ public class OlxTokenManager {
     private String currentToken=null;
     private Instant expiresAt=Instant.EPOCH;
 
+    void resetTokenState() {
+        currentToken = null;
+        expiresAt = Instant.EPOCH;
+    }
     @Transactional
     public synchronized String getAccessToken() {
         if (Instant.now().isAfter(expiresAt.minusSeconds(60))) {
@@ -38,9 +43,9 @@ public class OlxTokenManager {
         return currentToken;
     }
         public void refreshToken(){
-            try{
+            try {
                 OlxTokenEntity tokenRecord = OlxTokenEntity.findById("SINGLETON");
-                if(tokenRecord == null || tokenRecord.refreshToken == null)
+                if (tokenRecord == null || tokenRecord.refreshToken == null)
                     throw new TokenNotFoundException("Token not found. Register to OlX app.");
 
                 OlxTokenResponse response = olxAuthClient.fetchToken(
@@ -55,13 +60,15 @@ public class OlxTokenManager {
 
                 this.currentToken = response.accessToken;
                 this.expiresAt = Instant.now().plusSeconds(response.expiresIn);
-                if(response.refreshToken != null){
+                if (response.refreshToken != null) {
                     tokenRecord.refreshToken = response.refreshToken;
-                    tokenRecord.updatedAt=Instant.now();
+                    tokenRecord.updatedAt = Instant.now();
                     tokenRecord.persist();
                 }
+            }catch (TokenNotFoundException e){
+                throw e;
             }catch (Exception e){
-                e.printStackTrace();
+                Log.error("Olx Token Manager Error " + e.getMessage(), e);
                 throw new RefreshTokenException("Unabled to refresh OLX token");
             }
 
