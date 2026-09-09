@@ -1,6 +1,7 @@
 import { WheelsStock, WheelAdvertsLoading } from "@/app/components/components";
-import { getWheelAdverts } from "@/services/advertService";
+import { getAllStatusesWheelAdverts } from "@/services/advertService";
 import { Suspense } from "react";
+import { auth } from "@/auth";
 export default async function RimsDashboardPage({
   searchParams,
 }: {
@@ -24,7 +25,9 @@ export default async function RimsDashboardPage({
     sortBy: filters.sortBy,
     order: filters.order,
   };
-  const data = await getWheelAdverts(params);
+  const session = await auth();
+  const accessToken = session?.accessToken ? session.accessToken : "";
+  const data = await getAllStatusesWheelAdverts(params, accessToken);
   return (
     <Suspense fallback={<WheelAdvertsLoading />}>
       <WheelsStock
