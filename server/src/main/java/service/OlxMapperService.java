@@ -3,6 +3,7 @@ package service;
 import dto.WheelAdDto;
 import dto.WheelType;
 import jakarta.enterprise.context.ApplicationScoped;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,12 @@ public class OlxMapperService {
     private static final String CATEGORY_TYRES_ID = "1649";
     private static final String AUTO_CATEGORY_ID = "5";
     private static final String CITY_ID = "60321"; // Pitesti city Id
+
+    @ConfigProperty(name = "olx.contact.name")
+    private String contactName;
+
+    @ConfigProperty(name="olx.contact.phone")
+    private String contactPhone;
 
     public Map<String, Object> toOlxWheelPayload(WheelAdDto dto) {
 
@@ -122,8 +129,8 @@ public class OlxMapperService {
         basePayload.put("advertiser_type", "private");
 
         Map<String, Object> contact = new HashMap<>();
-        contact.put("name", "Roberto");
-        contact.put("phone", "+40726052030");
+        contact.put("name", contactName);
+        contact.put("phone", contactPhone);
         basePayload.put("contact", contact);
 
         Map<String, Object> location = new HashMap<>();
