@@ -40,6 +40,22 @@ public class AdResource {
     @Inject
     OlxMapperService mapper;
 
+    @GET
+    @Path("/admin/wheels")
+    public Response getWheelAds(){
+        try{
+            String authHeader = "Bearer " + tokenManager.getAccessToken();
+            OlxAdListResponseDto response = adClient.getAds(authHeader, "2.0");
+            return Response.ok().entity(response).build();
+        }catch (WebApplicationException e){
+            String error = e.getResponse().readEntity(String.class);
+            return Response.status(e.getResponse().getStatus()).entity(error).build();
+        }catch (Exception e){
+            Log.error("Unexpected error fetching admin route wheel ads: " + e.getMessage(), e);
+            return Response.serverError().entity("Networking error. Try again!").build();
+
+        }
+    }
     @POST
     @Path("/wheels")
     @CacheInvalidateAll(cacheName = "public-ads-list")
