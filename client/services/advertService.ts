@@ -542,7 +542,54 @@ function hasRimCategory(categoryId: number): boolean {
   return categoryId === 1647;
 }
 
-export async function getWheelAdverts(params: CatalogParams) {
+export async function getAllStatusesWheelAdverts(
+  params: CatalogParams,
+  accessToken: string,
+) {
+  const apiBaseUrl =
+    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";
+  try {
+    const response = await fetch(`${apiBaseUrl}/api/ad/admin/wheels?`, {
+      method: "GET",
+      cache: "no-cache",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    if (!response.ok) throw new Error("Eroare de rețea: Încearcă din nou.");
+    const payload = await response.json();
+    let ads: WheelAdProps[] = payload.data || [];
+    return applyParamsToWheelAdverts(params, ads);
+  } catch (error) {
+    console.log("Error while fetching active wheel adverts " + error);
+    return null;
+  }
+}
+export async function getActiveWheelAdverts(params: CatalogParams) {
+  const apiBaseUrl =
+    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";
+  try {
+    const response = await fetch(`${apiBaseUrl}/api/ad/adminwheels?`, {
+      method: "GET",
+      next: {
+        revalidate: 300,
+        tags: ["wheel-ads"],
+      },
+    });
+    if (!response.ok) throw new Error("Eroare de rețea: Încearcă din nou.");
+    const payload = await response.json();
+    let ads: WheelAdProps[] = payload.data || [];
+    return applyParamsToWheelAdverts(params, ads);
+  } catch (error) {
+    console.log("Error while fetching active wheel adverts " + error);
+    return null;
+  }
+}
+
+export async function applyParamsToWheelAdverts(
+  params: CatalogParams,
+  ads: WheelAdProps[],
+) {
   //destructuring params
   const {
     page,
@@ -562,235 +609,211 @@ export async function getWheelAdverts(params: CatalogParams) {
     order = "desc",
   } = params;
 
-  const apiBaseUrl =
-    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";
-  try {
-    const response = await fetch(`${apiBaseUrl}/api/ad/wheels?`, {
-      method: "GET",
-      next: {
-        revalidate: 300,
-        tags: ["wheel-ads"],
-      },
+  //GENERAL FILTERS
+  //filter by category
+  if (category)
+    ads = ads.filter(
+      (ad: WheelAdProps) => ad.category_id.toString() === category,
+    );
+
+  //filter by max price
+  if (maxPrice) {
+    const max = parseFloat(maxPrice);
+    if (!isNaN(max))
+      ads = ads.filter((ad: WheelAdProps) => (ad.price.value || 0) <= max);
+  }
+
+  //filter by state (new or used)
+  if (state) {
+    ads = ads.filter((ad: WheelAdProps) => getAttribute(ad, "state") === state);
+  }
+  if (diameter) {
+    ads = ads.filter((ad: WheelAdProps) => {
+      const rimInches = getAttribute(ad, "rims_inches");
+      const tyreInches = getAttribute(ad, "tyres_inches");
+      return rimInches === diameter || tyreInches === diameter;
     });
-    if (!response.ok) throw new Error("Eroare de rețea: Încearcă din nou.");
-    const payload = await response.json();
-    let ads: WheelAdProps[] = payload.data || [];
+  }
 
-    //GENERAL FILTERS
-    //filter by category
-    if (category)
+  //CUSTOM FILTERS
+  //category_id = 1647 => rims filters
+  if (category === "1647") {
+    if (make) {
       ads = ads.filter(
-        (ad: WheelAdProps) => ad.category_id.toString() === category,
-      );
-
-    //filter by max price
-    if (maxPrice) {
-      const max = parseFloat(maxPrice);
-      if (!isNaN(max))
-        ads = ads.filter((ad: WheelAdProps) => (ad.price.value || 0) <= max);
-    }
-
-    //filter by state (new or used)
-    if (state) {
-      ads = ads.filter(
-        (ad: WheelAdProps) => getAttribute(ad, "state") === state,
+        (ad: WheelAdProps) =>
+          getAttribute(ad, "donor_make") === formatBrand(make),
       );
     }
-    if (diameter) {
-      ads = ads.filter((ad: WheelAdProps) => {
-        const rimInches = getAttribute(ad, "rims_inches");
-        const tyreInches = getAttribute(ad, "tyres_inches");
-        return rimInches === diameter || tyreInches === diameter;
+    if (material) {
+      ads = ads.filter(
+        (ad: WheelAdProps) => getAttribute(ad, "wheels_rims") == material,
+      );
+    }
+  }
+
+  //category_id = 1649 => tyres filters
+  if (category === "1649") {
+    if (tyreBrand) {
+      ads = ads.filter(
+        (ad: WheelAdProps) =>
+          getAttribute(ad, "tire_brand") === formatBrand(tyreBrand),
+      );
+    }
+    if (season) {
+      ads = ads.filter((ad: any) => getAttribute(ad, "tyres_type") === season);
+    }
+    if (width) {
+      ads = ads.filter((ad: any) => getAttribute(ad, "tyres_width") === width);
+    }
+    if (profile) {
+      ads = ads.filter(
+        (ad: any) => getAttribute(ad, "tyres_profile") === profile,
+      );
+    }
+  }
+
+  if (query && query.trim() !== "") {
+    const parsedQuery = parseSearchQuery(query);
+
+    //check for category
+
+    if (!category && parsedQuery.category) {
+      if (parsedQuery.category === "tyres") {
+        ads = ads.filter((ad) => hasTyreCategory(ad.category_id));
+      }
+
+      if (parsedQuery.category === "rims") {
+        ads = ads.filter((ad) => hasRimCategory(ad.category_id));
+      }
+    }
+
+    //check for tyres season
+
+    if (parsedQuery.season && !season) {
+      ads = ads.filter((ad) => {
+        if (!hasTyreCategory(ad.category_id)) {
+          return false;
+        }
+
+        return matchesSeason(ad, parsedQuery.season!);
       });
     }
 
-    //CUSTOM FILTERS
-    //category_id = 1647 => rims filters
-    if (category === "1647") {
-      if (make) {
-        ads = ads.filter(
-          (ad: WheelAdProps) =>
-            getAttribute(ad, "donor_make") === formatBrand(make),
-        );
-      }
-      if (material) {
-        ads = ads.filter(
-          (ad: WheelAdProps) => getAttribute(ad, "wheels_rims") == material,
-        );
-      }
+    //check for state
+
+    if (parsedQuery.state && !state) {
+      ads = ads.filter((ad) => matchesState(ad, parsedQuery.state!));
     }
 
-    //category_id = 1649 => tyres filters
-    if (category === "1649") {
-      if (tyreBrand) {
-        ads = ads.filter(
-          (ad: WheelAdProps) =>
-            getAttribute(ad, "tire_brand") === formatBrand(tyreBrand),
-        );
-      }
-      if (season) {
-        ads = ads.filter(
-          (ad: any) => getAttribute(ad, "tyres_type") === season,
-        );
-      }
-      if (width) {
-        ads = ads.filter(
-          (ad: any) => getAttribute(ad, "tyres_width") === width,
-        );
-      }
-      if (profile) {
-        ads = ads.filter(
-          (ad: any) => getAttribute(ad, "tyres_profile") === profile,
-        );
-      }
-    }
+    //check for dimensions (both tyres and rims category - but only for diameter)
 
-    if (query && query.trim() !== "") {
-      const parsedQuery = parseSearchQuery(query);
+    if (parsedQuery.dimension) {
+      ads = ads.filter((ad) => {
+        const dimension = parsedQuery.dimension!;
 
-      //check for category
-
-      if (!category && parsedQuery.category) {
-        if (parsedQuery.category === "tyres") {
-          ads = ads.filter((ad) => hasTyreCategory(ad.category_id));
-        }
-
-        if (parsedQuery.category === "rims") {
-          ads = ads.filter((ad) => hasRimCategory(ad.category_id));
-        }
-      }
-
-      //check for tyres season
-
-      if (parsedQuery.season && !season) {
-        ads = ads.filter((ad) => {
+        if (dimension.width || dimension.profile) {
           if (!hasTyreCategory(ad.category_id)) {
             return false;
           }
 
-          return matchesSeason(ad, parsedQuery.season!);
-        });
-      }
-
-      //check for state
-
-      if (parsedQuery.state && !state) {
-        ads = ads.filter((ad) => matchesState(ad, parsedQuery.state!));
-      }
-
-      //check for dimensions (both tyres and rims category - but only for diameter)
-
-      if (parsedQuery.dimension) {
-        ads = ads.filter((ad) => {
-          const dimension = parsedQuery.dimension!;
-
-          if (dimension.width || dimension.profile) {
-            if (!hasTyreCategory(ad.category_id)) {
-              return false;
-            }
-
-            return matchesDimension(ad, dimension);
-          }
-
           return matchesDimension(ad, dimension);
-        });
-      }
+        }
 
-      //fuzzy text search
-
-      if (parsedQuery.textTerms.length > 0) {
-        const searchableAds: SearchableWheelAd[] = ads.map((ad) => ({
-          ...ad,
-          searchText: buildSearchText(ad),
-        }));
-
-        const fuseOptions = {
-          isCaseSensitive: false,
-
-          threshold: 0.3,
-
-          ignoreLocation: true,
-          ignoreFieldNorm: true,
-
-          useExtendedSearch: true,
-
-          keys: [
-            {
-              name: "title",
-              weight: 0.7,
-            },
-            {
-              name: "searchText",
-              weight: 0.3,
-            },
-          ],
-
-          getFn: (ad: SearchableWheelAd, path: string | string[]) => {
-            const propertyPath = Array.isArray(path) ? path[0] : path;
-
-            const value = (ad as Record<string, unknown>)[propertyPath];
-
-            return typeof value === "string" ? normalizeSearchText(value) : "";
-          },
-        };
-
-        const fuse = new Fuse(searchableAds, fuseOptions);
-
-        const logicalQuery = {
-          $and: parsedQuery.textTerms.map((term) => {
-            const variants = Array.from(
-              new Set([term, ...(SEARCH_SYNONYMS[term] ?? [])]),
-            );
-
-            return {
-              $or: variants.map((variant) => ({
-                $or: [
-                  {
-                    title: variant,
-                  },
-                  {
-                    searchText: variant,
-                  },
-                ],
-              })),
-            };
-          }),
-        } as Expression;
-
-        const results = fuse.search(logicalQuery);
-
-        ads = results.map((result) => result.item);
-      }
+        return matchesDimension(ad, dimension);
+      });
     }
 
-    //ads sorting
-    ads.sort((a: WheelAdProps, b: WheelAdProps): number => {
-      let valA;
-      let valB;
-      if (sortBy === "price") {
-        valA = a.price.value || 0;
-        valB = b.price.value || 0;
-      } else {
-        valA = new Date(a.created_at).getTime();
-        valB = new Date(b.created_at).getTime();
-      }
-      if (valA < valB) return order === "asc" ? -1 : 1;
-      if (valA > valB) return order === "asc" ? 1 : -1;
-      return 0;
-    });
+    //fuzzy text search
 
-    //ads pagination
-    const offset = (page - 1) * limit;
-    const totalFilteredAds = ads.length;
-    const paginatedAds = ads.slice(offset, offset + limit);
-    return {
-      items: paginatedAds,
-      total: totalFilteredAds,
-    };
-  } catch (error) {
-    console.log("Error " + error);
-    return null;
+    if (parsedQuery.textTerms.length > 0) {
+      const searchableAds: SearchableWheelAd[] = ads.map((ad) => ({
+        ...ad,
+        searchText: buildSearchText(ad),
+      }));
+
+      const fuseOptions = {
+        isCaseSensitive: false,
+
+        threshold: 0.3,
+
+        ignoreLocation: true,
+        ignoreFieldNorm: true,
+
+        useExtendedSearch: true,
+
+        keys: [
+          {
+            name: "title",
+            weight: 0.7,
+          },
+          {
+            name: "searchText",
+            weight: 0.3,
+          },
+        ],
+
+        getFn: (ad: SearchableWheelAd, path: string | string[]) => {
+          const propertyPath = Array.isArray(path) ? path[0] : path;
+
+          const value = (ad as Record<string, unknown>)[propertyPath];
+
+          return typeof value === "string" ? normalizeSearchText(value) : "";
+        },
+      };
+
+      const fuse = new Fuse(searchableAds, fuseOptions);
+
+      const logicalQuery = {
+        $and: parsedQuery.textTerms.map((term) => {
+          const variants = Array.from(
+            new Set([term, ...(SEARCH_SYNONYMS[term] ?? [])]),
+          );
+
+          return {
+            $or: variants.map((variant) => ({
+              $or: [
+                {
+                  title: variant,
+                },
+                {
+                  searchText: variant,
+                },
+              ],
+            })),
+          };
+        }),
+      } as Expression;
+
+      const results = fuse.search(logicalQuery);
+
+      ads = results.map((result) => result.item);
+    }
   }
+
+  //ads sorting
+  ads.sort((a: WheelAdProps, b: WheelAdProps): number => {
+    let valA;
+    let valB;
+    if (sortBy === "price") {
+      valA = a.price.value || 0;
+      valB = b.price.value || 0;
+    } else {
+      valA = new Date(a.created_at).getTime();
+      valB = new Date(b.created_at).getTime();
+    }
+    if (valA < valB) return order === "asc" ? -1 : 1;
+    if (valA > valB) return order === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  //ads pagination
+  const offset = (page - 1) * limit;
+  const totalFilteredAds = ads.length;
+  const paginatedAds = ads.slice(offset, offset + limit);
+  return {
+    items: paginatedAds,
+    total: totalFilteredAds,
+  };
 }
 
 export async function getWheelAdvertById(id: string) {
