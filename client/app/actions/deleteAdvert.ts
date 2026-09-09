@@ -1,5 +1,5 @@
 "use server";
-import { updateTag } from "next/cache";
+import { updateTag, revalidatePath } from "next/cache";
 import { ActionState } from "../types/types";
 import { auth } from "@/auth";
 export async function deleteAdvert(
@@ -54,6 +54,10 @@ export async function deleteAdvert(
           };
       }
     }
+    revalidatePath("/");
+    revalidatePath("/anunturi/jante-si-roti/");
+    revalidatePath("/dashboard/rims");
+    revalidatePath(`/anunturi/jante-si-roti/${advertId}`);
     updateTag("wheel-ads");
     updateTag(`wheel-ad:${advertId}`);
     return {
