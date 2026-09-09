@@ -559,7 +559,8 @@ export async function getAllStatusesWheelAdverts(
     if (!response.ok) throw new Error("Eroare de rețea: Încearcă din nou.");
     const payload = await response.json();
     let ads: WheelAdProps[] = payload.data || [];
-    return applyParamsToWheelAdverts(params, ads);
+    const data = await applyParamsToWheelAdverts(params, ads);
+    return data;
   } catch (error) {
     console.log("Error while fetching active wheel adverts " + error);
     return null;
@@ -569,7 +570,7 @@ export async function getActiveWheelAdverts(params: CatalogParams) {
   const apiBaseUrl =
     process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8081";
   try {
-    const response = await fetch(`${apiBaseUrl}/api/ad/adminwheels?`, {
+    const response = await fetch(`${apiBaseUrl}/api/ad/wheels?`, {
       method: "GET",
       next: {
         revalidate: 300,
@@ -579,7 +580,8 @@ export async function getActiveWheelAdverts(params: CatalogParams) {
     if (!response.ok) throw new Error("Eroare de rețea: Încearcă din nou.");
     const payload = await response.json();
     let ads: WheelAdProps[] = payload.data || [];
-    return applyParamsToWheelAdverts(params, ads);
+    const data = await applyParamsToWheelAdverts(params, ads);
+    return data;
   } catch (error) {
     console.log("Error while fetching active wheel adverts " + error);
     return null;
