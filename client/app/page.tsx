@@ -11,7 +11,7 @@ import {
   Map,
   WhatsappFloat,
 } from "@/app/components/components";
-import { getWheelAdverts } from "@/services/advertService";
+import { getActiveWheelAdverts } from "@/services/advertService";
 import { CatalogParams } from "./types/types";
 
 export default async function Home() {
@@ -20,7 +20,7 @@ export default async function Home() {
     limit: 6,
     order: "desc",
   };
-  const data = await getWheelAdverts(queryParams);
+  const data = await getActiveWheelAdverts(queryParams);
 
   return (
     <>
