@@ -16,7 +16,8 @@ export const Navigation = () => {
   const pathname = usePathname();
   const session = useSession();
 
-  const disableMenuSearchBar = pathname.startsWith("/anunturi");
+  const disableMenuSearchBar =
+    pathname.startsWith("/anunturi") || pathname.startsWith("/dashboard/rims");
 
   const closeMenu = () => {
     setIsMenuOpen(false);
@@ -91,18 +92,18 @@ export const Navigation = () => {
                 <EllipsisVertical size={24} aria-hidden="true" />
               </button>
               <div className="nav-dropdown__menu" role="menu">
-                <Link role="menuitem" href="/dashboard">
+                <a role="menuitem" href="/dashboard">
                   <div className="nav-drop__menu-item">
                     <LayoutDashboard />
                     <span>Dashboard</span>
                   </div>
-                </Link>
-                <Link role="menuitem" href="/dashboard/account">
+                </a>
+                <a role="menuitem" href="/dashboard/account">
                   <div className="nav-drop__menu-item">
                     <User />
                     <span>Cont </span>
                   </div>
-                </Link>
+                </a>
                 {session.status === "authenticated" && (
                   <div className="nav-drop__logout">
                     <span className="top-bar"></span>
@@ -162,7 +163,7 @@ export const Navigation = () => {
                 Contact
               </Link>
 
-              <Link href="/dashboard">Zonă administrator</Link>
+              <a href="/dashboard">Zonă administrator</a>
 
               {session.status === "authenticated" && (
                 <div className="nav-drop__logout">
